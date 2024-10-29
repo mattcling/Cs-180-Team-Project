@@ -1,4 +1,4 @@
-public class Login extends UserProfile{
+public class Login implements UserProfileInterface {
     private static String username;
     private static String password;
     private static boolean isValid;
