@@ -16,11 +16,17 @@ public interface UserProfileInterface {
   public String getPassword();
   public ArrayList<UserProfile> getFriends();
   public String toString();
+  public ArrayList<UserProfile> getBlocked();
   //settera
-  public boolean setUsername(String username);
-  public boolean setPassword(String password);
-  public boolean setFriends(ArrayList<UserProfile> friends);
+  public void setUsername(String username);
+  public void setPassword(String password);
+  public void setFriends(ArrayList<UserProfile> friends);
+  public void setBlocked(ArrayList<UserProfile> blocked);
   //friend methods
-  public boolean addFriend(String friend);
-  public boolean deleteFriend(String friend);
+  public void addFriend(UserProfile friend);
+  public void deleteFriend(UserProfile friend);
+  public void block(UserProfile friend);
+
+  public boolean deleteUser();
+  public boolean createUser(String username, String password);
 }
