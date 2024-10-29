@@ -1,9 +1,11 @@
+import java.util.ArrayList;
+
 /**
  * Group Project
  *
  * This interface contains user profile details for user class
  *
- * @author Group, LO4
+ * @author Charlotte Falus, LO4
  *
  * @version October 29, 2024
  *
@@ -12,15 +14,13 @@ public interface UserProfileInterface {
   //getters
   public String getUsername();
   public String getPassword();
-  public ArrayList<User> getFriends();
-  public ArrayList<User> getBlocked();
+  public ArrayList<UserProfile> getFriends();
   public String toString();
-  //setters
+  //settera
   public void setUsername(String username);
   public void setPassword(String password);
-  public void setFriends(ArrayList<User> friends);
+  public void setFriends(ArrayList<UserProfile> friends);
   //friend methods
   public void addFriend(String friend);
   public void deleteFriend(String friend);
-  public void block(User user);
 }
