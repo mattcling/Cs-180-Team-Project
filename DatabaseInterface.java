@@ -3,8 +3,8 @@
 public interface DatabaseInterface {
 
     //Varibales
-    public UserProfile user = null;
-    public String message = "";
+    public static UserProfile user = null;
+    public static String message = "";
 
 
 
