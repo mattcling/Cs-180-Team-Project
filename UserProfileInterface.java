@@ -17,10 +17,10 @@ public interface UserProfileInterface {
   public ArrayList<UserProfile> getFriends();
   public String toString();
   //settera
-  public void setUsername(String username);
-  public void setPassword(String password);
-  public void setFriends(ArrayList<UserProfile> friends);
+  public boolean setUsername(String username);
+  public boolean setPassword(String password);
+  public boolean setFriends(ArrayList<UserProfile> friends);
   //friend methods
-  public void addFriend(String friend);
-  public void deleteFriend(String friend);
+  public boolean addFriend(String friend);
+  public boolean deleteFriend(String friend);
 }
