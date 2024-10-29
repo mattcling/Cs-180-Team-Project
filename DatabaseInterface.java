@@ -1,10 +1,10 @@
 
 
-public class DatabaseInterface {
+public interface DatabaseInterface {
 
     //Varibales
-    public UserProfile user;
-    public String message;
+    public UserProfile user = null;
+    public String message = "";
 
 
 

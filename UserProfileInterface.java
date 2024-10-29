@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * Group Project
  *
@@ -12,12 +14,12 @@ public interface UserProfileInterface {
   //getters
   public String getUsername();
   public String getPassword();
-  public ArrayList<User> getFriends();
+  public ArrayList<UserProfile> getFriends();
   public String toString();
   //setters
   public void setUsername(String username);
   public void setPassword(String password);
-  public void setFriends(ArrayList<User> friends);
+  public void setFriends(ArrayList<UserProfile> friends);
   //friend methods
   public void addFriend(String friend);
   public void deleteFriend(String friend);
