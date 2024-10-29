@@ -28,4 +28,5 @@ public interface UserProfileInterface {
   public void block(UserProfile friend);
 
   public boolean deleteUser();
+  public boolean createUser(String username, String password);
 }
