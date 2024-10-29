@@ -8,6 +8,6 @@ public class Login extends UserProfile{
         this.username = username;
         this.password = password;
         this.isValid = false;
-        this.isValid = existingUser = false;
+        this.existingUser = false;
     }
 }
