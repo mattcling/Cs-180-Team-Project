@@ -20,10 +20,5 @@ Direct messaging
 
 Phase 1:
 Questions such as: What are we storing? How are we accessing it? What are we calculating? All should be addressed during this stage. 
-
-Interfaces: Lottie 
--User
--MEssages
-Database: Mattew
-Test cases: Matthew?
+ToDo: Interfaces, database, test cases
  
