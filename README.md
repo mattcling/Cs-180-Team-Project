@@ -1,3 +1,4 @@
+*if you work indp let people know what youre working on
 Notes:
 Phase 1: Interfaces, Database, Test Cases
 Modeling after; Whats App
