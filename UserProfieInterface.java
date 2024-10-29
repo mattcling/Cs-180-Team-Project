@@ -1,7 +1,7 @@
 /**
  * Group Project
  *
- * This interface contains user profile details
+ * This interface contains user profile details for user class
  *
  * @author Charlotte Falus, LO4
  *
