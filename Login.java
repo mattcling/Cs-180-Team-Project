@@ -1,4 +1,4 @@
-public class Login extends UserProfile{
+public class Login implements UserProfileInterface {
     public static String username;
     public static String password;
     public static boolean isValid;
@@ -8,6 +8,6 @@ public class Login extends UserProfile{
         this.username = username;
         this.password = password;
         this.isValid = false;
-        this.isValid = existingUser = false;
+        this.existingUser = false;
     }
 }
