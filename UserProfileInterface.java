@@ -26,4 +26,6 @@ public interface UserProfileInterface {
   public void addFriend(UserProfile friend);
   public void deleteFriend(UserProfile friend);
   public void block(UserProfile friend);
+
+  public boolean deleteUser();
 }
