@@ -1,3 +1,12 @@
+// The test cases should do the following: 
+
+// Verify all fields, constructors, and methods function properly.
+// Methods and constructors should have error tests to verify they do not crash when receiving invalid input, where applicable.
+// Data that persists should be validated with appropriate test cases. 
+// When designing your implementation, be sure to use methods appropriately. It will be challenging to design test cases for overly complex methods. 
+
+
+//example:
 // @Test(timeout = 1000)
 // public void testExpectedOne() {
 //     // Set the input        
