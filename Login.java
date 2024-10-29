@@ -1,4 +1,4 @@
-public class Login {
+public class Login extends UserProfile{
     public static String username;
     public static String password;
     public static boolean isValid;
