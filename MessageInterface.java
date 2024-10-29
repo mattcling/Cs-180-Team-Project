@@ -1,4 +1,4 @@
-public interface Message {
+public interface MessageInterface {
 
 
     //getters
