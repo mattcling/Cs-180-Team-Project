@@ -1,3 +1,4 @@
+*if you work indp let people know what youre working on
 Notes:
 Phase 1: Interfaces, Database, Test Cases
 Modeling after; Whats App
@@ -20,10 +21,5 @@ Direct messaging
 
 Phase 1:
 Questions such as: What are we storing? How are we accessing it? What are we calculating? All should be addressed during this stage. 
-
-Interfaces: Lottie 
--User
--MEssages
-Database: Mattew
-Test cases: Matthew?
+ToDo: Interfaces, database, test cases
  
