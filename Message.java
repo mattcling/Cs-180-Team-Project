@@ -1,12 +1,15 @@
-public class Message {
+import java.io.Serializable;
+
+public class Message implements MessageInterface {
 
     //Varaibles
     public String message;
     public String sender;
     public String receiver;
+    public String chatName;
 
     // Constructers
-    public Message(String message, String sender, String receiver) {
+    public Message(String message, String sender, String receiver, String chatName) {
         this.message = message;
         this.sender = sender;
         this.receiver = receiver;
@@ -24,6 +27,11 @@ public class Message {
         this.receiver = receiver;
     }
 
+    @Override
+    public void setChatName(String chatName) {
+        this.chatName = chatName;
+    }
+
     //Getters
     public String getMessage() {
         return message;
@@ -33,6 +41,11 @@ public class Message {
     }
     public String getReceiver() {
         return receiver;
+    }
+
+    @Override
+    public String getChatName() {
+        return chatName;
     }
 
 }
