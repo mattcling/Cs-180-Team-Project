@@ -1,58 +1,58 @@
-import java.util.Scanner;
-import java.io.*;
-import java.net.*;
-
-
 public class Database implements DatabaseInterface {
 
+    public String username;
+    public String password;
+    public String usersName;
+    public String[] blockUsers;
+    public String[] Friends;
+    public String UserBio;
+    public String[] messages;
 
-    @Override
-    public boolean storeNewUser() {
-        return false;
+    public Database(String username, String password,
+                    String usersName, String[] blockUsers,
+                    String[] Friends, String UserBio,
+                    String[] messages) {
+        this.username = username;
+        this.password = password;
+        this.usersName = usersName;
+        this.blockUsers = blockUsers;
+        this.Friends = Friends;
+        this.UserBio = UserBio;
+        this.messages = messages;
     }
 
     @Override
-    public boolean storeNewMessage() {
-        return false;
-    }
-
-    @Override
-    public String getUserMessage() {
-        return "";
+    public String[] getUserMessage() {
+       return messages;
     }
 
     @Override
     public String getUserName() {
-        return "";
+        return username;
     }
 
     @Override
     public String getPassword() {
-        return "";
+        return password;
     }
 
     @Override
     public String getUsersName() {
-        return "";
+        return usersName;
     }
 
     @Override
-    public String getBlockedUsers() {
-        return "";
-    }
-
-    @Override
-    public boolean removeMessage() {
-        return false;
+    public String[] getBlockedUsers() {
+        return blockUsers;
     }
 
     @Override
     public String getUserBio() {
-        return "";
+        return UserBio;
     }
 
     @Override
-    public String getUserFreinds() {
-        return "";
+    public String[] getUserFreinds() {
+        return Friends;
     }
 }
