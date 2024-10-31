@@ -6,7 +6,6 @@ import java.io.*;
 public interface DatabaseInterface {
 
     public UserProfile user = null;
-    public Login login = null;
     public Message message = null;
     public String freinds = null;
     public String bio = null;

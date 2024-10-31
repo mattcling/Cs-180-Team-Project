@@ -8,12 +8,14 @@ public interface UserProfileInterface {
   public String toString();
   public ArrayList<UserProfile> getBlocked();
   public String getBio();
-  //settera
+
+  //setters
   public boolean setUsername(String username);
   public boolean setPassword(String password);
   public boolean setFriends(ArrayList<UserProfile> friends);
   public boolean setBlocked(ArrayList<UserProfile> blocked);
   public boolean setBio(String bio);
+
   //friend methods
   public boolean addFriend(UserProfile friend);
   public boolean deleteFriend(UserProfile friend);
