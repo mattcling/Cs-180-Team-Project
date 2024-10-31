@@ -11,5 +11,5 @@ public interface MessageInterface {
     public boolean setChat(String chatName);
 
     public boolean deleteMessage(Message message);
-    public boolean sendMessage(User...receiver, Message message);
+    public boolean sendMessage(UserProfile receiver, Message message);
 }
