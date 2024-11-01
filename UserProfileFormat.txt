@@ -1,0 +1,6 @@
+This file is just to show a example of how we are going to format the user file 
+
+Username,Password,Freinds,blocked,Bio
+
+freinds will be seperated by : like this bob:Jimmy:Billy
+the same goes for blocked users.
