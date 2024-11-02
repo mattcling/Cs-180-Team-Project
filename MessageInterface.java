@@ -5,12 +5,11 @@ public interface MessageInterface {
     String getReceiverID();
     String getMessageID();
     LocalDateTime getDateTime();
+    String getMessageInfo();
 
     public void setMessageInfo(String message);
     public void setMessageID(String messageID);
     public void setSenderID(String senderID);
     public void setReceiverID(String receiverID);
-    public String getMessageInfo();
     public void setDateTime(LocalDateTime dateTime);
-
 }
