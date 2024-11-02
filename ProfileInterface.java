@@ -1,13 +1,13 @@
 public interface ProfileInterface {
 
-    String getUserID();
-    String getUserBio();
-    String GetprofilePicture(String ProfilePicture); // this is going to be a file location
-    String getStatus();
-    void setBio(String Bio);
-    void setProfilePicture(String ProfilePicture);
-    void setStatus(String Status);
-    void veiwProfile(String userID);
+    public String getUserID();
+    public void setUserID(String userID);
+    public String getBio();
+    public void setBio(String bio);
+    public String getProfilePicture();
+    public void updateProfile(String bio, String profilePicture);
+    public void setProfilePicture(String profilePicture);
+    public void displayProfile();
 
 
 
