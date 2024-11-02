@@ -57,18 +57,18 @@ public class MessageInterfaceTests {
             fail("The Message interface is missing the 'getDateTime' method.");
         }
         try {
-            Method get = clazz.getMethod("getMessageInfo");
-            assertNotNull("The Message interface should have an 'getMessageInfo' method.", get);
+            Method get = clazz.getMethod("getContents");
+            assertNotNull("The Message interface should have an 'getContents' method.", get);
         } catch (NoSuchMethodException e) {
-            fail("The Message interface is missing the 'getMessageInfo' method.");
+            fail("The Message interface is missing the 'getContents' method.");
         }
         
         //setters
         try {
-            Method set = clazz.getMethod("setMessageInfo", String.class);
-            assertNotNull("The Message interface should have an 'setMessageInfo' method.", set);
+            Method set = clazz.getMethod("setContents", String.class);
+            assertNotNull("The Message interface should have an 'setContents' method.", set);
         } catch (NoSuchMethodException e) {
-            fail("The Message interface is missing the 'setMessageInfo' method.");
+            fail("The Message interface is missing the 'setContents' method.");
         }
         try {
             Method set = clazz.getMethod("setMessageID", String.class);
@@ -103,9 +103,7 @@ public class MessageInterfaceTests {
 
         Assert.assertTrue("Ensure that 'Message Interface' is public", Modifier.isPublic(modifiers));
 
-        Assert.assertFalse("Ensure that `Message Interface` is NOT `abstract`!", Modifier.isAbstract(modifiers));
-
-        Assert.assertEquals("Ensure that `Message Interface` extends `Object'!", Object.class, superclass);
+        Assert.assertTrue("Ensure that `Message Interface` is NOT `abstract`!", Modifier.isAbstract(modifiers));
 
         Assert.assertEquals("Ensure that Message Interface has no interfaces itself" , 0, superinterfaces.length);
     }
