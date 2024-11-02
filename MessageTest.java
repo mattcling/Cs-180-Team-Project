@@ -26,9 +26,9 @@ import static org.junit.Assert.*;
  * @version November 2, 2024
  */
 
-public class MessagesTest {
+public class MessageTest {
     public static void main(String[] args) {
-        Result result = JUnitCore.runClasses(TestMessage.class);
+        Result result = JUnitCore.runClasses(MessageTest.class);
         if (result.wasSuccessful()) {
             System.out.println("Excellent - Test ran successfully");
         } else {
