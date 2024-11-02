@@ -1,19 +1,13 @@
-import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
-import org.junit.rules.Timeout;
+import org.junit.Test;
 
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
-import javax.swing.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.UUID;
 
 import static org.junit.Assert.*;
 
@@ -41,7 +35,7 @@ public class MessageTest {
     //testing message with an object
     private Message message;
 
-    @BeforeEach
+    @Before
     public void setUp() {
         message = new Message("1", "2", "3", "4");
     }
@@ -50,51 +44,51 @@ public class MessageTest {
     
     //initail value tests
     public void testInitialMessageID() {
-        assertEquals("1", message.getMessageID(), "Initially, the MessageID should be 1.");
+        assertEquals("Initially, the MessageID should be 1.", "1", message.getMessageID());
     }
     public void testInitialSenderID() {
-        assertEquals("2", message.getSenderID(), "Initially, the SenderID should be 2.");
+        assertEquals("Initially, the SenderID should be 2.", "2", message.getSenderID());
     }
     public void testInitialReceiverID() {
-        assertEquals("3", message.getReceiverID(), "Initially, the ReceiverID should be 3.");
+        assertEquals( "Initially, the ReceiverID should be 3.", "3", message.getReceiverID());
     }
     public void testInitialContents() {
-        assertEquals("4", message.getContents(), "Initially, the Contents should be 4.");
+        assertEquals("Initially, the Contents should be 4.", "4", message.getContents());
     }
     
     //getters and setters tests
     public void testMessageID() {
         message.setMessageID("id");
-        assertEquals("id", message.getMessageID(), "The MessageID should be set to id.");
+        assertEquals("The MessageID should be set to id.", "id", message.getMessageID());
     }
     public void testSenderID() {
         message.setSenderID("from");
-        assertEquals("from", message.getSenderID(), "The SenderID should be set to from.");
+        assertEquals("The SenderID should be set to from.", "from", message.getSenderID());
     }
     public void testReceiverID() {
         message.setReceiverID("to"); 
-        assertEquals("to", message.getReceiverID(), "The ReceiverID should be set to to.");
+        assertEquals("The ReceiverID should be set to to.", "to", message.getReceiverID());
     }
     public void testMessageInfo() {
         message.setMessageInfo("content");
-        assertEquals("content", message.getMessageInfo(), "The contents should be set to content.");
+        assertEquals("The contents should be set to content.", "content", message.getMessageInfo());
     }
     public void testTime() {
         LocalDateTime dt = LocalDateTime.now();
         message.setDateTime(dt);
-        assertEquals(dt, message.getMessageInfo(), "The contents should be set to " + dt + ".");
+        assertEquals("The DateTime is set wrong", dt, message.getDateTime());
     }
     
     //general tests
     public void testImplementsMessageInterface() {
-        assertTrue(message instanceof MessageInterface, "Message should implement Message interface.");
+        assertTrue("Message should implement Message interface.", message instanceof MessageInterface);
     }
     public void testImplementsSerializable() {
-        assertTrue(message instanceof Serializable, "Message should implement Serializable interface.");
+        assertTrue("Message should implement Serializable interface.", message instanceof Serializable);
     }
     public void testPublic() {
-        int modifiers = Person.class.getModifiers();
-        assertTrue(Modifier.isPublic(modifiers), "Message class should be public.");
+        int modifiers = Message.class.getModifiers();
+        assertTrue("Message class should be public.", Modifier.isPublic(modifiers));
     }    
     
 }
