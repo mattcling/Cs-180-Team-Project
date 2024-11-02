@@ -42,8 +42,8 @@ public class Message implements Serializable, MessageInterface {
     public String getContents() {
         return contents;
     }
-    public void setContents(String content) {
-        this.contents = content;
+    public void setContents(String contents) {
+        this.contents = contents;
     }
     public LocalDateTime getDateTime() {
         return dateTime;
