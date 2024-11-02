@@ -5,13 +5,13 @@ public class Profile implements Serializable, ProfileInterface {
 
     public String userID;
     public String bio;
-    public String ProfilePicture;
+    public String profilePicture;
 
 
-    public Profile(String userID, String bio, String profilePicture) {
+    public Profile(String userID, String bio, String ProfilePicture) {
         this.userID = userID;
         this.bio = bio;
-        this.ProfilePicture = profilePicture;
+        this.profilePicture = ProfilePicture;
     }
 
     public String getUserID() {
@@ -26,24 +26,24 @@ public class Profile implements Serializable, ProfileInterface {
     public void setBio(String bio) {
         this.bio = bio;
     }
-    public String getProfilePicture() {
-        return ProfilePicture;
+    public String getprofilePicture() {
+        return profilePicture;
     }
-    public void setProfilePicture(String profilePicture) {
-        ProfilePicture = profilePicture;
+    public void setProfilePicture(String ProfilePicture) {
+        profilePicture = ProfilePicture;
     }
 
-    public void updateProfile(String bio, String profilePicture) {
+    public void updateProfile(String bio, String ProfilePicture) {
         setBio(bio);
-        setProfilePicture(profilePicture);
+        setprofilePicture(ProfilePicture);
         System.out.println("Profile updated successfully.");
     }
 
     public void displayProfile() {
         System.out.println("User ID: " + userID);
         System.out.println("Bio: " + bio);
-        if(ProfilePicture != null) {
-            System.out.println("Profile Picture: " + ProfilePicture);
+        if(profilePicture != null) {
+            System.out.println("Profile Picture: " + profilePicture);
         }
         else {
             System.out.println("Profile Picture is null or empty.");
