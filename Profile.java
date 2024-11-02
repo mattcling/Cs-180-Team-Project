@@ -29,7 +29,7 @@ public class Profile implements Serializable, ProfileInterface {
     public String getprofilePicture() {
         return profilePicture;
     }
-    public void setProfilePicture(String ProfilePicture) {
+    public void setprofilePicture(String ProfilePicture) {
         profilePicture = ProfilePicture;
     }
 
