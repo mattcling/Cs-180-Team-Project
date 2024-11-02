@@ -18,7 +18,7 @@ import java.util.UUID;
 import static org.junit.Assert.*;
 
 /**
- * A framework to run public test cases for the Messages class.
+ * A framework to run public test cases for the Profile class.
  *
  * <p>Purdue University -- CS18000 -- Fall 2024</p>
  *
