@@ -82,7 +82,7 @@ public class MessageInterfaceTests {
             Class<?>[] superinterfaces;
 
             // Set the class being tested
-            clazz = Messages.class;
+            clazz = Message.class;
 
             // Perform tests
 
