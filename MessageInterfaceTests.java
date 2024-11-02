@@ -101,13 +101,13 @@ public class MessageInterfaceTests {
 
         superinterfaces = clazz.getInterfaces();
 
-        Assert.assertTrue("Ensure that 'Messages' is public", Modifier.isPublic(modifiers));
+        Assert.assertTrue("Ensure that 'Message Interface' is public", Modifier.isPublic(modifiers));
 
-        Assert.assertFalse("Ensure that `Messages` is NOT `abstract`!", Modifier.isAbstract(modifiers));
+        Assert.assertFalse("Ensure that `Message Interface` is NOT `abstract`!", Modifier.isAbstract(modifiers));
 
-        Assert.assertEquals("Ensure that `Messages` extends `Object'!", Object.class, superclass);
+        Assert.assertEquals("Ensure that `Message Interface` extends `Object'!", Object.class, superclass);
 
-        Assert.assertEquals("Ensure that `Messages` implements 'UserProfile interfaces!", superinterfaces.length);
+        Assert.assertEquals("Ensure that Message Interface has no interfaces itself" , 0, superinterfaces.length);
     }
 
     public static void main(String[] args) {

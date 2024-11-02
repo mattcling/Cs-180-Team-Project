@@ -20,18 +20,7 @@ import static org.junit.Assert.*;
  * @version November 2, 2024
  */
 
-public class MessageTest {
-    public static void main(String[] args) {
-        Result result = JUnitCore.runClasses(MessageTest.class);
-        if (result.wasSuccessful()) {
-            System.out.println("Excellent - Test ran successfully");
-        } else {
-            for (Failure failure : result.getFailures()) {
-                System.out.println(failure.toString());
-            }
-        }
-
-    }  
+public class MessageTest {  
     //testing message with an object
     private Message message;
 
@@ -69,9 +58,9 @@ public class MessageTest {
         message.setReceiverID("to"); 
         assertEquals("The ReceiverID should be set to to.", "to", message.getReceiverID());
     }
-    public void testMessageInfo() {
-        message.setMessageInfo("content");
-        assertEquals("The contents should be set to content.", "content", message.getMessageInfo());
+    public void testContents() {
+        message.setContents("content");
+        assertEquals("The contents should be set to content.", "content", message.getContents());
     }
     public void testTime() {
         LocalDateTime dt = LocalDateTime.now();
@@ -91,5 +80,58 @@ public class MessageTest {
         assertTrue("Message class should be public.", Modifier.isPublic(modifiers));
     }    
     
+    //error tests
+    public void testSetMessageIDError() {
+            try {
+            message.setMessageID(null);
+            fail("Expected IllegalArgumentException to be thrown");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Message ID cannot be null or empty.", e.getMessage());
+        }
+    }
+    public void testSetSenderIDError() {
+        try {
+            message.setSenderID(null);
+            fail("Expected IllegalArgumentException to be thrown");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Sender ID cannot be null or empty.", e.getMessage());
+        }
+    }
+    public void testsetReceiverIDError() {
+        try {
+            message.setReceiverID(null);
+            fail("Expected IllegalArgumentException to be thrown");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Receiver ID cannot be null or empty.", e.getMessage());
+        }
+    }
+    public void testSetContentsError() {
+        try {
+            message.setContents(null);
+            fail("Expected IllegalArgumentException to be thrown");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Contents cannot be null or empty.", e.getMessage());
+        }
+    }
+    public void testSetDateTimeError() {
+        try {
+            message.setDateTime(null);
+            fail("Expected IllegalArgumentException to be thrown");
+        } catch (IllegalArgumentException e) {
+            assertEquals("DateTime ID cannot be null or empty.", e.getMessage());
+        }
+    }
+    
+    public static void main(String[] args) {
+        Result result = JUnitCore.runClasses(MessageTest.class);
+        if (result.wasSuccessful()) {
+            System.out.println("Excellent - Test ran successfully");
+        } else {
+            for (Failure failure : result.getFailures()) {
+                System.out.println(failure.toString());
+            }
+        }
+
+    }
 }
 

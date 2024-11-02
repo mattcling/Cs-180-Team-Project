@@ -14,9 +14,9 @@ public interface MessageInterface {
     String getReceiverID();
     String getMessageID();
     LocalDateTime getDateTime();
-    String getMessageInfo();
+    String getContents();
 
-    public void setMessageInfo(String message);
+    public void setContents(String contents);
     public void setMessageID(String messageID);
     public void setSenderID(String senderID);
     public void setReceiverID(String receiverID);
