@@ -16,7 +16,7 @@ public class User implements UserInterface {
     public User(String username,
                 String password,
                 DatabaseInterface database ) {
-        this.userID = GenerateUserID(); // this method will be made in a bit
+        this.UserID = GenerateUserID(); // this method uses a io class to make a random sting of numbers and letters
         this.Password = password;
         this.database = database;
         this.userName = username;
@@ -26,7 +26,7 @@ public class User implements UserInterface {
 
     public boolean CreateAccount(String username,String password) {
 
-        if(database.retreiveData(username, "users") != null){
+        if(database.getData(username, "users") != null){
             System.out.println("User already exists");
             return false;
         }
@@ -36,8 +36,8 @@ public class User implements UserInterface {
     }
 
     public boolean login(String username,String password) {
-        User user = (User) database.retriveData(username, "users");
-        if(user != null && user.password.equals(password)){
+        User user = (User) database.getData(username, "users");
+        if(user != null && user.Password.equals(password)){
             System.out.println("User logged in");
             return true;
         }
@@ -78,7 +78,7 @@ public class User implements UserInterface {
         return false;
     }
 
-    public boolean removeBlockedUser(String blockedUserID) {
+    public boolean unBlockUser(String blockedUserID) {
         if(blockedUsers.contains(blockedUserID)){
             blockedUsers.remove(blockedUserID);
             System.out.println("Blocked user unblocked");
@@ -93,7 +93,7 @@ public class User implements UserInterface {
     }
 
 
-    // getters and setters as needed
+    // getters and setters
     public String getUserID() {
         return UserID;
     }
