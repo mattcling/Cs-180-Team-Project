@@ -27,7 +27,7 @@ import static org.junit.Assert.*;
  */
 
 
-public class MessageInterfaceTest {
+public class MessageInterfaceTests {
     public static void main(String[] args) {
         Result result = JUnitCore.runClasses(TestCase.class);
         if (result.wasSuccessful()) {

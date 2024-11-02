@@ -26,7 +26,7 @@ import static org.junit.Assert.*;
  * @version November 2, 2024
  */
 
-public class MessageTest {
+public class MessagesTest {
     public static void main(String[] args) {
         Result result = JUnitCore.runClasses(TestMessage.class);
         if (result.wasSuccessful()) {
