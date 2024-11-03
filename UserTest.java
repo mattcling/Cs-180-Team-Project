@@ -15,12 +15,12 @@ import static org.junit.Assert.assertEquals;
 public class UserTest { //SUPER UNFINISHED
     User user = new User("a", "b", null);
 
-    @Test
+    @Test(timeout = 1000)
     public void InitialValueTest() {
         assertEquals("Initially, the username should be a.", "a", user.getUserName());
         assertEquals("Initially, the password should be b.", "b", user.getPassword());
     }
-    @Test
+    @Test(timeout = 1000)
     public void GettersAndSettersTest() {
         user.setUserName("c");
         assertEquals("Username should be c", "c", user.getUserName());
@@ -37,17 +37,17 @@ public class UserTest { //SUPER UNFINISHED
         user.setUserID("a");
         assertEquals("UserID should be a", "a", user.getUserID());
     }
-    @Test
+    @Test(timeout = 1000)
     public void TestCreateAccount() {
         user.CreateAccount("a", "b");
         Assert.assertFalse("Should return false if account already exists.", user.CreateAccount("a", "b"));
     }
-    @Test
+    @Test(timeout = 1000)
     public void TestLogin() {
         user.CreateAccount("a", "b");
         Assert.assertTrue("Should return true when correctly inputting username and password.", user.login("a", "b"));
     }
-    @Test
+    @Test(timeout = 1000)
     public void TestAddFreind() {
         ArrayList<String> temp = new ArrayList<String>();
         temp.add("a"); temp.add("b");
@@ -56,7 +56,7 @@ public class UserTest { //SUPER UNFINISHED
         user.addFreind("c");
         assertEquals("Freinds list should contain a, b, c.", temp, user.getFreindsList());
     }
-    @Test
+    @Test(timeout = 1000)
     public void TestRemoveFreind() {
         ArrayList<String> temp = new ArrayList<String>();
         temp.add("a"); temp.add("b");
@@ -65,7 +65,7 @@ public class UserTest { //SUPER UNFINISHED
         user.removeFreind("b");
         assertEquals("Freinds list should only contain a.", temp, user.getFreindsList());
     }
-    @Test
+    @Test(timeout = 1000)
     public void TestAddBlockedUser() {
         ArrayList<String> temp = new ArrayList<String>();
         temp.add("a"); temp.add("b");
@@ -74,7 +74,7 @@ public class UserTest { //SUPER UNFINISHED
         user.addBlockedUser("c");
         assertEquals("Blocked list should contain a, b, c.", temp, user.getBlockedUsers());
     }
-    @Test
+    @Test(timeout = 1000)
     public void TestUnblockUser() {
         ArrayList<String> temp = new ArrayList<String>();
         temp.add("a"); temp.add("b");
