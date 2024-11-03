@@ -125,6 +125,8 @@ public class User implements UserInterface {
     public void setBlockedUsers(List<String> blockedUsers) {
         this.blockedUsers = blockedUsers;
     }
+    public void setPassword(String password) { this.Password = password; }
+    public void setUserID(String userID) { this.UserID = userID; }
 
 
 
