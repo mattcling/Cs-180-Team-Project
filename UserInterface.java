@@ -14,9 +14,9 @@ public interface UserInterface {
     public String getProfilePicture();
     public List<String> getFreindsList();
     public List<String> getBlockedUsers();
-    public void setUserName(String userName);
-    public void setProfilePicture(String profilePicture);
-    public void setFreindsList(List<String> freindsList);
-    public void setBlockedUsers(List<String> blockedUsers);
+    public boolean setUserName(String userName);
+    public boolean setProfilePicture(String profilePicture);
+    public boolean setFreindsList(List<String> freindsList);
+    public boolean setBlockedUsers(List<String> blockedUsers);
 
 }

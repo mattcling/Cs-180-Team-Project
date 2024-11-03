@@ -113,16 +113,16 @@ public class User implements UserInterface {
         return blockedUsers;
     }
 
-    public void setUserName(String userName) {
+    public boolean setUserName(String userName) {
         this.userName = userName;
     }
-    public void setProfilePicture(String profilePicture) {
+    public boolean setProfilePicture(String profilePicture) {
         ProfilePicture = profilePicture;
     }
-    public void setFreindsList(List<String> freindsList) {
+    public boolean setFreindsList(List<String> freindsList) {
         FreindsList = freindsList;
     }
-    public void setBlockedUsers(List<String> blockedUsers) {
+    public boolean setBlockedUsers(List<String> blockedUsers) {
         this.blockedUsers = blockedUsers;
     }
 
