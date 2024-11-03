@@ -1,13 +1,42 @@
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 
+import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
 import java.io.*;
 
+import static org.junit.Assert.assertEquals;
+
 public class UserTest { //SUPER UNFINISHED
+    User user = new User("a", "b", null);
+
+    @Test
+    public void InitialValueTest() {
+        assertEquals("Initially, the username should be a.", "a", user.getUserName());
+        assertEquals("Initially, the password should be b.", "b", user.getPassword());
+    }
+    @Test
+    public void GettersAndSettersTest() {
+
+    }
+    @Test
+    public void TestCreateAccount() {
+        user.CreateAccount("a", "b");
+        Assert.assertFalse("Should return false if account already exists.", user.CreateAccount("a", "b"));
+    }
+    @Test
+    public void TestLogin() {
+        user.CreateAccount("a", "b");
+        Assert.assertTrue("Should return true when correctly inputting username and password.", user.login("a", "b"));
+    }
+    @Test
+    public void TestAddFreind() {
+
+    }
     public static void main(String[] args) {
         Result result = JUnitCore.runClasses(TestCases.class);
         System.out.printf("Test Count: %d.\n", result.getRunCount());
@@ -18,38 +47,6 @@ public class UserTest { //SUPER UNFINISHED
             for (Failure failure : result.getFailures()) {
                 System.out.println(failure.toString());
             }
-        }
-    }
-    public static class TestCases {
-        private final PrintStream originalOutput = System.out;
-        private final InputStream originalSystemIn = System.in;
-
-        @SuppressWarnings("FieldCanBeLocal")
-        private ByteArrayInputStream testIn;
-
-        @SuppressWarnings("FieldCanBeLocal")
-        private ByteArrayOutputStream testOut;
-
-        @Before
-        public void outputStart() {
-            testOut = new ByteArrayOutputStream();
-            System.setOut(new PrintStream(testOut));
-        }
-
-        @After
-        public void restoreInputAndOutput() {
-            System.setIn(originalSystemIn);
-            System.setOut(originalOutput);
-        }
-
-        private String getOutput() {
-            return testOut.toString();
-        }
-
-        @SuppressWarnings("SameParameterValue")
-        private void receiveInput(String str) {
-            testIn = new ByteArrayInputStream(str.getBytes());
-            System.setIn(testIn);
         }
     }
 }
