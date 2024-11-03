@@ -8,6 +8,7 @@ import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
 import java.io.*;
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
@@ -21,7 +22,16 @@ public class UserTest { //SUPER UNFINISHED
     }
     @Test
     public void GettersAndSettersTest() {
-
+        user.setUserName("c");
+        assertEquals("Username should be c", "c", user.getUserName());
+        user.setProfilePicture("a");
+        assertEquals("Profile Picture should be a", "a", user.getProfilePicture());
+        ArrayList<String> temp = new ArrayList<String>();
+        temp.add("a"); temp.add("b");
+        user.setFreindsList(temp);
+        assertEquals("Freinds list should be a, b", temp, user.getFreindsList());
+        user.setBlockedUsers(temp);
+        assertEquals("Blocked Users should be a, b", temp, user.getBlockedUsers());
     }
     @Test
     public void TestCreateAccount() {
