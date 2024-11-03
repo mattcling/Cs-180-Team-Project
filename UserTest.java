@@ -38,7 +38,7 @@ public class UserTest { //SUPER UNFINISHED
 
     }
     public static void main(String[] args) {
-        Result result = JUnitCore.runClasses(TestCases.class);
+        Result result = JUnitCore.runClasses(UserTest.class);
         System.out.printf("Test Count: %d.\n", result.getRunCount());
         if (result.wasSuccessful()) {
             System.out.print("Excellent - all local tests ran successfully.\n");
