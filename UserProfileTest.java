@@ -82,7 +82,7 @@ public class UserProfileTest {
             Class<?>[] superinterfaces;
 
             // Set the class being tested
-            clazz = UserProfile.class;
+            clazz = User.class;
 
             // Perform tests
 
