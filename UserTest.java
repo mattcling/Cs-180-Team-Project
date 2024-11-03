@@ -49,10 +49,42 @@ public class UserTest { //SUPER UNFINISHED
     }
     @Test
     public void TestAddFreind() {
-
+        ArrayList<String> temp = new ArrayList<String>();
+        temp.add("a"); temp.add("b");
+        user.setFreindsList(temp);
+        temp.add("c");
+        user.addFreind("c");
+        assertEquals("Freinds list should contain a, b, c.", temp, user.getFreindsList());
+    }
+    @Test
+    public void TestRemoveFreind() {
+        ArrayList<String> temp = new ArrayList<String>();
+        temp.add("a"); temp.add("b");
+        user.setFreindsList(temp);
+        temp.remove("b");
+        user.removeFreind("b");
+        assertEquals("Freinds list should only contain a.", temp, user.getFreindsList());
+    }
+    @Test
+    public void TestAddBlockedUser() {
+        ArrayList<String> temp = new ArrayList<String>();
+        temp.add("a"); temp.add("b");
+        user.setBlockedUsers(temp);
+        temp.add("c");
+        user.addBlockedUser("c");
+        assertEquals("Blocked list should contain a, b, c.", temp, user.getBlockedUsers());
+    }
+    @Test
+    public void TestUnblockUser() {
+        ArrayList<String> temp = new ArrayList<String>();
+        temp.add("a"); temp.add("b");
+        user.setBlockedUsers(temp);
+        temp.remove("b");
+        user.unBlockUser("b");
+        assertEquals("Blocked list should only contain a.", temp, user.getBlockedUsers());
     }
     public static void main(String[] args) {
-        Result result = JUnitCore.runClasses(TestCases.class);
+        Result result = JUnitCore.runClasses(UserTest.class);
         System.out.printf("Test Count: %d.\n", result.getRunCount());
         if (result.wasSuccessful()) {
             System.out.print("Excellent - all local tests ran successfully.\n");
