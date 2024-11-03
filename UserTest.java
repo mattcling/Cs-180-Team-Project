@@ -12,7 +12,16 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
-public class UserTest { //SUPER UNFINISHED
+/**
+ * A framework to run public test cases for the User class.
+ *
+ * <p>Purdue University -- CS18000 -- Fall 2024</p>
+ *
+ * @author Purdue CS
+ * @version November 3, 2024
+ */
+
+public class UserTest {
     User user = new User("a", "b", null);
 
     @Test(timeout = 1000)

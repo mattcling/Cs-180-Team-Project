@@ -10,7 +10,6 @@ public interface UserInterface {
     public boolean removeFreind(String freindsID);
     public boolean addFreind(String freindsID);
     public String getUserID();
-    public String getPassword();
     public String getProfilePicture();
     public List<String> getFreindsList();
     public List<String> getBlockedUsers();
@@ -18,5 +17,4 @@ public interface UserInterface {
     public void setProfilePicture(String profilePicture);
     public void setFreindsList(List<String> freindsList);
     public void setBlockedUsers(List<String> blockedUsers);
-
 }
