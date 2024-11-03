@@ -1,7 +1,8 @@
 import java.util.*;
 import java.io.*;
 
-public class User implements UserInterface {
+public class User implements UserInterface,Serializable {
+    private static final long serialVersionUID = 1L;
 
     private String UserID; // will be a set of 12 digits for a mostly uncapped user count
     private String Password; // make sure only numbers and letters

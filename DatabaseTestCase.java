@@ -20,44 +20,43 @@ public class DatabaseTestCase {
     private Chat testingchat;
     private Message testingmessage;
 
-    //to clear files after each test
+
+
+    @Before
+    public void setUp() throws Exception {
+        db = new Database();
+        testinguser = new User("testinguser","1234",db);
+        testingchat = new Chat("1234");
+        testingmessage = new Message("messageID","sendingUser","recivingUser","contents");
+
+        db.saveData(testinguser,"user");
+        db.saveData(testingchat,"chats");
+        db.saveData(testingmessage,"messages");
+    }
     void clearfiles(){
         db.deleteData("users", "testinguser");
         db.deleteData("chats", "testingchat");
         db.deleteData("messages", "testingmessage");
     }
 
-    @Before
-    public void setUp() throws Exception {
-        clearfiles();
-        db = new Database();
-        testinguser = new User("testinguser","1234",db);
-        testingchat = new Chat("1234");
-        testingmessage = new Message("messageid","sendingUser","recivingUser","contents");
-
-        db.saveData(testinguser,"user");
-        db.saveData(testingchat,"chat");
-        db.saveData(testingmessage,"message");
-    }
-
 
     @Test
     public void testsaveData(){
-        assertTrue(db.saveData(new User("newuser","1234",db),"users"));
-        assertNotNull(db.getData("users","newuser"));
+        assertTrue(db.saveData(new User("newuser","1234",db),"user"));
+        assertNotNull(db.getData("user","newuser"));
     }
     @Test
     public void testgetData(){
-        assertEquals(testinguser,db.getData("users","testinguser"));
-        assertEquals(testingchat,db.getData("chat","testingchat"));
-        assertEquals(testingmessage,db.getData("message","testingmessage"));
+        assertEquals(testinguser,db.getData("user","testinguser"));
+        assertEquals(testingchat,db.getData("chats","1234"));
+        assertEquals(testingmessage,db.getData("message","messageID"));
 
     }
 
     @Test
     public void testdeleteData(){
-        db.deleteData("users", "testinguser");
-        assertNull(db.getData("users","testinguser"));
+        db.deleteData("user", "testinguser");
+        assertNull(db.getData("user","testinguser"));
     }
 
     @Test
@@ -65,9 +64,9 @@ public class DatabaseTestCase {
         db.saveData();
         db.initializeDatabase();
 
-        assertNotNull(db.getData("users","testinguser"));
-        assertNotNull(db.getData("chat","testingchat"));
-        assertNotNull(db.getData("message","testingmessage"));
+        assertNotNull(db.getData("user","testinguser"));
+        assertNotNull(db.getData("chats","1234"));
+        assertNotNull(db.getData("messages","messageID"));
     }
 
     public static void main(String[] args) {
