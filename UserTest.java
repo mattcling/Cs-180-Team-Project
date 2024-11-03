@@ -32,6 +32,10 @@ public class UserTest { //SUPER UNFINISHED
         assertEquals("Freinds list should be a, b", temp, user.getFreindsList());
         user.setBlockedUsers(temp);
         assertEquals("Blocked Users should be a, b", temp, user.getBlockedUsers());
+        user.setPassword("a");
+        assertEquals("Password should be a", "a", user.getPassword());
+        user.setUserID("a");
+        assertEquals("UserID should be a", "a", user.getUserID());
     }
     @Test
     public void TestCreateAccount() {
