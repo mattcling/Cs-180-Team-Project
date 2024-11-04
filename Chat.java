@@ -3,17 +3,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A framework to control chats for a c socail media
+ * A framework to control chats for a socail media
  *
  * <p>
  * Purdue University -- CS18000 -- Fall 2024
  * </p>
  *
+ * @author purdue cs
  * @version November 2, 2024
  */
 
 public class Chat implements Serializable, ChatInterface {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersion = 1L;
 
     private String chatID;
     private List<Message> messages;
@@ -22,7 +23,7 @@ public class Chat implements Serializable, ChatInterface {
 
     // constructor :)
     public Chat(String chatID) {
-        this.chatID = chatID;
+        this.chatId = chatId;
         this.messages = new ArrayList<>();
         this.participants = new ArrayList<>();
     }
@@ -40,11 +41,11 @@ public class Chat implements Serializable, ChatInterface {
     }
 
     public String getChatID() {
-        return chatID;
+        return chatId;
     }
 
-    public void setChatID(String chatID) {
-        this.chatID = chatID;
+    public void setChatID(String chatId) {
+        this.chatID = chatId;
     }
 
     public List<String> getParticipants() {
