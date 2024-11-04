@@ -2,22 +2,27 @@ import java.util.*;
 import java.io.*;
 
 /**
- * A framework to control users for a social media platform
+ * A framework to run public test cases for the User class.
  *
- * <p>
- * Purdue University -- CS18000 -- Fall 2024
- * </p>
+ * <p>Purdue University -- CS18000 -- Fall 2024</p>
  *
- * @version November 2, 2024
+ * @author Purdue CS
+ * @author Matthew Clingerman
+ * @author Charlotte Falus
+ * @author Luke Guiboux
+ * @author Kimaya Deshpande
+ * @author Sid Songirkar
+ * @version November 3, 2024
  */
-public class User implements UserInterface, Serializable {
-    private static final long serialVersionUID = 1L;
 
-    private String UserID; // will be a set of 12 digits for a mostly uncapped user count
-    private String Password; // make sure only numbers and letters
+public class User implements UserInterface, Serializable {
+    private static final long SERIAL_VERSION_UID = 1L;
+
+    private String userID; // will be a set of 12 digits for a mostly uncapped user count
+    private String password; // make sure only numbers and letters
     private String userName; // this will be chosen by user
-    private String ProfilePicture; // should be the file i want to acces
-    private List<String> FreindsList; // stores all frreinds id numbers
+    private String profilePicture; // should be the file i want to acces
+    private List<String> freindsList; // stores all frreinds id numbers
     // using lists for easier access and this way we know that things wont get complicated with lengths of a basic array
     private List<String> blockedUsers; // stores blocked freinds id numbers
 
@@ -26,28 +31,28 @@ public class User implements UserInterface, Serializable {
     public User(String username,
                 String password,
                 DatabaseInterface database) {
-        this.UserID = GenerateUserID(); // this method uses a io class to make a random sting of numbers and letters
-        this.Password = password;
+        this.userID = generateUserID(); // this method uses a io class to make a random sting of numbers and letters
+        this.password = password;
         this.database = database;
         this.userName = username;
         this.blockedUsers = new ArrayList<>();
-        this.FreindsList = new ArrayList<>();
+        this.freindsList = new ArrayList<>();
     }
 
-    public boolean CreateAccount(String username, String password) {
+    public boolean createAccount(String username, String newPassword) {
 
         if (database.getData(username, "users") != null) {
             System.out.println("User already exists");
             return false;
         }
 
-        User newUser = new User(username, password, database);
+        User newUser = new User(username, newPassword, database);
         return database.saveData(newUser, "users");
     }
 
-    public boolean login(String username, String password) {
+    public boolean login(String username, String userpassword) {
         User user = (User) database.getData(username, "users");
-        if (user != null && user.Password.equals(password)) {
+        if (user != null && user.password.equals(userpassword)) {
             System.out.println("User logged in");
             return true;
         }
@@ -60,8 +65,8 @@ public class User implements UserInterface, Serializable {
     }
 
     public boolean addFreind(String freindsID) {
-        if (!FreindsList.contains(freindsID)) {
-            FreindsList.add(freindsID);
+        if (!freindsList.contains(freindsID)) {
+            freindsList.add(freindsID);
             System.out.println("Freind added");
             return true;
         }
@@ -70,8 +75,8 @@ public class User implements UserInterface, Serializable {
     }
 
     public boolean removeFreind(String freindsID) {
-        if (FreindsList.contains(freindsID)) {
-            FreindsList.remove(freindsID);
+        if (freindsList.contains(freindsID)) {
+            freindsList.remove(freindsID);
             System.out.println("Freind removed");
             return true;
         }
@@ -99,18 +104,18 @@ public class User implements UserInterface, Serializable {
         return false;
     }
 
-    private String GenerateUserID() {
+    public String generateUserID() {
         return "UID" + UUID.randomUUID();
     }
 
 
     // getters and setters
     public String getUserID() {
-        return UserID;
+        return userID;
     }
 
     public String getPassword() {
-        return Password;
+        return password;
     }
 
     public String getUserName() {
@@ -118,11 +123,11 @@ public class User implements UserInterface, Serializable {
     }
 
     public String getProfilePicture() {
-        return ProfilePicture;
+        return profilePicture;
     }
 
     public List<String> getFreindsList() {
-        return FreindsList;
+        return freindsList;
     }
 
     public List<String> getBlockedUsers() {
@@ -134,11 +139,11 @@ public class User implements UserInterface, Serializable {
     }
 
     public void setProfilePicture(String profilePicture) {
-        ProfilePicture = profilePicture;
+        profilePicture = profilePicture;
     }
 
     public void setFreindsList(List<String> freindsList) {
-        FreindsList = freindsList;
+        freindsList = freindsList;
     }
 
     public void setBlockedUsers(List<String> blockedUsers) {
@@ -146,11 +151,11 @@ public class User implements UserInterface, Serializable {
     }
 
     public void setPassword(String password) {
-        this.Password = password;
+        this.password = password;
     }
 
     public void setUserID(String userID) {
-        this.UserID = userID;
+        this.userID = userID;
     }
 
 

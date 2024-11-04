@@ -11,15 +11,21 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+
 /**
- * A framework to run public test cases for the Chat class.
+ * A framework to run public test cases for the User class.
  *
- * <p>
- * Purdue University -- CS18000 -- Fall 2024
- * </p>
+ * <p>Purdue University -- CS18000 -- Fall 2024</p>
  *
- * @version November 2, 2024
+ * @author Purdue CS
+ * @author Matthew Clingerman
+ * @author Charlotte Falus
+ * @author Luke Guiboux
+ * @author Kimaya Deshpande
+ * @author Sid Songirkar
+ * @version November 3, 2024
  */
+
 
 public class ChatTest {
     private Chat chat;
@@ -45,7 +51,7 @@ public class ChatTest {
     @Test
     public void testAddMessage() {
         chat.addMessage(message);
-        List<Message> messages = chat.ReceiveChat(message);
+        List<Message> messages = chat.receiveChat(message);
         assertEquals("The chat should contain 1 message after adding a message.", 1, messages.size());
         assertEquals("The message content should match the added message.", "Hello, world!",
                 messages.get(0).getContents());
@@ -54,8 +60,8 @@ public class ChatTest {
     @Test
     public void testRemoveMessage() {
         chat.addMessage(message);
-        chat.RemoveMessage(message);
-        List<Message> messages = chat.ReceiveChat(message);
+        chat.removeMessage(message);
+        List<Message> messages = chat.receiveChat(message);
         assertTrue("The chat should be empty after removing the message.", messages.isEmpty());
     }
 
@@ -68,7 +74,7 @@ public class ChatTest {
     @Test
     public void testReceiveChat() {
         chat.addMessage(message);
-        List<Message> messages = chat.ReceiveChat(message);
+        List<Message> messages = chat.receiveChat(message);
         assertEquals("ReceiveChat should return a list containing the added message.", 1, messages.size());
         assertEquals("The returned message should match the added message.", message, messages.get(0));
     }

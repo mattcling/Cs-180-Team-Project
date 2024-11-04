@@ -1,14 +1,19 @@
 import java.io.Serializable;
 
 /**
- * A framework to run profiles for the social media platofrom
+ * A framework to run public test cases for the User class.
  *
- * <p>
- * Purdue University -- CS18000 -- Fall 2024
- * </p>
+ * <p>Purdue University -- CS18000 -- Fall 2024</p>
  *
- * @version November 2, 2024
+ * @author Purdue CS
+ * @author Matthew Clingerman
+ * @author Charlotte Falus
+ * @author Luke Guiboux
+ * @author Kimaya Deshpande
+ * @author Sid Songirkar
+ * @version November 3, 2024
  */
+
 public class Profile implements Serializable, ProfileInterface {
     private static final long serialVersionUID = 1L;
 
@@ -17,10 +22,10 @@ public class Profile implements Serializable, ProfileInterface {
     public String profilePicture;
 
 
-    public Profile(String userID, String bio, String ProfilePicture) {
+    public Profile(String userID, String bio, String userProfilePicture) {
         this.userID = userID;
         this.bio = bio;
-        this.profilePicture = ProfilePicture;
+        this.profilePicture = userProfilePicture;
     }
 
     public String getUserID() {
@@ -43,13 +48,13 @@ public class Profile implements Serializable, ProfileInterface {
         return profilePicture;
     }
 
-    public void setprofilePicture(String ProfilePicture) {
-        profilePicture = ProfilePicture;
+    public void setprofilePicture(String userProfilePicture) {
+        this.profilePicture = userProfilePicture;
     }
 
-    public void updateProfile(String bio, String ProfilePicture) {
-        setBio(bio);
-        setprofilePicture(ProfilePicture);
+    public void updateProfile(String userbio, String userProfilePicture) {
+        setBio(userbio);
+        setprofilePicture(userProfilePicture);
         System.out.println("Profile updated successfully.");
     }
 

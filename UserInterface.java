@@ -1,21 +1,27 @@
 import java.util.List;
-
 /**
- * A interface for the user class
+ * A framework to run public test cases for the User class.
  *
- * <p>
- * Purdue University -- CS18000 -- Fall 2024
- * </p>
+ * <p>Purdue University -- CS18000 -- Fall 2024</p>
  *
- * @version November 2, 2024
+ * @author Purdue CS
+ * @author Matthew Clingerman
+ * @author Charlotte Falus
+ * @author Luke Guiboux
+ * @author Kimaya Deshpande
+ * @author Sid Songirkar
+ * @version November 3, 2024
  */
+
 public interface UserInterface {
 
-    boolean CreateAccount(String username, String password);
+    boolean createAccount(String username, String password);
 
     boolean login(String username, String password);
 
     void logout();
+
+    String generateUserID();
 
     public boolean addBlockedUser(String blockedUserID);
 

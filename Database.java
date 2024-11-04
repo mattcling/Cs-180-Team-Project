@@ -2,14 +2,19 @@ import java.io.*;
 import java.util.*;
 
 /**
- * A framework to run a database for a social media
+ * A framework to run public test cases for the User class.
  *
- * <p>
- * Purdue University -- CS18000 -- Fall 2024
- * </p>
+ * <p>Purdue University -- CS18000 -- Fall 2024</p>
  *
- * @version November 2, 2024
+ * @author Purdue CS
+ * @author Matthew Clingerman
+ * @author Charlotte Falus
+ * @author Luke Guiboux
+ * @author Kimaya Deshpande
+ * @author Sid Songirkar
+ * @version November 3, 2024
  */
+
 
 public class Database implements DatabaseInterface {
 
@@ -20,25 +25,24 @@ public class Database implements DatabaseInterface {
     // we will be using hashmap tabels and the tables will all have their own info stored
 
     private Map<String, User> userTable = new HashMap<>();
-    private Map<String, Chat> chatTable = new HashMap<>(); // if this is still error its because i havent ended up making chat class
+    private Map<String, Chat> chatTable = new HashMap<>();
     private Map<String, Message> messageTable = new HashMap<>();
 
-    private final String USERDATE_FILE = "userTable.ser";
-    private final String CHATDATE_FILE = "chatTable.ser";
-    private final String MESSAGEDATE_FILE = "messageTable.ser";
+    private final String userDataFile = "userTable.ser";
+    private final String chatDataFile = "chatTable.ser";
+    private final String messageDataFile = "messageTable.ser";
 
 
-    public void LoadOldData() { // this needs loadtable method made
-        userTable = loadTableUser(USERDATE_FILE);
-        chatTable = loadTableChat(CHATDATE_FILE);
-        messageTable = loadTableMessage(MESSAGEDATE_FILE);
+    public void loadOldData() { // this needs loadtable method made
+        userTable = loadTableUser(userDataFile);
+        chatTable = loadTableChat(chatDataFile);
+        messageTable = loadTableMessage(messageDataFile);
     }
 
     public void saveData() {
-        saveTableUser(userTable, USERDATE_FILE);
-        saveTableChat(chatTable, CHATDATE_FILE);
-        saveTableMessage(messageTable, MESSAGEDATE_FILE);
-        // once again unmade method if still error talk to me and i will see if the method is done also note to me finsih
+        saveTableUser(userTable, userDataFile);
+        saveTableChat(chatTable, chatDataFile);
+        saveTableMessage(messageTable, messageDataFile);
     }
 
     public void saveTableUser(Map<String, User> table, String filename) {
@@ -100,9 +104,9 @@ public class Database implements DatabaseInterface {
     public void initializeDatabase() {
         System.out.println("Initializing database...");
 
-        userTable = loadTableUser(USERDATE_FILE);
-        messageTable = loadTableMessage(MESSAGEDATE_FILE);
-        chatTable = loadTableChat(CHATDATE_FILE);
+        userTable = loadTableUser(userDataFile);
+        messageTable = loadTableMessage(messageDataFile);
+        chatTable = loadTableChat(chatDataFile);
 
         System.out.println("Database initialized!!!");
     }
@@ -154,7 +158,7 @@ public class Database implements DatabaseInterface {
         }
     }
 
-    public boolean ChangeData(String tableName, Object data, String key) {
+    public boolean changeData(String tableName, Object data, String key) {
         switch (tableName) {
             case "user":
                 if (data instanceof User) {

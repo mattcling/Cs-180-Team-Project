@@ -3,18 +3,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A framework to control chats for a socail media
+ * A framework to run public test cases for the User class.
  *
- * <p>
- * Purdue University -- CS18000 -- Fall 2024
- * </p>
+ * <p>Purdue University -- CS18000 -- Fall 2024</p>
  *
- * @author purdue cs
- * @version November 2, 2024
+ * @author Purdue CS
+ * @author Matthew Clingerman
+ * @author Charlotte Falus
+ * @author Luke Guiboux
+ * @author Kimaya Deshpande
+ * @author Sid Songirkar
+ * @version November 3, 2024
  */
 
+
 public class Chat implements Serializable, ChatInterface {
-    private static final long serialVersion = 1L;
+    private static final long SERIAL_VERSION_UID = 1L;
 
     private String chatID;
     private List<Message> messages;
@@ -23,7 +27,7 @@ public class Chat implements Serializable, ChatInterface {
 
     // constructor :)
     public Chat(String chatID) {
-        this.chatId = chatId;
+        this.chatID = chatID;
         this.messages = new ArrayList<>();
         this.participants = new ArrayList<>();
     }
@@ -32,16 +36,16 @@ public class Chat implements Serializable, ChatInterface {
         messages.add(message);
     }
 
-    public void RemoveMessage(Message message) {
+    public void removeMessage(Message message) {
         messages.remove(message);
     }
 
-    public List<Message> ReceiveChat(Message message) {
+    public List<Message> receiveChat(Message message) {
         return new ArrayList<>(messages);
     }
 
     public String getChatID() {
-        return chatId;
+        return chatID;
     }
 
     public void setChatID(String chatId) {
@@ -51,6 +55,5 @@ public class Chat implements Serializable, ChatInterface {
     public List<String> getParticipants() {
         return new ArrayList<>(participants);
     }
-
 
 }

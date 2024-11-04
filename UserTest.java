@@ -18,6 +18,11 @@ import static org.junit.Assert.assertEquals;
  * <p>Purdue University -- CS18000 -- Fall 2024</p>
  *
  * @author Purdue CS
+ * @author Matthew Clingerman
+ * @author Charlotte Falus
+ * @author Luke Guiboux
+ * @author Kimaya Deshpande
+ * @author Sid Songirkar
  * @version November 3, 2024
  */
 
@@ -25,13 +30,13 @@ public class UserTest {
     User user = new User("a", "b", null);
 
     @Test(timeout = 1000)
-    public void InitialValueTest() {
+    public void initialValueTest() {
         assertEquals("Initially, the username should be a.", "a", user.getUserName());
         assertEquals("Initially, the password should be b.", "b", user.getPassword());
     }
 
     @Test(timeout = 1000)
-    public void GettersAndSettersTest() {
+    public void gettersAndSettersTest() {
         user.setUserName("c");
         assertEquals("Username should be c", "c", user.getUserName());
         user.setProfilePicture("a");
@@ -50,19 +55,19 @@ public class UserTest {
     }
 
     @Test(timeout = 1000)
-    public void TestCreateAccount() {
-        user.CreateAccount("a", "b");
-        Assert.assertFalse("Should return false if account already exists.", user.CreateAccount("a", "b"));
+    public void testCreateAccount() {
+        user.createAccount("a", "b");
+        Assert.assertFalse("Should return false if account already exists.", user.createAccount("a", "b"));
     }
 
     @Test(timeout = 1000)
-    public void TestLogin() {
-        user.CreateAccount("a", "b");
+    public void testLogin() {
+        user.createAccount("a", "b");
         Assert.assertTrue("Should return true when correctly inputting username and password.", user.login("a", "b"));
     }
 
     @Test(timeout = 1000)
-    public void TestAddFreind() {
+    public void testAddFreind() {
         ArrayList<String> temp = new ArrayList<String>();
         temp.add("a");
         temp.add("b");
@@ -73,7 +78,7 @@ public class UserTest {
     }
 
     @Test(timeout = 1000)
-    public void TestRemoveFreind() {
+    public void testRemoveFreind() {
         ArrayList<String> temp = new ArrayList<String>();
         temp.add("a");
         temp.add("b");
@@ -84,7 +89,7 @@ public class UserTest {
     }
 
     @Test(timeout = 1000)
-    public void TestAddBlockedUser() {
+    public void testAddBlockedUser() {
         ArrayList<String> temp = new ArrayList<String>();
         temp.add("a");
         temp.add("b");
@@ -95,7 +100,7 @@ public class UserTest {
     }
 
     @Test(timeout = 1000)
-    public void TestUnblockUser() {
+    public void testUnblockUser() {
         ArrayList<String> temp = new ArrayList<String>();
         temp.add("a");
         temp.add("b");

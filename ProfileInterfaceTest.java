@@ -20,12 +20,17 @@ import java.util.UUID;
 import static org.junit.Assert.*;
 
 /**
- * A framework to run public test cases for the Profile class.
+ * A framework to run public test cases for the User class.
  *
  * <p>Purdue University -- CS18000 -- Fall 2024</p>
  *
  * @author Purdue CS
- * @version November 2, 2024
+ * @author Matthew Clingerman
+ * @author Charlotte Falus
+ * @author Luke Guiboux
+ * @author Kimaya Deshpande
+ * @author Sid Songirkar
+ * @version November 3, 2024
  */
 
 
@@ -43,7 +48,19 @@ public class ProfileInterfaceTest {
 
     }
 
+
+    /**
+     * A framework to run profiles for the social media platofrom
+     *
+     * <p>
+     * Purdue University -- CS18000 -- Fall 2024
+     * </p>
+     *
+     * @ author purdue CS
+     * @version November 2, 2024
+     */
     //certain tests possible for the messages code
+
     public static class TestCase {
         private final PrintStream originalOutput = System.out;
         private final InputStream originalSysin = System.in;

@@ -12,13 +12,19 @@ import java.time.LocalDateTime;
 import static org.junit.Assert.*;
 
 /**
- * A framework to run public test cases for the Message class.
+ * A framework to run public test cases for the User class.
  *
  * <p>Purdue University -- CS18000 -- Fall 2024</p>
  *
  * @author Purdue CS
- * @version November 2, 2024
+ * @author Matthew Clingerman
+ * @author Charlotte Falus
+ * @author Luke Guiboux
+ * @author Kimaya Deshpande
+ * @author Sid Songirkar
+ * @version November 3, 2024
  */
+
 
 public class MessageTest {
     //testing message with an object
@@ -147,4 +153,3 @@ public class MessageTest {
 
     }
 }
-
