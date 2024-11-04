@@ -1,4 +1,4 @@
-import java.time.LocalDateTime; 
+import java.time.LocalDateTime;
 import java.io.Serializable;
 
 /**
@@ -42,42 +42,51 @@ public class Message implements Serializable, MessageInterface {
     public String getMessageID() {
         return messageID;
     }
+
     public void setMessageID(String messageID) {
         if (messageID == null || messageID.isEmpty()) {
             throw new IllegalArgumentException("messageID cannot be null or empty.");
         }
         this.messageID = messageID;
     }
+
     public String getSenderID() {
         return senderID;
     }
+
     public void setSenderID(String senderID) {
         if (senderID == null || senderID.isEmpty()) {
             throw new IllegalArgumentException("senderID cannot be null or empty.");
         }
         this.senderID = senderID;
     }
+
     public String getReceiverID() {
         return receiverID;
     }
+
     public void setReceiverID(String receiverID) {
         if (receiverID == null || receiverID.isEmpty()) {
             throw new IllegalArgumentException("receiverID cannot be null or empty.");
         }
         this.receiverID = receiverID;
     }
+
     public String getContents() {
         return contents;
     }
+
     public void setContents(String contents) {
         if (contents == null || contents.isEmpty()) {
             throw new IllegalArgumentException("contents cannot be null or empty.");
         }
         this.contents = contents;
     }
+
     public LocalDateTime getDateTime() {
         return dateTime;
     }
+
     public void setDateTime(LocalDateTime dateTime) {
         if (dateTime == null) {
             throw new IllegalArgumentException("receiverID cannot be null or empty.");

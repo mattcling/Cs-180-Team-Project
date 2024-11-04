@@ -12,6 +12,15 @@ import java.lang.reflect.*;
 
 import static org.junit.Assert.*;
 
+/**
+ * A framework to run public test cases for the database class.
+ *
+ * <p>
+ * Purdue University -- CS18000 -- Fall 2024
+ * </p>
+ *
+ * @version November 2, 2024
+ */
 
 public class DatabaseTestCase {
 
@@ -21,19 +30,19 @@ public class DatabaseTestCase {
     private Message testingmessage;
 
 
-
     @Before
     public void setUp() throws Exception {
         db = new Database();
-        testinguser = new User("testinguser","1234",db);
+        testinguser = new User("testinguser", "1234", db);
         testingchat = new Chat("1234");
-        testingmessage = new Message("messageID","sendingUser","recivingUser","contents");
+        testingmessage = new Message("messageID", "sendingUser", "recivingUser", "contents");
 
-        db.saveData(testinguser,"user");
-        db.saveData(testingchat,"chats");
-        db.saveData(testingmessage,"messages");
+        db.saveData(testinguser, "user");
+        db.saveData(testingchat, "chats");
+        db.saveData(testingmessage, "messages");
     }
-    void clearfiles(){
+
+    void clearfiles() {
         db.deleteData("users", "testinguser");
         db.deleteData("chats", "testingchat");
         db.deleteData("messages", "testingmessage");
@@ -41,32 +50,33 @@ public class DatabaseTestCase {
 
 
     @Test
-    public void testsaveData(){
-        assertTrue(db.saveData(new User("newuser","1234",db),"user"));
-        assertNotNull(db.getData("user","newuser"));
+    public void testsaveData() {
+        assertTrue(db.saveData(new User("newuser", "1234", db), "user"));
+        assertNotNull(db.getData("user", "newuser"));
     }
+
     @Test
-    public void testgetData(){
-        assertEquals(testinguser,db.getData("user","testinguser"));
-        assertEquals(testingchat,db.getData("chats","1234"));
-        assertEquals(testingmessage,db.getData("message","messageID"));
+    public void testgetData() {
+        assertEquals(testinguser, db.getData("user", "testinguser"));
+        assertEquals(testingchat, db.getData("chats", "1234"));
+        assertEquals(testingmessage, db.getData("message", "messageID"));
 
     }
 
     @Test
-    public void testdeleteData(){
+    public void testdeleteData() {
         db.deleteData("user", "testinguser");
-        assertNull(db.getData("user","testinguser"));
+        assertNull(db.getData("user", "testinguser"));
     }
 
     @Test
-    public void testloadata(){
+    public void testloadata() {
         db.saveData();
         db.initializeDatabase();
 
-        assertNotNull(db.getData("user","testinguser"));
-        assertNotNull(db.getData("chats","1234"));
-        assertNotNull(db.getData("messages","messageID"));
+        assertNotNull(db.getData("user", "testinguser"));
+        assertNotNull(db.getData("chats", "1234"));
+        assertNotNull(db.getData("messages", "messageID"));
     }
 
     public static void main(String[] args) {

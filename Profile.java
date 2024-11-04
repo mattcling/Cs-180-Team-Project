@@ -1,5 +1,14 @@
 import java.io.Serializable;
 
+/**
+ * A framework to run profiles for the social media platofrom
+ *
+ * <p>
+ * Purdue University -- CS18000 -- Fall 2024
+ * </p>
+ *
+ * @version November 2, 2024
+ */
 public class Profile implements Serializable, ProfileInterface {
     private static final long serialVersionUID = 1L;
 
@@ -17,18 +26,23 @@ public class Profile implements Serializable, ProfileInterface {
     public String getUserID() {
         return userID;
     }
+
     public void setUserID(String userID) {
         this.userID = userID;
     }
+
     public String getBio() {
         return bio;
     }
+
     public void setBio(String bio) {
         this.bio = bio;
     }
+
     public String getprofilePicture() {
         return profilePicture;
     }
+
     public void setprofilePicture(String ProfilePicture) {
         profilePicture = ProfilePicture;
     }
@@ -42,15 +56,12 @@ public class Profile implements Serializable, ProfileInterface {
     public void displayProfile() {
         System.out.println("User ID: " + userID);
         System.out.println("Bio: " + bio);
-        if(profilePicture != null) {
+        if (profilePicture != null) {
             System.out.println("Profile Picture: " + profilePicture);
-        }
-        else {
+        } else {
             System.out.println("Profile Picture is null or empty.");
         }
     }
-
-
 
 
 }

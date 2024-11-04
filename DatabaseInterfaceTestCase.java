@@ -46,19 +46,19 @@ public class DatabaseInterfaceTestCase {
             fail("The Message interface is missing the 'saveData' method.");
         }
         try {
-            Method delete = dataclass.getMethod("deleteData", String.class , String.class);
+            Method delete = dataclass.getMethod("deleteData", String.class, String.class);
             assertNotNull("The Message interface should have an 'deleteData' method.", delete);
         } catch (NoSuchMethodException e) {
             fail("The Message interface is missing the 'deleteData' method.");
         }
         try {
-            Method change = dataclass.getMethod("ChangeData", String.class,Object.class , String.class);
+            Method change = dataclass.getMethod("ChangeData", String.class, Object.class, String.class);
             assertNotNull("The Message interface should have an 'ChangeData' method.", change);
         } catch (NoSuchMethodException e) {
             fail("The Message interface is missing the 'ChangeData' method.");
         }
         try {
-            Method get = dataclass.getMethod("getData",String.class , String.class);
+            Method get = dataclass.getMethod("getData", String.class, String.class);
             assertNotNull("The Message interface should have an 'getData' method.", get);
         } catch (NoSuchMethodException e) {
             fail("The Message interface is missing the 'getData' method.");
@@ -130,7 +130,7 @@ public class DatabaseInterfaceTestCase {
 
         Assert.assertTrue("Ensure that `Message Interface` is NOT `abstract`!", Modifier.isAbstract(modifiers));
 
-        Assert.assertEquals("Ensure that Message Interface has no interfaces itself" , 0, superinterfaces.length);
+        Assert.assertEquals("Ensure that Message Interface has no interfaces itself", 0, superinterfaces.length);
     }
 
     public static void main(String[] args) {

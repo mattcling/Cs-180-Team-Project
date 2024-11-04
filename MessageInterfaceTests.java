@@ -29,7 +29,7 @@ public class MessageInterfaceTests {
         int modifiers;
         Class<?> superclass;
         Class<?>[] superinterfaces;
-        
+
         //testing if methods are there that should be
         //getters:
         try {
@@ -62,7 +62,7 @@ public class MessageInterfaceTests {
         } catch (NoSuchMethodException e) {
             fail("The Message interface is missing the 'getContents' method.");
         }
-        
+
         //setters
         try {
             Method set = clazz.getMethod("setContents", String.class);
@@ -94,7 +94,7 @@ public class MessageInterfaceTests {
         } catch (NoSuchMethodException e) {
             fail("The Message interface is missing the 'setDateTime' method.");
         }
-        
+
         modifiers = clazz.getModifiers();
 
         superclass = clazz.getSuperclass();
@@ -105,7 +105,7 @@ public class MessageInterfaceTests {
 
         Assert.assertTrue("Ensure that `Message Interface` is NOT `abstract`!", Modifier.isAbstract(modifiers));
 
-        Assert.assertEquals("Ensure that Message Interface has no interfaces itself" , 0, superinterfaces.length);
+        Assert.assertEquals("Ensure that Message Interface has no interfaces itself", 0, superinterfaces.length);
     }
 
     public static void main(String[] args) {

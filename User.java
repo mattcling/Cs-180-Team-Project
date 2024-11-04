@@ -1,7 +1,16 @@
 import java.util.*;
 import java.io.*;
 
-public class User implements UserInterface,Serializable {
+/**
+ * A framework to control users for a social media platform
+ *
+ * <p>
+ * Purdue University -- CS18000 -- Fall 2024
+ * </p>
+ *
+ * @version November 2, 2024
+ */
+public class User implements UserInterface, Serializable {
     private static final long serialVersionUID = 1L;
 
     private String UserID; // will be a set of 12 digits for a mostly uncapped user count
@@ -16,7 +25,7 @@ public class User implements UserInterface,Serializable {
 
     public User(String username,
                 String password,
-                DatabaseInterface database ) {
+                DatabaseInterface database) {
         this.UserID = GenerateUserID(); // this method uses a io class to make a random sting of numbers and letters
         this.Password = password;
         this.database = database;
@@ -25,9 +34,9 @@ public class User implements UserInterface,Serializable {
         this.FreindsList = new ArrayList<>();
     }
 
-    public boolean CreateAccount(String username,String password) {
+    public boolean CreateAccount(String username, String password) {
 
-        if(database.getData(username, "users") != null){
+        if (database.getData(username, "users") != null) {
             System.out.println("User already exists");
             return false;
         }
@@ -36,9 +45,9 @@ public class User implements UserInterface,Serializable {
         return database.saveData(newUser, "users");
     }
 
-    public boolean login(String username,String password) {
+    public boolean login(String username, String password) {
         User user = (User) database.getData(username, "users");
-        if(user != null && user.Password.equals(password)){
+        if (user != null && user.Password.equals(password)) {
             System.out.println("User logged in");
             return true;
         }
@@ -51,7 +60,7 @@ public class User implements UserInterface,Serializable {
     }
 
     public boolean addFreind(String freindsID) {
-        if(!FreindsList.contains(freindsID)){
+        if (!FreindsList.contains(freindsID)) {
             FreindsList.add(freindsID);
             System.out.println("Freind added");
             return true;
@@ -59,8 +68,9 @@ public class User implements UserInterface,Serializable {
         System.out.println("this person is already your freind");
         return false;
     }
+
     public boolean removeFreind(String freindsID) {
-        if(FreindsList.contains(freindsID)){
+        if (FreindsList.contains(freindsID)) {
             FreindsList.remove(freindsID);
             System.out.println("Freind removed");
             return true;
@@ -70,7 +80,7 @@ public class User implements UserInterface,Serializable {
     }
 
     public boolean addBlockedUser(String blockedUserID) {
-        if(!blockedUsers.contains(blockedUserID)){
+        if (!blockedUsers.contains(blockedUserID)) {
             blockedUsers.add(blockedUserID);
             System.out.println("Blocked user!");
             return true;
@@ -80,7 +90,7 @@ public class User implements UserInterface,Serializable {
     }
 
     public boolean unBlockUser(String blockedUserID) {
-        if(blockedUsers.contains(blockedUserID)){
+        if (blockedUsers.contains(blockedUserID)) {
             blockedUsers.remove(blockedUserID);
             System.out.println("Blocked user unblocked");
             return true;
@@ -98,18 +108,23 @@ public class User implements UserInterface,Serializable {
     public String getUserID() {
         return UserID;
     }
+
     public String getPassword() {
         return Password;
     }
+
     public String getUserName() {
         return userName;
     }
+
     public String getProfilePicture() {
         return ProfilePicture;
     }
+
     public List<String> getFreindsList() {
         return FreindsList;
     }
+
     public List<String> getBlockedUsers() {
         return blockedUsers;
     }
@@ -117,21 +132,26 @@ public class User implements UserInterface,Serializable {
     public void setUserName(String userName) {
         this.userName = userName;
     }
+
     public void setProfilePicture(String profilePicture) {
         ProfilePicture = profilePicture;
     }
+
     public void setFreindsList(List<String> freindsList) {
         FreindsList = freindsList;
     }
+
     public void setBlockedUsers(List<String> blockedUsers) {
         this.blockedUsers = blockedUsers;
     }
-    public void setPassword(String password) { this.Password = password; }
-    public void setUserID(String userID) { this.UserID = userID; }
 
+    public void setPassword(String password) {
+        this.Password = password;
+    }
 
-
-
+    public void setUserID(String userID) {
+        this.UserID = userID;
+    }
 
 
 }

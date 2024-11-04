@@ -1,13 +1,16 @@
 import java.time.LocalDateTime;
+
 import org.junit.Test;
 import org.junit.Assert;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
+
 import java.lang.reflect.*;
 import java.util.List;
 
 import static org.junit.Assert.*;
+
 /**
  * A framework to run public test cases for the User Interface.
  *
@@ -107,8 +110,9 @@ public class UserInterfaceTest {
 
         Assert.assertTrue("Ensure that `Message Interface` is NOT `abstract`!", Modifier.isAbstract(modifiers));
 
-        Assert.assertEquals("Ensure that Message Interface has no interfaces itself" , 0, superinterfaces.length);
+        Assert.assertEquals("Ensure that Message Interface has no interfaces itself", 0, superinterfaces.length);
     }
+
     public static void main(String[] args) {
         Result result = JUnitCore.runClasses(UserInterfaceTest.class);
         if (result.wasSuccessful()) {
