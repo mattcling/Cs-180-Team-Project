@@ -1,3 +1,4 @@
+package tests;
 import java.time.LocalDateTime;
 
 import org.junit.Test;
@@ -5,6 +6,8 @@ import org.junit.Assert;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
+
+import UserInterface;
 
 import java.lang.reflect.*;
 import java.util.List;

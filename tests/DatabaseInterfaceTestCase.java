@@ -1,3 +1,4 @@
+package tests;
 import org.junit.Test;
 import org.junit.After;
 import org.junit.Assert;
@@ -7,6 +8,8 @@ import org.junit.rules.Timeout;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
+
+import DatabaseInterface;
 
 import javax.swing.*;
 import java.io.*;

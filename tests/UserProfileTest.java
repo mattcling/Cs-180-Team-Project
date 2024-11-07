@@ -1,3 +1,4 @@
+package tests;
 import org.junit.Test;
 import org.junit.After;
 import org.junit.Assert;
@@ -10,6 +11,8 @@ import org.junit.runner.Result;
 import org.junit.runner.RunWith;
 import org.junit.runner.notification.Failure;
 
+import User;
+
 import javax.swing.*;
 import java.io.*;
 import java.lang.reflect.*;
@@ -20,22 +23,17 @@ import java.util.UUID;
 import static org.junit.Assert.*;
 
 /**
- * A framework to run public test cases for the User class.
+ * A framework to run public test cases for User Profile class.
  *
  * <p>Purdue University -- CS18000 -- Fall 2024</p>
  *
  * @author Purdue CS
- * @author Matthew Clingerman
- * @author Charlotte Falus
- * @author Luke Guiboux
- * @author Kimaya Deshpande
- * @author Sid Songirkar
- * @version November 3, 2024
+ * @version November 1, 2024
  */
 
 
 @RunWith(Enclosed.class)
-public class ProfileInterfaceTest {
+public class UserProfileTest {
     public static void main(String[] args) {
         Result result = JUnitCore.runClasses(TestCase.class);
         if (result.wasSuccessful()) {
@@ -48,19 +46,7 @@ public class ProfileInterfaceTest {
 
     }
 
-
-    /**
-     * A framework to run profiles for the social media platofrom
-     *
-     * <p>
-     * Purdue University -- CS18000 -- Fall 2024
-     * </p>
-     *
-     * @ author purdue CS
-     * @version November 2, 2024
-     */
-    //certain tests possible for the messages code
-
+    //certain tests possible for user profile code
     public static class TestCase {
         private final PrintStream originalOutput = System.out;
         private final InputStream originalSysin = System.in;
@@ -102,7 +88,7 @@ public class ProfileInterfaceTest {
             Class<?>[] superinterfaces;
 
             // Set the class being tested
-            clazz = Profile.class;
+            clazz = User.class;
 
             // Perform tests
 
@@ -112,15 +98,16 @@ public class ProfileInterfaceTest {
 
             superinterfaces = clazz.getInterfaces();
 
-            Assert.assertTrue("Ensure that 'Profile' is public", Modifier.isPublic(modifiers));
+            Assert.assertTrue("Ensure that 'UserProfile' is public", Modifier.isPublic(modifiers));
 
-            Assert.assertFalse("Ensure that `Profile` is NOT `abstract`!", Modifier.isAbstract(modifiers));
+            Assert.assertFalse("Ensure that `UserProfile` is NOT `abstract`!", Modifier.isAbstract(modifiers));
 
-            Assert.assertEquals("Ensure that `Profile` extends `Object'!", Object.class, superclass);
+            Assert.assertEquals("Ensure that `UserProfile` extends `Object'!", Object.class, superclass);
 
-            Assert.assertEquals("Ensure that `Profile` implements 'Profile interface!", superinterfaces.length);
+            Assert.assertEquals("Ensure that `UserProfile` implements 'UserProfile interfaces!", superinterfaces.length);
         }
 
 
     }
 }
+

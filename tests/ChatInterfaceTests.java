@@ -1,3 +1,4 @@
+package tests;
 import java.util.List;
 
 import org.junit.Test;
@@ -5,6 +6,8 @@ import org.junit.Assert;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
+
+import ChatInterface;
 
 import java.lang.reflect.*;
 
