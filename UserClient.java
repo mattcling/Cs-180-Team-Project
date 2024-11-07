@@ -1,3 +1,8 @@
+import java.util.*;
+import java.io.*;
+import java.net.*;
+import javax.swing.*;
+
 /**
  * A framework to run public test cases for the User class.
  *

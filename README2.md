@@ -1,6 +1,4 @@
-Description
-
-Additional info for Phase 2:
+ # Additional info for Phase 2:
 
 Phase 2 consists of building the communication functionality of your team's social media platform. The core requirements for this phase are as follows:
 
@@ -20,3 +18,15 @@ Phase 2 consists of building the communication functionality of your team's soci
 7. Your README should include detailed testing information for the IO functionality - it will be tested manually by the grading TA.
     
 8. Issues from Phase 1 should be corrected - failure to do so will result in further loss of points.
+
+ ## TODO:
+
+1. 
+- Implement server to support multiple clients.
+- Ensure server/database interaction is thread safe.
+- Implement server class using Runnable interface.
+- Ensure client does not store information locally.
+- Update interfaces and test cases from Phase 1.
+- Write test cases for Server and Client classes.
+- Include detailed testing information for IO functionality in README.
+- Correct issues from Phase 1.
