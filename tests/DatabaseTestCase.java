@@ -48,9 +48,9 @@ public class DatabaseTestCase {
         testingchat = new Chat("1234");
         testingmessage = new Message("messageID", "sendingUser", "recivingUser", "contents");
 
-        db.saveData(testinguser, "user");
-        db.saveData(testingchat, "chats");
-        db.saveData(testingmessage, "messages");
+        db.writeData(testinguser, "user");
+        db.writeData(testingchat, "chats");
+        db.writeData(testingmessage, "messages");
     }
 
     void clearfiles() {
@@ -61,8 +61,8 @@ public class DatabaseTestCase {
 
 
     @Test
-    public void testsaveData() {
-        assertTrue(db.saveData(new User("newuser", "1234", db), "user"));
+    public void testwriteData() {
+        assertTrue(db.writeData(new User("newuser", "1234", db), "user"));
         assertNotNull(db.getData("user", "newuser"));
     }
 
@@ -82,7 +82,7 @@ public class DatabaseTestCase {
 
     @Test
     public void testloadata() {
-        db.saveData();
+        db.writeData();
         db.initializeDatabase();
 
         assertNotNull(db.getData("user", "testinguser"));

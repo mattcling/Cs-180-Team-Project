@@ -39,12 +39,6 @@ public class Database implements DatabaseInterface {
         messageTable = loadTableMessage(messageDataFile);
     }
 
-    public void saveData() {
-        saveTableUser(userTable, userDataFile);
-        saveTableChat(chatTable, chatDataFile);
-        saveTableMessage(messageTable, messageDataFile);
-    }
-
     public void saveTableUser(Map<String, User> table, String filename) {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename))) {
             out.writeObject(table);
@@ -111,7 +105,7 @@ public class Database implements DatabaseInterface {
         System.out.println("Database initialized!!!");
     }
 
-    public boolean saveData(Object data, String tableName) {
+    public boolean writeData(Object data, String tableName) {
         switch (tableName) {
             case "user":
                 if (data instanceof User) {
@@ -122,7 +116,7 @@ public class Database implements DatabaseInterface {
                     return true;
                 }
                 break;
-            case "chats":
+            case "chat":
                 if (data instanceof Chat) {
                     Chat chat = (Chat) data;
                     chatTable.put(chat.getChatID(), chat);
@@ -132,7 +126,7 @@ public class Database implements DatabaseInterface {
                 }
                 break;
 
-            case "messages":
+            case "message":
                 if (data instanceof Message) {
                     Message message = (Message) data;
                     messageTable.put(message.getMessageID(), message);
@@ -204,6 +198,7 @@ public class Database implements DatabaseInterface {
                 if (chatTable.remove(key) != null) {
                     System.out.println("Chat " + key + " has been deleted!");
                     chatTable.remove(key);
+                    saveTableChat(chatTable,chatDataFile);
                     return true;
                 }
                 break;
@@ -211,6 +206,7 @@ public class Database implements DatabaseInterface {
                 if (messageTable.remove(key) != null) {
                     System.out.println("Message " + key + " has been deleted!");
                     messageTable.remove(key);
+                    saveTableMessage(messageTable, messageDataFile);
                     return true;
                 }
                 break;

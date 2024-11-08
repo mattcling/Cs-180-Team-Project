@@ -18,7 +18,7 @@ public interface DatabaseInterface {
 
     // this is going to attempt to use tables as a database.
 
-    boolean saveData(Object data, String tablename);
+    boolean writeData(Object data, String tablename);
 
     boolean deleteData(String tablename, String key);
 
@@ -29,8 +29,6 @@ public interface DatabaseInterface {
     public void initializeDatabase();
 
     public void loadOldData();
-
-    public void saveData();
 
     public Map<String, Message> loadTableMessage(String filename);
 

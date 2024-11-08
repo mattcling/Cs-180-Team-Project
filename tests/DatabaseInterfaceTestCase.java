@@ -48,10 +48,10 @@ public class DatabaseInterfaceTestCase {
         //testing if methods are there that should be
 
         try {
-            Method saveData = dataclass.getMethod("saveData");
-            assertNotNull("The Message interface should have an 'saveData' method.", saveData);
+            Method writeData = dataclass.getMethod("writeData");
+            assertNotNull("The Message interface should have an 'writeData' method.", writeData);
         } catch (NoSuchMethodException e) {
-            fail("The Message interface is missing the 'saveData' method.");
+            fail("The Message interface is missing the 'writeData' method.");
         }
         try {
             Method delete = dataclass.getMethod("deleteData", String.class, String.class);
@@ -86,10 +86,10 @@ public class DatabaseInterfaceTestCase {
             fail("The Message interface is missing the 'LoadOldData' method.");
         }
         try {
-            Method save = dataclass.getMethod("saveData");
-            assertNotNull("The Message interface should have an 'saveData' method.", save);
+            Method save = dataclass.getMethod("writeData");
+            assertNotNull("The Message interface should have an 'writeData' method.", save);
         } catch (NoSuchMethodException e) {
-            fail("The Message interface is missing the 'saveData' method.");
+            fail("The Message interface is missing the 'writeData' method.");
         }
         try {
             Method loadtable = dataclass.getMethod("loadTableMessage", String.class);

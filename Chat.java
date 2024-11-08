@@ -26,10 +26,16 @@ public class Chat implements Serializable, ChatInterface {
 
 
     // constructor :)
-    public Chat(String chatID) {
+    public Chat(String chatID, String user1, String user2) {
         this.chatID = chatID;
         this.messages = new ArrayList<>();
         this.participants = new ArrayList<>();
+        participants.add(user1);
+        participants.add(user2);
+    }
+
+    public void addParticipantToChat(String participant) {
+        participants.add(participant);
     }
 
     public void addMessage(Message message) {

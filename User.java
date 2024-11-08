@@ -47,7 +47,7 @@ public class User implements UserInterface, Serializable {
         }
 
         User newUser = new User(username, newPassword, database);
-        return database.saveData(newUser, "users");
+        return database.writeData(newUser, "users");
     }
 
     public boolean login(String username, String userpassword) {

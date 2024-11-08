@@ -55,9 +55,24 @@ public class ServerClient implements Runnable, ServerClientInterface {
 
 		// First User!
 		// User user = new User("john", "80085");
-		// d.saveData(user,"user");
+		// d.writeData(user,"user");
 		// d.deleteData("user","john");
-		System.out.println( ((User) d.getData("user", "john")).getPassword());
+		//System.out.println( ((User) d.getData("user", "john")).getPassword());
+
+		// First Chat!
+		// Chat chat = new Chat("chat1", "john", "admin");
+		// d.writeData(chat,"chat");
+		//d.deleteData("chat","chat1");
+		// System.out.println(((Chat) d.getData("chat", "chat1")).getParticipants());
+
+		// First Message!
+		// Message message = new Message("message1", "john", "admin", "hello");
+		// d.writeData(message,"message");
+		//d.deleteData("message","message1");
+		//System.out.println(((Message) d.getData("message", "message1")).getMessageID());
+
+		
+
 
 		try {
 			ServerSocket serverSocket = new ServerSocket(4343);
