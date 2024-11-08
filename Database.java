@@ -141,6 +141,20 @@ public class Database implements DatabaseInterface {
         return false;
     }
 
+    public boolean containsObject(String tableName, String key) {
+        switch (tableName) {
+            case "user":
+                return userTable.containsKey(key);
+            case "chat":
+                return chatTable.containsKey(key);
+            case "message":
+                return messageTable.containsKey(key);
+            default:
+                System.out.println("Invalid table name!");
+                return false;
+        }
+    }
+
     public Object getData(String tableName, String key) {
         switch (tableName) {
             case "user":

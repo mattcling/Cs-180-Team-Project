@@ -21,12 +21,29 @@ public class UserClient{
 
     public static void main(String[] args) {
 				try (Socket socket = new Socket("localhost", 4343);){
-						PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-						BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-						System.out.println("Hello, Server!");
+						ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream());
+						ObjectInputStream receive = new ObjectInputStream(socket.getInputStream());
+						Scanner sc = new Scanner(System.in);
+
+						String fromServer;
+						fromServer = (String) receive.readObject();
+						System.out.println(fromServer);
+						fromServer = (String) receive.readObject();
+						System.out.println(fromServer);
+						send.writeObject(sc.nextLine());
+						send.flush();
+						fromServer = (String) receive.readObject();
+						System.out.println(fromServer);
+						send.writeObject(sc.nextLine());
+						send.flush();
+						fromServer = (String) receive.readObject();
+						System.out.println(fromServer);
+
 
 						
-				} catch (IOException e) {
+
+
+				} catch (IOException  | ClassNotFoundException e) {
 						e.printStackTrace();
 				}
 		}

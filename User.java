@@ -46,7 +46,7 @@ public class User implements UserInterface, Serializable {
             return false;
         }
 
-        User newUser = new User(username, newPassword, database);
+        User newUser = new User(username, newPassword);
         return database.writeData(newUser, "users");
     }
 

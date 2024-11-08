@@ -20,8 +20,9 @@ import javax.swing.*;
 public class ServerClient implements Runnable, ServerClientInterface {
 	Socket socket;
 	private final String userDataFile = "userTable.ser";
-    private final String chatDataFile = "chatTable.ser";
-    private final String messageDataFile = "messageTable.ser";
+  private final String chatDataFile = "chatTable.ser";
+  private final String messageDataFile = "messageTable.ser";
+	public static Database d = new Database();
 
 	public ServerClient(Socket socket) {
 		this.socket = socket;
@@ -31,25 +32,34 @@ public class ServerClient implements Runnable, ServerClientInterface {
 		System.out.printf("connection received from %s\n", socket);
 		
 		try {
-			PrintWriter pw = new PrintWriter(socket.getOutputStream());
-			Scanner in = new Scanner(socket.getInputStream());
+			ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream());
+			ObjectInputStream receive = new ObjectInputStream(socket.getInputStream());
 			
-			while (in.hasNextLine()) {
-				String line = in.nextLine();
-				System.out.printf("%s says: %s\n", socket, line);
-				pw.printf("echo: %s\n", line);
-				pw.flush();
+			send.writeObject("Hello, User!");
+			send.writeObject("Please enter your username: ");
+			send.flush();
+			String username = (String) receive.readObject();
+			send.writeObject("Please enter your password: ");
+			send.flush();
+			String password = (String) receive.readObject();
+
+			if(d.containsObject("user", username)){
+				if(password.equals(( (User) d.getData("user", username)).getPassword())){
+					send.writeObject("Welcome, " + username + "!");
+				} else {
+					send.writeObject("Invalid password.");
+				}
 			}
+			else{
+				send.writeObject("Invalid username.");
+			}	
 			
-			pw.close();
-			in.close();
-		} catch (IOException e) {
+		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
 	
 	public static void main(String[] args) {
-		Database d = new Database();
 		d.initializeDatabase();
 		
 
@@ -80,7 +90,6 @@ public class ServerClient implements Runnable, ServerClientInterface {
 			while (true) {
 				
 				Socket socket = serverSocket.accept();
-				System.out.println("Hello Client");
 				ServerClient server = new ServerClient(socket);
 				new Thread(server).start();
 			
