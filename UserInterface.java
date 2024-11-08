@@ -27,15 +27,15 @@ public interface UserInterface {
 
     public boolean unBlockUser(String blockedUserID);
 
-    public boolean removeFreind(String freindsID);
+    public boolean removeFriend(String friendsID);
 
-    public boolean addFreind(String freindsID);
+    public boolean addFriend(String friendsID);
 
     public String getUserID();
 
     public String getProfilePicture();
 
-    public List<String> getFreindsList();
+    public List<String> getFriendsList();
 
     public List<String> getBlockedUsers();
 
@@ -43,7 +43,7 @@ public interface UserInterface {
 
     public void setProfilePicture(String profilePicture);
 
-    public void setFreindsList(List<String> freindsList);
+    public void setFriendsList(List<String> friendsList);
 
     public void setBlockedUsers(List<String> blockedUsers);
 }

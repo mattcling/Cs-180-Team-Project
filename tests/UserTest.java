@@ -47,8 +47,8 @@ public class UserTest {
         ArrayList<String> temp = new ArrayList<String>();
         temp.add("a");
         temp.add("b");
-        user.setFreindsList(temp);
-        assertEquals("Freinds list should be a, b", temp, user.getFreindsList());
+        user.setFriendsList(temp);
+        assertEquals("Friends list should be a, b", temp, user.getFriendsList());
         user.setBlockedUsers(temp);
         assertEquals("Blocked Users should be a, b", temp, user.getBlockedUsers());
         user.setPassword("a");
@@ -70,25 +70,25 @@ public class UserTest {
     }
 
     @Test(timeout = 1000)
-    public void testAddFreind() {
+    public void testAddFriend() {
         ArrayList<String> temp = new ArrayList<String>();
         temp.add("a");
         temp.add("b");
-        user.setFreindsList(temp);
+        user.setFriendsList(temp);
         temp.add("c");
-        user.addFreind("c");
-        assertEquals("Freinds list should contain a, b, c.", temp, user.getFreindsList());
+        user.addFriend("c");
+        assertEquals("Friends list should contain a, b, c.", temp, user.getFriendsList());
     }
 
     @Test(timeout = 1000)
-    public void testRemoveFreind() {
+    public void testRemoveFriend() {
         ArrayList<String> temp = new ArrayList<String>();
         temp.add("a");
         temp.add("b");
-        user.setFreindsList(temp);
+        user.setFriendsList(temp);
         temp.remove("b");
-        user.removeFreind("b");
-        assertEquals("Freinds list should only contain a.", temp, user.getFreindsList());
+        user.removeFriend("b");
+        assertEquals("Friends list should only contain a.", temp, user.getFriendsList());
     }
 
     @Test(timeout = 1000)

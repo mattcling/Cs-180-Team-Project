@@ -22,21 +22,21 @@ public class User implements UserInterface, Serializable {
     private String password; // make sure only numbers and letters
     private String userName; // this will be chosen by user
     private String profilePicture; // should be the file i want to acces
-    private List<String> freindsList; // stores all frreinds id numbers
+    private List<String> friendsList; // stores all frreinds id numbers
     // using lists for easier access and this way we know that things wont get complicated with lengths of a basic array
-    private List<String> blockedUsers; // stores blocked freinds id numbers
+    private List<String> blockedUsers; // stores blocked friends id numbers
 
     private DatabaseInterface database;
 
     public User(String username,
-                String password,
-                DatabaseInterface database) {
+                String password) {
         this.userID = generateUserID(); // this method uses a io class to make a random sting of numbers and letters
         this.password = password;
-        this.database = database;
+        
         this.userName = username;
         this.blockedUsers = new ArrayList<>();
-        this.freindsList = new ArrayList<>();
+        this.friendsList = new ArrayList<>();
+        
     }
 
     public boolean createAccount(String username, String newPassword) {
@@ -64,23 +64,23 @@ public class User implements UserInterface, Serializable {
         System.out.println("User logged out");
     }
 
-    public boolean addFreind(String freindsID) {
-        if (!freindsList.contains(freindsID)) {
-            freindsList.add(freindsID);
-            System.out.println("Freind added");
+    public boolean addFriend(String friendsID) {
+        if (!friendsList.contains(friendsID)) {
+            friendsList.add(friendsID);
+            System.out.println("Friend added");
             return true;
         }
-        System.out.println("this person is already your freind");
+        System.out.println("this person is already your friend");
         return false;
     }
 
-    public boolean removeFreind(String freindsID) {
-        if (freindsList.contains(freindsID)) {
-            freindsList.remove(freindsID);
-            System.out.println("Freind removed");
+    public boolean removeFriend(String friendsID) {
+        if (friendsList.contains(friendsID)) {
+            friendsList.remove(friendsID);
+            System.out.println("Friend removed");
             return true;
         }
-        System.out.println("this person is not your freind");
+        System.out.println("this person is not your friend");
         return false;
     }
 
@@ -126,8 +126,8 @@ public class User implements UserInterface, Serializable {
         return profilePicture;
     }
 
-    public List<String> getFreindsList() {
-        return freindsList;
+    public List<String> getFriendsList() {
+        return friendsList;
     }
 
     public List<String> getBlockedUsers() {
@@ -142,8 +142,8 @@ public class User implements UserInterface, Serializable {
         profilePicture = profilePicture;
     }
 
-    public void setFreindsList(List<String> freindsList) {
-        freindsList = freindsList;
+    public void setFriendsList(List<String> friendsList) {
+        friendsList = friendsList;
     }
 
     public void setBlockedUsers(List<String> blockedUsers) {

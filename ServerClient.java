@@ -18,7 +18,10 @@ import javax.swing.*;
  */
 
 public class ServerClient implements Runnable, ServerClientInterface {
-	private Socket socket;
+	Socket socket;
+	private final String userDataFile = "userTable.ser";
+    private final String chatDataFile = "chatTable.ser";
+    private final String messageDataFile = "messageTable.ser";
 
 	public ServerClient(Socket socket) {
 		this.socket = socket;
@@ -49,6 +52,8 @@ public class ServerClient implements Runnable, ServerClientInterface {
 		Database d = new Database();
 		d.initializeDatabase();
 		System.out.println("Database initialized");
+		User user = new User("admin", "123456789");
+		d.saveData(user,"user");
 
 		try {
 			ServerSocket serverSocket = new ServerSocket(4343);

@@ -50,10 +50,10 @@ public class UserInterfaceTest {
             fail("The User interface is missing the 'setProfilePicture' method.");
         }
         try {
-            Method get = clazz.getMethod("setFreindsList", List.class);
-            assertNotNull("The User interface should have a 'setFreindsList' method.", get);
+            Method get = clazz.getMethod("setFriendsList", List.class);
+            assertNotNull("The User interface should have a 'setFriendsList' method.", get);
         } catch (NoSuchMethodException e) {
-            fail("The User interface is missing the 'setFreindsList' method.");
+            fail("The User interface is missing the 'setFriendsList' method.");
         }
         try {
             Method get = clazz.getMethod("setBlockedUsers", List.class);
@@ -75,10 +75,10 @@ public class UserInterfaceTest {
             fail("The User interface is missing the 'getProfilePicture' method.");
         }
         try {
-            Method get = clazz.getMethod("getFreindsList");
-            assertNotNull("The User interface should have a 'getFreindsList' method.", get);
+            Method get = clazz.getMethod("getFriendsList");
+            assertNotNull("The User interface should have a 'getFriendsList' method.", get);
         } catch (NoSuchMethodException e) {
-            fail("The User interface is missing the 'getFreindsList' method.");
+            fail("The User interface is missing the 'getFriendsList' method.");
         }
         try {
             Method get = clazz.getMethod("getBlockedUsers");
@@ -100,16 +100,16 @@ public class UserInterfaceTest {
             fail("The User interface is missing the 'unBlockUser' method.");
         }
         try {
-            Method get = clazz.getMethod("removeFreind", String.class);
-            assertNotNull("The User interface should have a 'removeFreind' method.", get);
+            Method get = clazz.getMethod("removeFriend", String.class);
+            assertNotNull("The User interface should have a 'removeFriend' method.", get);
         } catch (NoSuchMethodException e) {
-            fail("The User interface is missing the 'removeFreind' method.");
+            fail("The User interface is missing the 'removeFriend' method.");
         }
         try {
-            Method get = clazz.getMethod("addFreind", String.class);
-            assertNotNull("The User interface should have a 'addFreind' method.", get);
+            Method get = clazz.getMethod("addFriend", String.class);
+            assertNotNull("The User interface should have a 'addFriend' method.", get);
         } catch (NoSuchMethodException e) {
-            fail("The User interface is missing the 'addFreind' method.");
+            fail("The User interface is missing the 'addFriend' method.");
         }
         int modifiers = clazz.getModifiers();
         superclass = clazz.getSuperclass();

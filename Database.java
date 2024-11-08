@@ -118,6 +118,7 @@ public class Database implements DatabaseInterface {
                     User user = (User) data;
                     userTable.put(user.getUserName(), user);
                     System.out.println("User " + user.getUserName() + " has been saved!");
+                    this.saveTableUser(userTable, userDataFile);
                     return true;
                 }
                 break;
@@ -126,6 +127,7 @@ public class Database implements DatabaseInterface {
                     Chat chat = (Chat) data;
                     chatTable.put(chat.getChatID(), chat);
                     System.out.println("Chat ID#: " + chat.getChatID() + " has been saved!");
+                    this.saveTableChat(chatTable, chatDataFile);
                     return true;
                 }
                 break;
@@ -135,6 +137,7 @@ public class Database implements DatabaseInterface {
                     Message message = (Message) data;
                     messageTable.put(message.getMessageID(), message);
                     System.out.println("Message ID#: " + message.getMessageID() + " was just saved!");
+                    this.saveTableMessage(messageTable, messageDataFile);
                     return true;
                 }
                 break;
