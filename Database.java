@@ -149,11 +149,11 @@ public class Database implements DatabaseInterface {
 
     public Object getData(String tableName, String key) {
         switch (tableName) {
-            case "users":
+            case "user":
                 return userTable.get(key);
-            case "chats":
+            case "chat":
                 return chatTable.get(key);
-            case "messages":
+            case "message":
                 return messageTable.get(key);
             default:
                 System.out.println("Invalid table name!");
@@ -192,21 +192,25 @@ public class Database implements DatabaseInterface {
 
     public boolean deleteData(String tableName, String key) {
         switch (tableName) {
-            case "users":
+            case "user":
                 if (userTable.remove(key) != null) {
                     System.out.println("User " + key + " has been deleted!");
+                    userTable.remove(key);
+                    saveTableUser(userTable, userDataFile);
                     return true;
                 }
                 break;
-            case "chats":
+            case "chat":
                 if (chatTable.remove(key) != null) {
                     System.out.println("Chat " + key + " has been deleted!");
+                    chatTable.remove(key);
                     return true;
                 }
                 break;
-            case "messages":
+            case "message":
                 if (messageTable.remove(key) != null) {
                     System.out.println("Message " + key + " has been deleted!");
+                    messageTable.remove(key);
                     return true;
                 }
                 break;

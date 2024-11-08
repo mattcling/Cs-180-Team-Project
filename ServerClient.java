@@ -51,9 +51,13 @@ public class ServerClient implements Runnable, ServerClientInterface {
 	public static void main(String[] args) {
 		Database d = new Database();
 		d.initializeDatabase();
-		System.out.println("Database initialized");
-		User user = new User("admin", "123456789");
-		d.saveData(user,"user");
+		
+
+		// First User!
+		// User user = new User("john", "80085");
+		// d.saveData(user,"user");
+		// d.deleteData("user","john");
+		System.out.println( ((User) d.getData("user", "john")).getPassword());
 
 		try {
 			ServerSocket serverSocket = new ServerSocket(4343);
