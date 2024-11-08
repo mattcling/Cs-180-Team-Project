@@ -2,11 +2,11 @@
 
 Phase 2 consists of building the communication functionality of your team's social media platform. The core requirements for this phase are as follows:
 
-1. Server supports multiple clients.
+1. Server supports multiple clients. CHECK  |||||||||||||||||||||||||
     
-2. Server/Database interaction is thread safe.
+2. Server/Database interaction is thread safe. (wtf) (cooked)
 
-3. Server should either extend Thread or implement the Runnable interface - the latter is recommended. Reminder: A class can implement multiple interfaces. If you user Runnable, you are still required to have a dedicated interface for your server class.
+3. Server should either extend Thread or implement the Runnable interface - the latter is recommended. Reminder: A class can implement multiple interfaces. If you user Runnable, you are still required to have a dedicated interface for your server class. 
     
 	
 4. Client does not store information locally - All information is stored on the server side and accessed via network IO using the client.
@@ -21,8 +21,6 @@ Phase 2 consists of building the communication functionality of your team's soci
 
  ## TODO:
 
-1. 
-- Implement server to support multiple clients.
 - Ensure server/database interaction is thread safe.
 - Implement server class using Runnable interface.
 - Ensure client does not store information locally.

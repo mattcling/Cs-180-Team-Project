@@ -17,6 +17,18 @@ import javax.swing.*;
  * @version November 3, 2024
  */
 
-public class UserClient {
+public class UserClient{
 
+    public static void main(String[] args) {
+				try (Socket socket = new Socket("localhost", 4343);){
+						PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+						BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+						System.out.println("Hello, Server!");
+
+						
+				} catch (IOException e) {
+						e.printStackTrace();
+				}
+		}
+    
 }

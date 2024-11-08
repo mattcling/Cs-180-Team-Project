@@ -17,25 +17,52 @@ import javax.swing.*;
  * @version November 3, 2024
  */
 
-public class ServerClient implements Runnable {
+public class ServerClient implements Runnable, ServerClientInterface {
+	private Socket socket;
 
+	public ServerClient(Socket socket) {
+		this.socket = socket;
+	}
 
-	public void run(){
-    
+	public void run() {
+		System.out.printf("connection received from %s\n", socket);
 		
-		try (ServerSocket socket = new ServerSocket(8080);){
-			Socket clientSocket = socket.accept();
-	    PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-			BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-			out.println("Hello, Server!");
-			String response = in.readLine();
-			System.out.println(response);
+		try {
+			PrintWriter pw = new PrintWriter(socket.getOutputStream());
+			Scanner in = new Scanner(socket.getInputStream());
+			
+			while (in.hasNextLine()) {
+				String line = in.nextLine();
+				System.out.printf("%s says: %s\n", socket, line);
+				pw.printf("echo: %s\n", line);
+				pw.flush();
+			}
+			
+			pw.close();
+			in.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	
 	public static void main(String[] args) {
-		Thread t = new Thread(new ServerClient());
-		t.start();
+		Database d = new Database();
+		d.initializeDatabase();
+		System.out.println("Database initialized");
+
+		try {
+			ServerSocket serverSocket = new ServerSocket(4343);
+			System.out.printf("socket open, waiting for connections on %s\n", serverSocket);
+			while (true) {
+				
+				Socket socket = serverSocket.accept();
+				System.out.println("Hello Client");
+				ServerClient server = new ServerClient(socket);
+				new Thread(server).start();
+			
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -102,8 +102,8 @@ public class Database implements DatabaseInterface {
 
     // this just runs the load method to get the data for the database to work!!
     public void initializeDatabase() {
+        
         System.out.println("Initializing database...");
-
         userTable = loadTableUser(userDataFile);
         messageTable = loadTableMessage(messageDataFile);
         chatTable = loadTableChat(chatDataFile);
