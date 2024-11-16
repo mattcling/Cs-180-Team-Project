@@ -1,7 +1,5 @@
-import java.util.*;
 import java.io.*;
 import java.net.*;
-import javax.swing.*;
 
 /**
  * A framework to run public test cases for the User class.
@@ -20,8 +18,8 @@ import javax.swing.*;
 public class ServerClient implements Runnable, ServerClientInterface {
 	Socket socket;
 	private final String userDataFile = "userTable.ser";
-  private final String chatDataFile = "chatTable.ser";
-  private final String messageDataFile = "messageTable.ser";
+  	private final String chatDataFile = "chatTable.ser";
+  	private final String messageDataFile = "messageTable.ser";
 	public static Database d = new Database();
 
 	public ServerClient(Socket socket) {
@@ -36,24 +34,99 @@ public class ServerClient implements Runnable, ServerClientInterface {
 			ObjectInputStream receive = new ObjectInputStream(socket.getInputStream());
 			
 			send.writeObject("Hello, User!");
-			send.writeObject("Please enter your username: ");
 			send.flush();
-			String username = (String) receive.readObject();
-			send.writeObject("Please enter your password: ");
+			//while later mabye
+			send.writeObject("Please choose 1 option \n 1. Login \n 2. Create new user");
 			send.flush();
-			String password = (String) receive.readObject();
-
-			if(d.containsObject("user", username)){
-				if(password.equals(( (User) d.getData("user", username)).getPassword())){
-					send.writeObject("Welcome, " + username + "!");
-				} else {
-					send.writeObject("Invalid password.");
-				}
-			}
-			else{
-				send.writeObject("Invalid username.");
-			}	
 			
+			String Response = ((String) receive.readObject());
+			if (Response.equals("1")) { //login
+				send.writeObject("Please enter your username: ");
+				String username = (String) receive.readObject();
+				send.writeObject("Please enter your password: ");
+				String password = (String) receive.readObject();
+
+				if(d.containsObject("user", username)) {
+					if(password.equals(( (User) d.getData("user", username)).getPassword())){
+						send.writeObject("Welcome, " + username + "!");
+					} else {
+						send.writeObject("Invalid password.");
+					}
+				}
+				else {
+					send.writeObject("Invalid username.");
+				}
+			} else if (Response.equals("2")) { //create new user
+				send.writeObject("Create your User!");
+				send.flush();
+				String username = null;
+				while(true) {
+					send.writeObject("Please enter a username: ");
+					send.flush();
+					username = (String) receive.readObject();
+					if(d.getData("user", username) != null) {
+						send.writeObject("Username is already taken");
+						send.flush();
+					} else {
+						break;
+					}
+				}
+				send.writeObject("Please enter a password: ");
+				send.flush();
+				String password = (String) receive.readObject();
+				System.out.println("Test point 1");
+				d.writeData(new User(username, password), "user");
+				System.out.println("Test point 2");
+			} else { //invalid selection
+				send.writeObject("Invalid Input");
+				//mabye cont w a while loop 
+			}
+			/*
+			user is logged in: (need to be able to: meessage, see profile, see friends, see blocked, search);
+			send.writeObject("Please choose 1 option \n 1. Go To Profile \n 2. Send Message \n 3. Logout");
+			send.flush();
+			Response = ((String) receive.readObject());
+			switch(Response) {
+				case "1":\\profile
+					//DISPLAY PROFILE HERE
+					send.writeObject("Please choose 1 option \n 1. Edit Username \n 2. Edit password \n 3. Edit Friends \n 4. Edit Blocked Users \n 5. Logout/back?");
+					send.flush();
+					Response = ((String) receive.readObject());
+					switch(Response) {
+						case "1"://edit username
+							send.writeObject("Enter your new username");
+							send.flush();
+							String username = null;
+							while(true) {
+								send.writeObject("Please enter a username: ");
+								send.flush();
+								username = (String) receive.readObject();
+								if(d.getData("user", username) != null) {
+									send.writeObject("Username is already taken");
+									send.flush();
+								} else {
+									break;
+								}
+							}
+							d.changeData(String tableName, Object data, //name);
+							send.writeObject("Your new username has been set ", username);
+							send.flush();
+						case "2"://edit password
+						case "3"://edit friends list
+						case "4"://edit blocked users list
+						case "5"://logout/back
+					}
+				case "2":\\message
+				
+				case "3": \\logout
+
+				default:
+			}
+			*/
+
+			
+			//d.getData("user", username).getFriendsList()
+			//d.getData("user", username).getFriendsList()
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
