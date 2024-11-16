@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * A framework to run public test cases for the User class.
@@ -24,13 +25,15 @@ public class Database implements DatabaseInterface {
     // work and stay even after resets
     // we will be using hashmap tabels and the tables will all have their own info stored
 
-    private Map<String, User> userTable = new HashMap<>();
-    private Map<String, Chat> chatTable = new HashMap<>();
-    private Map<String, Message> messageTable = new HashMap<>();
+    private Map<String, User> userTable = new ConcurrentHashMap();
+    private Map<String, Chat> chatTable = new ConcurrentHashMap<>();
+    private Map<String, Message> messageTable = new ConcurrentHashMap<>();
 
     private final String userDataFile = "userTable.ser";
     private final String chatDataFile = "chatTable.ser";
     private final String messageDataFile = "messageTable.ser";
+    //create a gatekeeper to prevent multiple instances of the database
+    private static Object object = new Object();
 
 
     public void loadOldData() { // this needs loadtable method made
@@ -39,7 +42,7 @@ public class Database implements DatabaseInterface {
         messageTable = loadTableMessage(messageDataFile);
     }
 
-    public void saveTableUser(Map<String, User> table, String filename) {
+    public synchronized void saveTableUser(Map<String, User> table, String filename) {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename))) {
             out.writeObject(table);
         } catch (IOException e) {
@@ -49,7 +52,7 @@ public class Database implements DatabaseInterface {
 
 
     // this saves the hasmap to a file so that i can be kept on refresh of the server
-    public void saveTableChat(Map<String, Chat> table, String filename) {
+    public synchronized void saveTableChat(Map<String, Chat> table, String filename) {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename))) {
             out.writeObject(table);
         } catch (IOException e) {
@@ -57,7 +60,7 @@ public class Database implements DatabaseInterface {
         }
     }
 
-    public void saveTableMessage(Map<String, Message> table, String filename) {
+    public synchronized void saveTableMessage(Map<String, Message> table, String filename) {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename))) {
             out.writeObject(table);
         } catch (IOException e) {
@@ -72,7 +75,7 @@ public class Database implements DatabaseInterface {
             return (Map<String, User>) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
-            return new HashMap<>();
+            return new ConcurrentHashMap<>();
         }
     }
 
@@ -81,7 +84,7 @@ public class Database implements DatabaseInterface {
             return (Map<String, Chat>) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
-            return new HashMap<>();
+            return new ConcurrentHashMap<>();
         }
     }
 
@@ -90,12 +93,12 @@ public class Database implements DatabaseInterface {
             return (Map<String, Message>) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
-            return new HashMap<>();
+            return new ConcurrentHashMap<>();
         }
     }
 
     // this just runs the load method to get the data for the database to work!!
-    public void initializeDatabase() {
+    public void  initializeDatabase() {
         
         System.out.println("Initializing database...");
         userTable = loadTableUser(userDataFile);
@@ -104,8 +107,9 @@ public class Database implements DatabaseInterface {
 
         System.out.println("Database initialized!!!");
     }
-
-    public boolean writeData(Object data, String tableName) {
+    
+    // synchronized to prevent multiple threads from accessing the same data
+    public synchronized boolean writeData(Object data, String tableName) {
         switch (tableName) {
             case "user":
                 if (data instanceof User) {
@@ -169,7 +173,8 @@ public class Database implements DatabaseInterface {
         }
     }
 
-    public boolean changeData(String tableName, Object data, String key) {
+    // synchronized to prevent multiple threads from accessing the same data
+    public synchronized boolean changeData(String tableName, Object data, String key) {
         switch (tableName) {
             case "user":
                 if (data instanceof User) {
@@ -197,8 +202,8 @@ public class Database implements DatabaseInterface {
         }
         return false;
     }
-
-    public boolean deleteData(String tableName, String key) {
+    // synchronized to prevent multiple threads from accessing the same data
+    public synchronized boolean deleteData(String tableName, String key) {
         switch (tableName) {
             case "user":
                 if (userTable.remove(key) != null) {
