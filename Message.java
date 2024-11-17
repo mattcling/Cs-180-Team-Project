@@ -1,4 +1,5 @@
 import java.time.LocalDateTime;
+import java.util.UUID;
 import java.io.Serializable;
 
 /**
@@ -20,28 +21,30 @@ public class Message implements Serializable, MessageInterface {
     //private final static long SerialVersionUID = 1L; // this will set the serialization for later when needed
 
     private String messageID;
-    private String senderID;
-    private String receiverID;
+    private String chatID;
     private String contents;
-    private LocalDateTime dateTime; // this may be a way to track time sent for now im not gunna do much with it.
+    private String senderID;
+    private LocalDateTime dateTime;
+    private static Database d = new Database();
 
-    public Message(String messageID, String senderID, String receiverID, String contents) {
-        if (messageID == null || messageID.isEmpty()) {
+     // this may be a way to track time sent for now im not gunna do much with it.
+
+    public Message(String chatID, String senderID, String contents) {
+        d.loadOldData();
+        if (senderID == null || messageID.isEmpty()) {
             throw new IllegalArgumentException("messageID cannot be null or empty.");
-        }
-        if (senderID == null || senderID.isEmpty()) {
-            throw new IllegalArgumentException("senderID cannot be null or empty.");
-        }
-        if (receiverID == null || receiverID.isEmpty()) {
-            throw new IllegalArgumentException("receiverID cannot be null or empty.");
         }
         if (contents == null || contents.isEmpty()) {
             throw new IllegalArgumentException("contents cannot be null or empty.");
         }
-        this.messageID = messageID;
-        this.senderID = senderID;
-        this.receiverID = receiverID;
+        if (chatID == null || chatID.isEmpty()) {
+            throw new IllegalArgumentException("chatID cannot be null or empty.");
+        }
+
+        this.messageID = generateUserID();
         this.contents = contents;
+        this.chatID = chatID;
+        this.senderID = senderID;
         this.dateTime = LocalDateTime.now(); // this is how to set it as a variable!!!
     }
 
@@ -49,37 +52,37 @@ public class Message implements Serializable, MessageInterface {
         return messageID;
     }
 
+    public String getChatID(){
+        return chatID;
+    }
+
+    public String getSenderID(){
+        return senderID;
+    }
+
+    public String getContents() {
+        return contents;
+    }
+    
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public String generateUserID() {
+        String temp = "UID" + UUID.randomUUID();
+        if (d.getData(temp, "message") != null) {
+            return generateUserID();
+        } else {
+            return temp;
+        }
+    }
+
+    //setters
     public void setMessageID(String messageID) {
         if (messageID == null || messageID.isEmpty()) {
             throw new IllegalArgumentException("messageID cannot be null or empty.");
         }
         this.messageID = messageID;
-    }
-
-    public String getSenderID() {
-        return senderID;
-    }
-
-    public void setSenderID(String senderID) {
-        if (senderID == null || senderID.isEmpty()) {
-            throw new IllegalArgumentException("senderID cannot be null or empty.");
-        }
-        this.senderID = senderID;
-    }
-
-    public String getReceiverID() {
-        return receiverID;
-    }
-
-    public void setReceiverID(String receiverID) {
-        if (receiverID == null || receiverID.isEmpty()) {
-            throw new IllegalArgumentException("receiverID cannot be null or empty.");
-        }
-        this.receiverID = receiverID;
-    }
-
-    public String getContents() {
-        return contents;
     }
 
     public void setContents(String contents) {
@@ -89,15 +92,18 @@ public class Message implements Serializable, MessageInterface {
         this.contents = contents;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
-    }
-
     public void setDateTime(LocalDateTime dateTime) {
         if (dateTime == null) {
-            throw new IllegalArgumentException("receiverID cannot be null or empty.");
+            throw new IllegalArgumentException("time cannot be null");
         }
         this.dateTime = LocalDateTime.now();
+    }
+
+    public void setChatID(String chatID) {
+        if (chatID == null || chatID.isEmpty()) {
+            throw new IllegalArgumentException("chatID cannot be null or empty.");
+        }
+        this.chatID = chatID;
     }
 
 }

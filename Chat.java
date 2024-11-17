@@ -1,6 +1,7 @@
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * A framework to run public test cases for the User class.
@@ -23,22 +24,44 @@ public class Chat implements Serializable, ChatInterface {
     private String chatID;
     private List<Message> messages;
     private List<String> participants;
+    private static Database d = new Database();
 
 
     // constructor :)
-    public Chat(String chatID, String user1, String user2) {
-        this.chatID = chatID;
+    public Chat(String user1, String user2) {
+        d.loadOldData();
+        this.chatID = generateChatID();
         this.messages = new ArrayList<>();
         this.participants = new ArrayList<>();
         participants.add(user1);
         participants.add(user2);
     }
 
+    public String generateChatID() {
+        // this is a way to generate a random chat id
+        // we are not going to be using it right now because everything is done in text,
+        // so we're just going to use every participants username concatenated tg as the chat id
+        
+
+        // String temp = "UID" + UUID.randomUUID();
+        // if (d.getData(temp, "chat") != null) {
+        //     return generateChatID();
+        // } else {
+        //     return temp;
+        // }
+
+        for (String participant : participants) {
+            chatID += participant;
+        }
+        return chatID;
+    }
+
     public void addParticipantToChat(String participant) {
         participants.add(participant);
     }
 
-    public void addMessage(Message message) {
+    public void sendMessage(String mess, String sender) {
+        Message message = new Message(this.chatID, sender, mess);
         messages.add(message);
     }
 

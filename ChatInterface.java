@@ -22,10 +22,12 @@ public interface ChatInterface {
 
     void removeMessage(Message message);
 
+    String generateChatID();
+
     String getChatID();
 
     List<String> getParticipants();
 
-    void addMessage(Message message);
+    public void sendMessage(String mess, String sender);
 
 }

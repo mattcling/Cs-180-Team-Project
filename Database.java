@@ -141,6 +141,7 @@ public class Database implements DatabaseInterface {
                 break;
             default:
                 System.out.println("Invalid table name!");
+                System.out.println("Location: WriteData");
         }
         return false;
     }
@@ -155,6 +156,7 @@ public class Database implements DatabaseInterface {
                 return messageTable.containsKey(key);
             default:
                 System.out.println("Invalid table name!");
+                System.out.println("Location: ContainsObject");
                 return false;
         }
     }
@@ -169,6 +171,7 @@ public class Database implements DatabaseInterface {
                 return messageTable.get(key);
             default:
                 System.out.println("Invalid table name!");
+                System.out.println("Location: GetData");
                 return null;
         }
     }
@@ -180,6 +183,7 @@ public class Database implements DatabaseInterface {
                 if (data instanceof User) {
                     userTable.put(key, (User) data);
                     System.out.println("User " + key + " has been updated!");
+                    this.saveTableUser(userTable, userDataFile);
                     return true;
                 }
                 break;
@@ -187,6 +191,7 @@ public class Database implements DatabaseInterface {
                 if (data instanceof Chat) {
                     chatTable.put(key, (Chat) data);
                     System.out.println("Chat " + key + " has been updated!");
+                    this.saveTableChat(chatTable, chatDataFile);
                     return true;
                 }
                 break;
@@ -194,11 +199,13 @@ public class Database implements DatabaseInterface {
                 if (data instanceof Message) {
                     messageTable.put(key, (Message) data);
                     System.out.println("Message " + key + " has been updated!");
+                    this.saveTableMessage(messageTable, messageDataFile);
                     return true;
                 }
                 break;
             default:
                 System.out.println("Invalid table name!");
+                System.out.println("Location: ChangeData");
         }
         return false;
     }
@@ -231,6 +238,7 @@ public class Database implements DatabaseInterface {
                 break;
             default:
                 System.out.println("Invalid table name!");
+                System.out.println("Location: DeleteData");
         }
         return false;
     }

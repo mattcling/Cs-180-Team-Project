@@ -26,7 +26,7 @@ public class User implements UserInterface, Serializable {
     // using lists for easier access and this way we know that things wont get complicated with lengths of a basic array
     private List<String> blockedUsers; // stores blocked friends id numbers
 
-    private DatabaseInterface database;
+    private static Database database = new Database();
 
     public User(String username,
                 String password) {
@@ -41,17 +41,18 @@ public class User implements UserInterface, Serializable {
 
     public boolean createAccount(String username, String newPassword) {
 
-        if (database.getData(username, "users") != null) {
+        database.initializeDatabase();
+        if (database.getData("user", username) != null) {
             System.out.println("User already exists");
             return false;
         }
 
         User newUser = new User(username, newPassword);
-        return database.writeData(newUser, "users");
+        return database.writeData(newUser, "user");
     }
 
     public boolean login(String username, String userpassword) {
-        User user = (User) database.getData(username, "users");
+        User user = (User) database.getData("user", username);
         if (user != null && user.password.equals(userpassword)) {
             System.out.println("User logged in");
             return true;
@@ -64,9 +65,9 @@ public class User implements UserInterface, Serializable {
         System.out.println("User logged out");
     }
 
-    public boolean addFriend(String friendsID) {
-        if (!friendsList.contains(friendsID)) {
-            friendsList.add(friendsID);
+    public boolean addFriend(String friendsName) {
+        if (!friendsList.contains(friendsName)) {
+            friendsList.add(friendsName);
             System.out.println("Friend added");
             return true;
         }
@@ -74,9 +75,9 @@ public class User implements UserInterface, Serializable {
         return false;
     }
 
-    public boolean removeFriend(String friendsID) {
-        if (friendsList.contains(friendsID)) {
-            friendsList.remove(friendsID);
+    public boolean removeFriend(String friendsName) {
+        if (friendsList.contains(friendsName)) {
+            friendsList.remove(friendsName);
             System.out.println("Friend removed");
             return true;
         }
@@ -84,9 +85,9 @@ public class User implements UserInterface, Serializable {
         return false;
     }
 
-    public boolean addBlockedUser(String blockedUserID) {
-        if (!blockedUsers.contains(blockedUserID)) {
-            blockedUsers.add(blockedUserID);
+    public boolean addBlockedUser(String blockedUserName) {
+        if (!blockedUsers.contains(blockedUserName)) {
+            blockedUsers.add(blockedUserName);
             System.out.println("Blocked user!");
             return true;
         }
@@ -94,9 +95,9 @@ public class User implements UserInterface, Serializable {
         return false;
     }
 
-    public boolean unBlockUser(String blockedUserID) {
-        if (blockedUsers.contains(blockedUserID)) {
-            blockedUsers.remove(blockedUserID);
+    public boolean unBlockUser(String blockedUserName) {
+        if (blockedUsers.contains(blockedUserName)) {
+            blockedUsers.remove(blockedUserName);
             System.out.println("Blocked user unblocked");
             return true;
         }
@@ -105,15 +106,19 @@ public class User implements UserInterface, Serializable {
     }
 
     public String generateUserID() {
-        return "UID" + UUID.randomUUID();
+        String temp = "UID" + UUID.randomUUID();
+        if (database.getData("user" , temp) != null) {
+            return generateUserID();
+        } else {
+            return temp;
+        }
     }
-
 
     // getters and setters
     public String getUserID() {
         return userID;
     }
-
+    
     public String getPassword() {
         return password;
     }

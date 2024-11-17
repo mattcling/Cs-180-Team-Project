@@ -1,4 +1,8 @@
- # Additional info for Phase 2:
+# Additional info for Phase 2:
+
+This branch has a similar idea to the first branch the main branch but i made a large number of changes to support hashmaps as a data storage method.
+
+i then also recreated a few classes with conditions to confirm things will work the way we hope
 
 Phase 2 consists of building the communication functionality of your team's social media platform. The core requirements for this phase are as follows:
 
