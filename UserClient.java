@@ -1,99 +1,62 @@
 import java.io.*;
 import java.net.*;
-import java.util.*;
+import java.util.Scanner;
 
-/**
- * A framework to run public test cases for the User class.
- *
- * <p>Purdue University -- CS18000 -- Fall 2024</p>
- *
- * @author Purdue CS
- * @author Matthew Clingerman
- * @author Charlotte Falus
- * @author Luke Guiboux
- * @author Kimaya Deshpande
- * @author Sid Songirkar
- * @version November 3, 2024
- */
-
-public class UserClient{
+public class UserClient {
 
     public static void main(String[] args) {
-			try (Socket socket = new Socket("localhost", 4343);) {
-				ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream());
-				ObjectInputStream receive = new ObjectInputStream(socket.getInputStream());
-				Scanner sc = new Scanner(System.in);
+        try (Socket socket = new Socket("localhost", 4343);
+             ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream receive = new ObjectInputStream(socket.getInputStream());
+             Scanner sc = new Scanner(System.in)) {
 
-				//while loop here eventually
-				String fromServer;
-				fromServer = (String) receive.readObject();
-				System.out.println(fromServer);
-				fromServer = (String) receive.readObject();
-				System.out.println(fromServer);
-				send.writeObject(sc.nextLine());
-				while(true) {
-					System.out.println((String) receive.readObject());
+            System.out.println("Server: " + receive.readObject());
+            System.out.println("Server: " + receive.readObject());
 
-					System.out.println((String) receive.readObject());
-					String response = sc.nextLine();
-					send.writeObject(response);
-					send.flush();
-					if (response.equals("1")) { 
-						System.out.println((String) receive.readObject());
-						String username = sc.nextLine();
-						send.writeObject(username);
-						send.flush();
+            String choice = sc.nextLine();
+            send.writeObject(choice);
+            send.flush();
 
-						System.out.println((String) receive.readObject()); 
-						String password = sc.nextLine();
-						send.writeObject(password);
-						send.flush();
+			//login
+            if ("1".equals(choice)) {
+                System.out.println("Server: " + receive.readObject());
+                String username = sc.nextLine();
+                send.writeObject(username);
+                send.flush();
 
-						String serverResponse = (String) receive.readObject();
-						System.out.println(serverResponse);
+                System.out.println("Server: " + receive.readObject());
+                String password = sc.nextLine();
+                send.writeObject(password);
+                send.flush();
 
-						if (serverResponse.contains("Welcome")) {
-							break;
-						}
+                System.out.println("Server: " + receive.readObject());
+				
+            } else if ("2".equals(choice)) { //new user 
+                while (true) {
+                    System.out.println("Server: " + receive.readObject());
+                    String username = sc.nextLine();
+                    send.writeObject(username);
+                    send.flush();
 
-					} else if(response.equals("2")) {
-						while (true) { 
-							System.out.println((String) receive.readObject()); 
-							String username = sc.nextLine();
-							send.writeObject(username);
-							send.flush();
-							String serverResponse = (String) receive.readObject();
-							System.out.println(serverResponse);
-							if (!serverResponse.equals("Username is already taken")) {
-								break;
-							}
-						}
-						System.out.println((String) receive.readObject()); 
-						String password = sc.nextLine();
-						send.writeObject(password);
-						send.flush();
+                    String serverResponse = (String) receive.readObject();
+                    System.out.println("Server: " + serverResponse);
 
-	
-						System.out.println("User created successfully!");
-					}
-				}
-						
-						// fromServer = (String) receive.readObject();
-						// System.out.println(fromServer);
-						// fromServer = (String) receive.readObject();
-						// System.out.println(fromServer);
-						// send.writeObject(sc.nextLine());
-						// send.flush();
-						// fromServer = (String) receive.readObject();
-						// System.out.println(fromServer);
-						// send.writeObject(sc.nextLine());
-						// send.flush();
-						// fromServer = (String) receive.readObject();
-						// System.out.println(fromServer);
+                    if ("Username is available.".equals(serverResponse)) {
+                        break;
+                    }
+                }
 
-				} catch (IOException  | ClassNotFoundException e) {
-						e.printStackTrace();
-				}
-		}
-    
+                System.out.println("Server: " + receive.readObject());
+                String password = sc.nextLine();
+                send.writeObject(password);
+                send.flush();
+
+                System.out.println("Server: " + receive.readObject());
+            } else {
+                System.out.println("Server: " + receive.readObject());
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 }
