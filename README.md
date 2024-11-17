@@ -29,6 +29,7 @@ Luke - Helped work on Login for ServerClient <br>
 - getChatID() <br>
 - setChatID(String chatId) <br>
 - getParticipants() <br>
+
 **Testing** - ChatTest.java test case file <br>
 
 #### ChatInterface.java
