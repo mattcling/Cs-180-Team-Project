@@ -1,10 +1,10 @@
-#Instructions on how to compile and run your project.
+# Instructions on how to compile and run your project.
 
 
-#Submit history
+# Submit history
 Matthew - Submitted Vocareum workspace on Brightspace for Phase 1 from team github repository
 
-##Commit history on Team Github Repo:
+## Commit history on Team Github Repo:
 Mattew - Submitted Database and Message classes, test cases and interfaces
 Siddesh - Submitted ServerClient and Chat classes, test cases and interfaces
 Charlotte - Submitted UserClient classes, test cases and interfaces
@@ -12,9 +12,9 @@ Kimaya - Submitted Profile classes, test cases and interfaces and README
 Luke - Helped work on Login for ServerClient
 
 
-#Class Descriptions
+# Class Descriptions
 
-##Chat.java
+## Chat.java
 Name - Chat
 Type - class
 Relationship - implements Serializable, ChatInterface
@@ -31,7 +31,7 @@ Methods -
 &nbsp;&nbsp;&nbsp;getParticipants()
 Testing - ChatTest.java test case file
 
-##ChatInterface.java
+## ChatInterface.java
 Name - ChatInterface
 Type - interface
 Relationship - interface for Chat class
@@ -45,7 +45,7 @@ Methods -
 &nbsp;&nbsp;&nbsp;getParticipants()
 &nbsp;&nbsp;&nbsp;sendMessage(String mess, String sender)
 
-##Database.java
+## Database.java
 Name - Database
 Type - class
 Relationship - implements DatabaseInterface
