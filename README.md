@@ -30,8 +30,7 @@ Luke - Helped work on Login for ServerClient <br>
 - getChatID() <br>
 - setChatID(String chatId) <br>
 - getParticipants() <br>
-
-
+<br><br>
 
 #### ChatInterface.java
 **Name** - ChatInterface <br>
@@ -47,8 +46,7 @@ Luke - Helped work on Login for ServerClient <br>
 - getChatID() <br>
 - getParticipants() <br>
 - sendMessage(String mess, String sender) <br>
-
-
+<br><br>
 
 #### Database.java <br>
 **Name** - Database <br>
@@ -72,8 +70,7 @@ Luke - Helped work on Login for ServerClient <br>
 - getData(String tableName, String key) <br>
 - changeData(String tableName, Object data, String key) <br>
 - deleteData(String tableName, String key) <br>
-
-
+<br><br>
 
 #### DatabaseInterface.java <br>
 **Name** - DatabaseInterface <br>
@@ -94,8 +91,7 @@ Luke - Helped work on Login for ServerClient <br>
 - saveTableMessage(Map<String, Message> table, String filename) <br>
 - saveTableChat(Map<String, Chat> table, String filename) <br>
 - saveTableUser(Map<String, User> table, String filename) <br>
-
-
+<br><br>
 
 #### Message.java <br>
 **Name** - Message <br>
@@ -116,8 +112,7 @@ Luke - Helped work on Login for ServerClient <br>
 - setContents(String contents) <br>
 - setDateTime(LocalDateTime dateTime) <br>
 - setChatID(String chatID) <br>
-
-
+<br><br>
 
 #### MessageInterface.java <br>
 **Name** - MessageInterface <br>
@@ -135,8 +130,7 @@ Luke - Helped work on Login for ServerClient <br>
 - setContents(String contents) <br>
 - setDateTime(LocalDateTime dateTime) <br>
 - setChatID(String chatID) <br>
-
-
+<br><br>
 
 #### Profile.java <br>
 **Name** - Profile <br>
@@ -156,8 +150,7 @@ Luke - Helped work on Login for ServerClient <br>
 - setprofilePicture(String userProfilePicture) <br>
 - updateProfile(String userbio, String userProfilePicture) <br>
 - displayProfile() <br>
-
-
+<br><br>
 
 #### ProfileInterface.java <br>
 **Name** - Profile <br>
@@ -175,8 +168,7 @@ Luke - Helped work on Login for ServerClient <br>
 - setprofilePicture(String userProfilePicture) <br>
 - updateProfile(String userbio, String userProfilePicture) <br>
 - displayProfile() <br>
-
-
+<br><br>
 
 #### ServerClient.java <br>
 **Name** - ServerClient <br>
@@ -189,8 +181,7 @@ Luke - Helped work on Login for ServerClient <br>
 **Methods** - 
 - run() <br>
 - public static void main(String[] args) <br>
-
-
+<br><br>
 
 #### ServerClientInterface.java <br>
 **Name** - ServerClientInterface <br>
@@ -198,8 +189,7 @@ Luke - Helped work on Login for ServerClient <br>
 **Relationship** - interface for ServerClient class <br>
 **Functionality** - Defines methods required for server-client interactions <br>
 **Testing** - ServerClientInterface.java test case file <br>
-
-
+<br><br>
 
 #### User.java <br>
 **Name** - User <br>
@@ -230,8 +220,7 @@ Luke - Helped work on Login for ServerClient <br>
 - setBlockedUsers(List<String> blockedUsers) <br>
 - setPassword(String password) <br>
 - setUserID(String userID) <br>
-
-
+<br><br>
 
 #### UserClient.java <br>
 **Name** - UserClient <br>
@@ -241,8 +230,7 @@ Luke - Helped work on Login for ServerClient <br>
 **Testing** - UserClientTest.java test case file <br>
 **Methods** - 
 - public static void main(String[] args) <br>
-
-
+<br><br>
 
 #### UserClientInterface.java <br>
 **Name** - UserClientInterface <br>
