@@ -1,7 +1,7 @@
 # Instructions on how to compile and run your project.
 
 
-### Submit history
+## Submit history
 Matthew - Submitted Vocareum workspace on Brightspace for Phase 1 from team github repository
 
 #### Commit history on Team Github Repo:
