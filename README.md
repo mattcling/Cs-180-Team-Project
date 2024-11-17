@@ -12,7 +12,7 @@ Kimaya - Submitted Profile classes, test cases and interfaces and README
 Luke - Helped work on Login for ServerClient
 
 
-### Class Descriptions
+## Class Descriptions
 
 #### Chat.java
 Name - Chat
