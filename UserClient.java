@@ -1,6 +1,19 @@
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
+/**
+ * A framework to run public test cases for the User class.
+ *
+ * <p>Purdue University -- CS18000 -- Fall 2024</p>
+ *
+ * @author Purdue CS
+ * @author Matthew Clingerman
+ * @author Charlotte Falus
+ * @author Luke Guiboux
+ * @author Kimaya Deshpande
+ * @author Sid Songirkar
+ * @version November 3, 2024
+ */
 
 public class UserClient {
 
@@ -9,38 +22,39 @@ public class UserClient {
              ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream());
              ObjectInputStream receive = new ObjectInputStream(socket.getInputStream());
              Scanner sc = new Scanner(System.in)) {
-            
+
+            String chatUser = "";
             boolean loggedIn = false;
-            while (!loggedIn) {//setts up a login loop until successsfully logged in
-                System.out.println("Server: " + receive.readObject());//elcome and propmting
+            while (!loggedIn) {
+                System.out.println("Server: " + receive.readObject());
                 System.out.println("Server: " + receive.readObject());
 
-                String choice = sc.nextLine(); //recives input 
+                String choice = sc.nextLine();
                 send.writeObject(choice);
                 send.flush();
 
-                if ("1".equals(choice)) {//login
-                    System.out.println("Server: " + receive.readObject()); //takes username input
+                if ("1".equals(choice)) {
+                    System.out.println("Server: " + receive.readObject());
                     String username = sc.nextLine();
                     send.writeObject(username);
                     send.flush();
 
-                    System.out.println("Server: " + receive.readObject()); //takes password input
+                    System.out.println("Server: " + receive.readObject());
                     String password = sc.nextLine();
                     send.writeObject(password);
                     send.flush();
 
                     String text = (String) receive.readObject();
-                    if(text.equals("Welcome, ")) {//if login was successful
+                    if (text.equals("Welcome, ")) {
                         System.out.println("Server: " + text);
-                         System.out.println("Server: " + receive.readObject());
+                        System.out.println("Server: " + receive.readObject());
                         loggedIn = true;
-                    } else {//login was not successfull (either beasue of wrong username or password - all here)
+                    } else {
                         System.out.println("Server: " + receive.readObject());
                     }
-                } else if ("2".equals(choice)) { //new user creation
-                    while (true) {//loops until valid username
-                        System.out.println("Server: " + receive.readObject());//recives username input
+                } else if ("2".equals(choice)) {
+                    while (true) {
+                        System.out.println("Server: " + receive.readObject());
                         String username = sc.nextLine();
                         send.writeObject(username);
                         send.flush();
@@ -53,89 +67,65 @@ public class UserClient {
                         }
                     }
 
-                    System.out.println("Server: " + receive.readObject());//recives password input
+                    System.out.println("Server: " + receive.readObject());
                     String password = sc.nextLine();
-                    
                     send.writeObject(password);
                     send.flush();
 
-                    System.out.println("Server: " + receive.readObject());//succes or fail
-
+                    System.out.println("Server: " + receive.readObject());
                 } else {
-                    System.out.println("Server: " + receive.readObject());//invalid
+                    System.out.println("Server: " + receive.readObject());
                 }
             }
 
-			
-//-------------------------
-
-
-            // Main menu
-
-            while (true) {//keeps running untill finished/exited
-                System.out.println("Server: " + receive.readObject());//gives choice to message, search, see friends, see blocked users, or exit
-                String choice = sc.nextLine();//takes input
+            while (true) {
+                System.out.println("Server: " + receive.readObject());
+                String choice = sc.nextLine();
                 send.writeObject(choice);
                 send.flush();
+
                 switch (choice) {
-                    case "1"://create/open chat option
-                        while (true) {// prints lines untill they are no longer sent(printing the friends usernames)
+                    case "1":
+                        while (true) {
                             String item = (String) receive.readObject();
-                            if ("\n".equals(item)) {// detecting when the list is done
+                            if ("\n".equals(item)) {
                                 break;
                             }
                             System.out.println(item);
                         }
-                    
+
                         System.out.println("Options: " + receive.readObject());
                         String input = sc.nextLine();
                         send.writeObject(input);
                         send.flush();
 
                         switch(input) {
-                            case "1"://send message
+                            case "1":
                                 System.out.println("Server: " + receive.readObject());
-                                // String chatUser = sc.nextLine();
                                 send.writeObject(chatUser);
                                 while (true) {
                                     String item = (String) receive.readObject();
-                                    if ("\n".equals(item)) {// detecting when the list is done
+                                    if ("\n".equals(item)) {
                                         break;
                                     }
                                     System.out.println(item);
                                 }
-                                String chatId = sc.nextLine();
-                                send.writeObject(chatId);
-                                while (true) {
-                                    String item = (String) receive.readObject();
-                                    if ("\n".equals(item)) {// detecting when the list is done
-                                        break;
-                                    }
-                                    System.out.println(item);
-                                }
-
                                 break;
                             case "2":
                                 System.out.println("Server: " + receive.readObject());
-                                // prompt who to chat with
                                 chatUser = sc.nextLine();
-                                send.writeObject(chatUser); // send who to chat to
+                                send.writeObject(chatUser);
                                 send.flush();
 
                                 String output = (String) receive.readObject();
-                                System.out.println(output); // recives and prints if user exists or not
-                                if (output.equals(("User does not exist."))) {// if issue, break switch
-                                    System.out.println("Server: " + output);
-                                    continue;
-                                }
-                                if (output.equals("You are blocked by this user.")) {// if issue break switch
-                                    System.out.println("Server: " + output);
+                                System.out.println(output);
+                                if (output.equals("User does not exist.") ||
+                                        output.equals("You are blocked by this user.")) {
                                     continue;
                                 }
 
                                 while (true) {
                                     System.out.println("Server: " + receive.readObject());
-                                    // System.out.println("Server: " + receive.readObject());
                                     String message = sc.nextLine();
 
                                     send.writeObject(message);
@@ -151,99 +141,99 @@ public class UserClient {
                                     }
                                 }
                                 break;
-                            default://invalid input
+                            default:
                                 System.out.println("Server: " + receive.readObject());
                                 continue;
                         }
                         break;
-                    case "2"://user search
-                        System.out.println("Server: " + receive.readObject()); //What user would you like to search for?
+                    case "2":
+                        System.out.println("Server: " + receive.readObject());
                         String searchUser = sc.nextLine();
-                        send.writeObject(searchUser); //Client sends the user they want to search for
+                        send.writeObject(searchUser);
                         send.flush();
-                        String serverString = ((String) receive.readObject()); 
-                        if ("Please Choose 1: \n 1. Friend user\n 2. Block user \n 3. Exit".equals(serverString)) {//if found then the line will be returned
-                            System.out.println("Server: " + serverString);//asks to select friend, block, or edit
-                            String action = sc.nextLine();//sends selection 
+                        String serverString = ((String) receive.readObject());
+                        if ("Please Choose 1: \n 1. Friend user\n 2. Block user \n 3. Exit".equals(serverString)) {
+                            System.out.println("Server: " + serverString);
+                            String action = sc.nextLine();
                             send.writeObject(action);
                             send.flush();
-                            System.out.println("Server: " + receive.readObject());//recives and prints only 1 line regardless of action
-                        } else {//if user is not found
+                            System.out.println("Server: " + receive.readObject());
+                        } else {
                             System.out.println("Server: " + serverString);
                         }
                         break;
-                    case "3"://friends list actions
-                        System.out.println("Server: " + receive.readObject());//writes "Your Friends: " header
-                        while (true) {//prints lines untill they are no longer sent(printing the friends usernames)
-                            String item = (String) receive.readObject();
-                            if ("\n".equals(item)) {//detecting when the list is done
-                                break;
-                            }
-                            System.out.println("Server: " + item); 
-                        }
-                        System.out.println("Server: " + receive.readObject());//promptin selction of undriend, block, or exit
-                        String actionChoice = sc.nextLine();//taking and sending the input
-                        send.writeObject(actionChoice);
-                        send.flush();
-                        switch (actionChoice) {
-                            case "1"://unfriend
-                                System.out.println("Server: " + receive.readObject());//enter username prompt
-                                String unfriend = sc.nextLine();//recives and sends username
-                                send.writeObject(unfriend);
-                                send.flush();
-                                System.out.println("Server: " + receive.readObject());//prints 1 line wheter successfull or not
-                                break;
-                            case "2"://block
-                                System.out.println("Server: " + receive.readObject());//enter username prompt
-                                String block = sc.nextLine();//recives and sends username
-                                send.writeObject(block);
-                                send.flush();
-                                System.out.println("Server: " + receive.readObject());//prints result line
-                                break;
-                            case "3"://exit 
-                                System.out.println("Server: " + receive.readObject());//prints successfull exit
-                                break;
-                            default://invalid input
-                                System.out.println("Server: " + receive.readObject());//prints invalid input 
-                                break;
-                        }
-                        break;
-                    case "4"://blocked list actions - same structure as friends list actions(see above)
-                        System.out.println("Server: " + receive.readObject());//header text "Your blocked users: "
-                        while (true) {//same loop structure as to display friends
+                    case "3":
+                        System.out.println("Server: " + receive.readObject());
+                        while (true) {
                             String item = (String) receive.readObject();
                             if ("\n".equals(item)) {
                                 break;
                             }
-                            System.out.println("Server: " + item); 
+                            System.out.println("Server: " + item);
+                        }
+                        System.out.println("Server: " + receive.readObject());
+                        String actionChoice = sc.nextLine();
+                        send.writeObject(actionChoice);
+                        send.flush();
+                        switch (actionChoice) {
+                            case "1":
+                                System.out.println("Server: " + receive.readObject());
+                                String unfriend = sc.nextLine();
+                                send.writeObject(unfriend);
+                                send.flush();
+                                System.out.println("Server: " + receive.readObject());
+                                break;
+                            case "2":
+                                System.out.println("Server: " + receive.readObject());
+                                String block = sc.nextLine();
+                                send.writeObject(block);
+                                send.flush();
+                                System.out.println("Server: " + receive.readObject());
+                                break;
+                            case "3":
+                                System.out.println("Server: " + receive.readObject());
+                                break;
+                            default:
+                                System.out.println("Server: " + receive.readObject());
+                                break;
+                        }
+                        break;
+                    case "4":
+                        System.out.println("Server: " + receive.readObject());
+                        while (true) {
+                            String item = (String) receive.readObject();
+                            if ("\n".equals(item)) {
+                                break;
+                            }
+                            System.out.println("Server: " + item);
                         }
                         System.out.println("Server: " + receive.readObject());
                         actionChoice = sc.nextLine();
                         send.writeObject(actionChoice);
                         send.flush();
                         switch (actionChoice) {
-                            case "1"://unblock
+                            case "1":
                                 System.out.println("Server: " + receive.readObject());
                                 String unblock = sc.nextLine();
                                 send.writeObject(unblock);
                                 send.flush();
                                 System.out.println("Server: " + receive.readObject());
                                 break;
-                            case "2"://exit
+                            case "2":
                                 System.out.println("Server: " + receive.readObject());
                                 break;
                             default:
-                                System.out.println("Server: " + receive.readObject());//invalid input
+                                System.out.println("Server: " + receive.readObject());
                                 break;
                         }
                         break;
-                    case "5"://quit
-                        System.out.println("Server: " + receive.readObject());//goodbye
+                    case "5":
+                        System.out.println("Server: " + receive.readObject());
                         break;
                 }
 
             }
-        } catch (IOException | ClassNotFoundException e) {//error handeling
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

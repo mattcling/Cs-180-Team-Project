@@ -30,6 +30,7 @@ Luke - Helped work on Login for ServerClient <br>
 - getChatID() <br>
 - setChatID(String chatId) <br>
 - getParticipants() <br>
+- getMessages() <br>
 <br><br>
 
 #### ChatInterface.java
@@ -176,7 +177,7 @@ Luke - Helped work on Login for ServerClient <br>
 **Relationship** - implements Runnable <br>
 **Functionality** - Represents a server-side implementation of a client-server chat system using Java socket programming. Handles client connections, user authentication, and various actions like chatting, searching users, and managing friends. <br>
 **Testing** - ServerClientTest.java test case file <br>
-**Fields** - socket, static Database d <br>
+**Fields** - socket, static Database d, stop <br>
 **Constructor** - ServerClient(Socket socket) <br>
 **Methods** - 
 - run() <br>
@@ -197,7 +198,7 @@ Luke - Helped work on Login for ServerClient <br>
 **Relationship** - implements UserInterface, Serializable <br>
 **Functionality** - Represents a user in a system, providing functionalities to manage user information, authenticate users, and manage their relationships with others. <br>
 **Testing** - UserTest.java test case file <br>
-**Fields** - userID, password, userName, profilePicture, friendsList, blockedUsers <br>
+**Fields** - userID, password, userName, profilePicture, friendsList, blockedUsers, static SERIAL_VERSION_UID <br>
 **Constructor** - User(String username, String password) <br>
 **Methods** - 
 - createAccount(String username, String newPassword) <br>

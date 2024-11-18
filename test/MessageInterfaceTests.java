@@ -8,7 +8,7 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
-import MessageInterface;
+//import MessageInterface;
 
 import java.lang.reflect.*;
 

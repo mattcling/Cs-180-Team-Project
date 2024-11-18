@@ -10,7 +10,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+/**
+ * A framework to run public test cases for the User class.
+ *
+ * <p>Purdue University -- CS18000 -- Fall 2024</p>
+ *
+ * @author Purdue CS
+ * @author Matthew Clingerman
+ * @author Charlotte Falus
+ * @author Luke Guiboux
+ * @author Kimaya Deshpande
+ * @author Sid Songirkar
+ * @version November 3, 2024
+ */
 
 public class UserClientTest {
 

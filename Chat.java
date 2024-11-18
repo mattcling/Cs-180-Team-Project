@@ -76,7 +76,7 @@ public class Chat implements Serializable, ChatInterface {
     }
 
     public String getChatID() {
-        return chatID;
+        return this.chatID;
     }
 
     public void setChatID(String chatId) {
