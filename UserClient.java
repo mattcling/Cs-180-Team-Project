@@ -95,16 +95,17 @@ public class UserClient {
                             System.out.println("Server: " + output);
                             continue;
                         }
-                        System.out.println("Server: " + receive.readObject());
+                        
                         while (true) {
+                            System.out.println("Server: " + receive.readObject());
                             //System.out.println("Server: " + receive.readObject());
                             String message = sc.nextLine();
                             
 
-                            System.out.println("about to send message to server (line 104)");
+                            
                             send.writeObject(message); 
                             send.flush();
-                            System.out.println("sent message to server (line 107)");
+                            
 
                             System.out.println("Server: " + receive.readObject());
                             System.out.println("Server: " + receive.readObject());

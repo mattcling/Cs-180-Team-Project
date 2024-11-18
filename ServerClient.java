@@ -93,6 +93,11 @@ public class ServerClient implements Runnable {
                 switch (choice) {
 
                     case "1": //create/open chat option
+                        send.writeObject("Your Friends: "); //display friends
+
+
+
+
                         send.writeObject("Please enter the username of the person you would like to chat with:");
                         //prompt to enter username of correspondant
                         send.flush();
