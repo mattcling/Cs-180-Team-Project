@@ -81,7 +81,34 @@ public class UserClient {
                 send.flush();
                 switch (choice) {
                     case "1"://message user
-                        //will do once yall finish the code for it
+                        System.out.println("Server: " + receive.readObject());
+                        String chatUser = sc.nextLine();
+                        send.writeObject(chatUser);
+                        send.flush();
+                        String output = (String) receive.readObject();
+                        if (output.equals(("User does not exist."))) {
+                            System.out.println("Server: " + output);
+                            continue;
+                        } 
+                        if (output.equals("You are blocked by this user.")) {
+                            System.out.println("Server: " + output);
+                            continue;
+                        }
+                        System.out.println("Server: " + receive.readObject());
+                        while (true) {
+                            System.out.println("Server: " + receive.readObject());
+                            String message = sc.nextLine();
+                            send.writeObject(message); 
+                            send.flush();
+                            System.out.println("Server: " + receive.readObject());
+                            System.out.println("Server: " + receive.readObject());
+                            String response = sc.nextLine();
+                            send.writeObject(response); 
+                            send.flush();
+                            if (response.equals("N")) {
+                                break;
+                            }
+                        }
                         break;
                     case "2"://user search
                         System.out.println("Server: " + receive.readObject()); //What user would you like to search for?
@@ -132,7 +159,36 @@ public class UserClient {
                                 break;
                         }
                         break;
-                    case "4"://quit
+                    case "4"://blocked list actions
+                        System.out.println("Server: " + receive.readObject());
+                        while (true) {
+                            String item = (String) receive.readObject();
+                            if ("\n".equals(item)) {
+                                break;
+                            }
+                            System.out.println("Server: " + item); 
+                        }
+                        System.out.println("Server: " + receive.readObject());
+                        actionChoice = sc.nextLine();
+                        send.writeObject(actionChoice);
+                        send.flush();
+                        switch (actionChoice) {
+                            case "1"://unblock
+                                System.out.println("Server: " + receive.readObject());
+                                String unblock = sc.nextLine();
+                                send.writeObject(unblock);
+                                send.flush();
+                                System.out.println("Server: " + receive.readObject());
+                                break;
+                            case "2"://exit
+                                System.out.println("Server: " + receive.readObject());
+                                break;
+                            default:
+                                System.out.println("Server: " + receive.readObject());
+                                break;
+                        }
+                        break;
+                    case "5"://quit
                         System.out.println("Server: " + receive.readObject());
                         break;
                 }

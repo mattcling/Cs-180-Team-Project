@@ -144,11 +144,11 @@ public class User implements UserInterface, Serializable {
     }
 
     public void setProfilePicture(String profilePicture) {
-        profilePicture = profilePicture;
+        this.profilePicture = profilePicture;
     }
 
     public void setFriendsList(List<String> friendsList) {
-        friendsList = friendsList;
+        this.friendsList = friendsList;
     }
 
     public void setBlockedUsers(List<String> blockedUsers) {
