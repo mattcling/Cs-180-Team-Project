@@ -239,6 +239,7 @@ Luke - Helped work on Login for ServerClient <br>
 **Relationship** - interface for UserClient class <br>
 **Functionality** -  Defines the structure for a user management system. Specifies the methods for UserClient class, ensuring consistent functionality for user account management, friends and blocked users management, and user details access/modification. <br>
 **Testing** - UserClientInterfaceTest.java test case file <br>
+when testing the methods there are a few created users sid with the pasword monkey and Diya with the pasword monkey and admin with the password monkey if you want to user them current messages are only sent and stored as the implementaion of them only works with a gui. you can add and remove and block users no problem lastly the test cases are weird and used packaging 
 **Methods** - 
 - createAccount(String username, String password) <br>
 - login(String username, String password) <br>
