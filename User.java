@@ -29,7 +29,7 @@ public class User implements UserInterface, Serializable {
     private static Database database = new Database();
 
     public User(String username,
-                String password) {
+                String password) {//creates new user with a username passowrd, empty friends and blocked lists, and a random id
         this.userID = generateUserID(); // this method uses a io class to make a random sting of numbers and letters
         this.password = password;
         
@@ -39,7 +39,7 @@ public class User implements UserInterface, Serializable {
         
     }
 
-    public boolean createAccount(String username, String newPassword) {
+    public boolean createAccount(String username, String newPassword) {//makes a new account if user does nto exist
 
         database.initializeDatabase();
         if (database.getData("user", username) != null) {
@@ -51,7 +51,7 @@ public class User implements UserInterface, Serializable {
         return database.writeData(newUser, "user");
     }
 
-    public boolean login(String username, String userpassword) {
+    public boolean login(String username, String userpassword) {//login function with username and password - checking if logged in and returning
         User user = (User) database.getData("user", username);
         if (user != null && user.password.equals(userpassword)) {
             System.out.println("User logged in");
@@ -61,11 +61,7 @@ public class User implements UserInterface, Serializable {
         return false;
     }
 
-    public void logout() {
-        System.out.println("User logged out");
-    }
-
-    public boolean addFriend(String friendsName) {
+    public boolean addFriend(String friendsName) {// adds friend to array or prints already friend
         if (!friendsList.contains(friendsName)) {
             friendsList.add(friendsName);
             System.out.println("Friend added");
@@ -75,7 +71,7 @@ public class User implements UserInterface, Serializable {
         return false;
     }
 
-    public boolean removeFriend(String friendsName) {
+    public boolean removeFriend(String friendsName) {//removes friend and returns confirmation
         if (friendsList.contains(friendsName)) {
             friendsList.remove(friendsName);
             System.out.println("Friend removed");
@@ -85,7 +81,7 @@ public class User implements UserInterface, Serializable {
         return false;
     }
 
-    public boolean addBlockedUser(String blockedUserName) {
+    public boolean addBlockedUser(String blockedUserName) {// similar to friend functions but with blocked users
         if (!blockedUsers.contains(blockedUserName)) {
             blockedUsers.add(blockedUserName);
             System.out.println("Blocked user!");
@@ -95,7 +91,7 @@ public class User implements UserInterface, Serializable {
         return false;
     }
 
-    public boolean unBlockUser(String blockedUserName) {
+    public boolean unBlockUser(String blockedUserName) {// similar to friend functions but with blocked users
         if (blockedUsers.contains(blockedUserName)) {
             blockedUsers.remove(blockedUserName);
             System.out.println("Blocked user unblocked");
@@ -105,7 +101,7 @@ public class User implements UserInterface, Serializable {
         return false;
     }
 
-    public String generateUserID() {
+    public String generateUserID() {//method to randomly generate the id 
         String temp = "UID" + UUID.randomUUID();
         if (database.getData("user" , temp) != null) {
             return generateUserID();

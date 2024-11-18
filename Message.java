@@ -29,8 +29,15 @@ public class Message implements Serializable, MessageInterface {
 
      // this may be a way to track time sent for now im not gunna do much with it.
 
-    public Message(String chatID, String senderID, String contents) {
+    public Message(String chatID, String senderID, String contents) {//creates new message and makes sure noting is null/empty
         d.loadOldData();
+    
+        this.messageID = generateUserID();
+        this.contents = contents;
+        this.chatID = chatID;
+        this.senderID = senderID;
+        this.dateTime = LocalDateTime.now(); // this is how to set it as a variable!!!
+        
         if (senderID == null || messageID.isEmpty()) {
             throw new IllegalArgumentException("messageID cannot be null or empty.");
         }
@@ -40,12 +47,6 @@ public class Message implements Serializable, MessageInterface {
         if (chatID == null || chatID.isEmpty()) {
             throw new IllegalArgumentException("chatID cannot be null or empty.");
         }
-
-        this.messageID = generateUserID();
-        this.contents = contents;
-        this.chatID = chatID;
-        this.senderID = senderID;
-        this.dateTime = LocalDateTime.now(); // this is how to set it as a variable!!!
     }
 
     public String getMessageID() {
@@ -68,7 +69,7 @@ public class Message implements Serializable, MessageInterface {
         return dateTime;
     }
 
-    public String generateUserID() {
+    public String generateUserID() {//randomly generates message id
         String temp = "UID" + UUID.randomUUID();
         if (d.getData(temp, "message") != null) {
             return generateUserID();

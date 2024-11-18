@@ -14,7 +14,7 @@ import java.io.Serializable;
  * @version November 3, 2024
  */
 
-public class Profile implements Serializable, ProfileInterface {
+public class Profile implements Serializable, ProfileInterface {//will be used in gui
     private static final long serialVersionUID = 1L;
 
     public String userID;
@@ -22,7 +22,7 @@ public class Profile implements Serializable, ProfileInterface {
     public String profilePicture;
 
 
-    public Profile(String userID, String bio, String userProfilePicture) {
+    public Profile(String userID, String bio, String userProfilePicture) {//creats new profile
         this.userID = userID;
         this.bio = bio;
         this.profilePicture = userProfilePicture;

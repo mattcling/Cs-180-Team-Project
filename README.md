@@ -8,7 +8,7 @@ Matthew - Submitted Vocareum workspace on Brightspace for Phase 1 from team gith
 Mattew - Submitted Database and Message classes, test cases and interfaces <br>
 Siddesh - Submitted ServerClient and Chat classes, test cases and interfaces <br>
 Charlotte - Submitted UserClient classes, test cases and interfaces <br>
-Kimaya - Submitted Profile classes, test cases and interfaces and README <br>
+Kimaya - Submitted ServerClient and User classes, test cases and interfaces and README <br>
 Luke - Helped work on Login for ServerClient <br>
 
 

@@ -21,20 +21,21 @@ import java.util.UUID;
 public class Chat implements Serializable, ChatInterface {
     private static final long SERIAL_VERSION_UID = 1L;
 
-    private String chatID;
-    private List<Message> messages;
-    private List<String> participants;
+    private String chatID;//to keep track of chats
+    private List<Message> messages;//keeps tractk of messages in an array
+    private List<String> participants;//keeps track of participants in an array
     private static Database d = new Database();
 
 
-    // constructor :)
-    public Chat(String user1, String user2) {
+    // constructor :D
+    public Chat(String user1, String user2) {//creats 1-1 chat and basically sets everyting at 0/null/empty
         d.loadOldData();
-        this.chatID = generateChatID();
         this.messages = new ArrayList<>();
         this.participants = new ArrayList<>();
         participants.add(user1);
         participants.add(user2);
+        this.chatID = generateChatID();
+        d.writeData(this, "chat");
     }
 
     public String generateChatID() {
@@ -49,7 +50,7 @@ public class Chat implements Serializable, ChatInterface {
         // } else {
         //     return temp;
         // }
-
+        chatID = "";
         for (String participant : participants) {
             chatID += participant;
         }
@@ -61,6 +62,7 @@ public class Chat implements Serializable, ChatInterface {
     }
 
     public void sendMessage(String mess, String sender) {
+        System.out.println(this.chatID);
         Message message = new Message(this.chatID, sender, mess);
         messages.add(message);
     }

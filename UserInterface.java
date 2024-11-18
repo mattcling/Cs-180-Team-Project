@@ -19,8 +19,6 @@ public interface UserInterface {
 
     boolean login(String username, String password);
 
-    void logout();
-
     String generateUserID();
 
     public boolean addBlockedUser(String blockedUserID);
