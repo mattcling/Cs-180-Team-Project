@@ -87,4 +87,8 @@ public class Chat implements Serializable, ChatInterface {
         return new ArrayList<>(participants);
     }
 
+    public List<Message> getMessages(){
+        return messages;
+    }
+
 }

@@ -47,6 +47,8 @@ public class Message implements Serializable, MessageInterface {
         if (chatID == null || chatID.isEmpty()) {
             throw new IllegalArgumentException("chatID cannot be null or empty.");
         }
+
+        d.writeData(this, "message");
     }
 
     public String getMessageID() {

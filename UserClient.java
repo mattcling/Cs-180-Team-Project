@@ -78,43 +78,82 @@ public class UserClient {
                 send.writeObject(choice);
                 send.flush();
                 switch (choice) {
-                    case "1"://message user
-                        System.out.println("Server: " + receive.readObject()); //prompt who to chat with
-                        String chatUser = sc.nextLine();
-                        send.writeObject(chatUser); //send who to chat to
-                        send.flush();
-
-                        
-                        String output = (String) receive.readObject();
-                        System.out.println(output); //recives and prints if user exists or not  
-                        if (output.equals(("User does not exist."))) {//if issue, break switch
-                            System.out.println("Server: " + output);
-                            continue;
-                        } 
-                        if (output.equals("You are blocked by this user.")) {//if issue break switch
-                            System.out.println("Server: " + output);
-                            continue;
-                        }
-                        
-                        while (true) {
-                            System.out.println("Server: " + receive.readObject());
-                            //System.out.println("Server: " + receive.readObject());
-                            String message = sc.nextLine();
-                            
-
-                            
-                            send.writeObject(message); 
-                            send.flush();
-                            
-
-                            System.out.println("Server: " + receive.readObject());
-                            System.out.println("Server: " + receive.readObject());
-                            String response = sc.nextLine();
-                            send.writeObject(response); 
-                            send.flush();
-                            if (response.equals("N")) {
+                    case "1"://create/open chat option
+                        while (true) {// prints lines untill they are no longer sent(printing the friends usernames)
+                            String item = (String) receive.readObject();
+                            if ("\n".equals(item)) {// detecting when the list is done
                                 break;
                             }
+                            System.out.println(item);
+                        }
+                    
+                        System.out.println("Options: " + receive.readObject());
+                        String input = sc.nextLine();
+                        send.writeObject(input);
+                        send.flush();
+
+                        switch(input) {
+                            case "1"://send message
+                                System.out.println("Server: " + receive.readObject());
+                                // String chatUser = sc.nextLine();
+                                send.writeObject(chatUser);
+                                while (true) {
+                                    String item = (String) receive.readObject();
+                                    if ("\n".equals(item)) {// detecting when the list is done
+                                        break;
+                                    }
+                                    System.out.println(item);
+                                }
+                                String chatId = sc.nextLine();
+                                send.writeObject(chatId);
+                                while (true) {
+                                    String item = (String) receive.readObject();
+                                    if ("\n".equals(item)) {// detecting when the list is done
+                                        break;
+                                    }
+                                    System.out.println(item);
+                                }
+
+                                break;
+                            case "2":
+                                System.out.println("Server: " + receive.readObject());
+                                // prompt who to chat with
+                                chatUser = sc.nextLine();
+                                send.writeObject(chatUser); // send who to chat to
+                                send.flush();
+
+                                String output = (String) receive.readObject();
+                                System.out.println(output); // recives and prints if user exists or not
+                                if (output.equals(("User does not exist."))) {// if issue, break switch
+                                    System.out.println("Server: " + output);
+                                    continue;
+                                }
+                                if (output.equals("You are blocked by this user.")) {// if issue break switch
+                                    System.out.println("Server: " + output);
+                                    continue;
+                                }
+
+                                while (true) {
+                                    System.out.println("Server: " + receive.readObject());
+                                    // System.out.println("Server: " + receive.readObject());
+                                    String message = sc.nextLine();
+
+                                    send.writeObject(message);
+                                    send.flush();
+
+                                    System.out.println("Server: " + receive.readObject());
+                                    System.out.println("Server: " + receive.readObject());
+                                    String response = sc.nextLine();
+                                    send.writeObject(response);
+                                    send.flush();
+                                    if (response.equals("N")) {
+                                        break;
+                                    }
+                                }
+                                break;
+                            default://invalid input
+                                System.out.println("Server: " + receive.readObject());
+                                continue;
                         }
                         break;
                     case "2"://user search

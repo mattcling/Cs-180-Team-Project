@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.*;
+import java.util.*;
 
 public class ServerClient implements Runnable {
     Socket socket;
@@ -90,54 +91,105 @@ public class ServerClient implements Runnable {
                 send.flush();
                 String choice = (String) receive.readObject();
                 //store option choice input
+                String chatUser = "";
+                String action = "";
                 switch (choice) {
 
                     case "1": //create/open chat option
-                        send.writeObject("Your Friends: "); //display friends
-
-
-
-
-                        send.writeObject("Please enter the username of the person you would like to chat with:");
-                        //prompt to enter username of correspondant
+                        send.writeObject("Your Friends: "); // displaying friends
                         send.flush();
-                        String chatUser = (String) receive.readObject();
-                        //store correspondant username
-                        if (d.containsObject("user", chatUser)) {
-                            if (((User) d.getData("user", chatUser)).getBlockedUsers().contains(((User) d.getData("user", username)).getUserName())) {
-                                send.writeObject("You are blocked by this user.");
-                                continue;
-                            }
-                            //erroring below
-                            Chat chat = new Chat(username, chatUser);
+                        for (String friend : ((User) d.getData("user", username)).getFriendsList()) { // loop through
+                            send.writeObject(friend); // display user's friends
+                            send.flush();
+                        }
+                        send.writeObject("\n");
+                        send.flush();
+                        send.writeObject("Please choose 1: \n1. Open existing Chat \n2. Create new chat \n3. Exit"); // print menu
+                        send.flush();
+                        action = (String) receive.readObject();
+                        chatUser = "";
+                        
+                        switch (action) {
+                            case "1":
+                                send.writeObject("Please enter the id of the chat you want to open: \n bellow are each of your chats");
+                                //prompt to enter username of correspondant
+                                send.flush();
+                                for(String chats :(((User) d.getData("user",username)).getChatIds())){
+                                    send.writeObject(chats); // display user's friends
+                                    System.out.println(chats); // test 
+                                    send.flush();
+                                }
+                                send.writeObject("\n");
+                                send.flush();
+                            
+                                
+                                chatUser = (String) receive.readObject();
+                                
+                                String openChat = (String) receive.readObject();
+                                Chat existingChat = (Chat) d.getData("chat", openChat);
+                                List<Message> messages = existingChat.getMessages();
+                                System.out.println("printing messages");
+                                for (Message message : messages) {
+                                        
+                                    send.writeObject(message.getSenderID() + ": " + message.getContents());
+                                    send.flush();
+                                }
+                                send.writeObject("\n");
+                                send.flush();
+
+                                
+
+
+                            case "2":
+                                send.writeObject("Please enter the username of the person you would like to chat with:");
+                                //prompt to enter username of correspondant
+                                send.flush();
+                                chatUser = (String) receive.readObject();
+                                //store correspondant username
+
+                                
+
+                                if (d.containsObject("user", chatUser)) {
+                                    if (((User) d.getData("user", chatUser)).getBlockedUsers().contains(((User) d.getData("user", username)).getUserName())) {
+                                        send.writeObject("You are blocked by this user.");
+                                        continue;
+                                    }
+                                //erroring below
+                                Chat chat = new Chat(username, chatUser);
 
                             
-                            send.writeObject("Chat created with " + chatUser);
-                            send.flush();
-                            while (true) {
-                                send.writeObject("Please enter your message:");
+                                send.writeObject("Chat created with " + chatUser);
                                 send.flush();
+                                while (true) {
+                                    send.writeObject("Please enter your message:");
+                                    send.flush();
 
-                                String message = (String) receive.readObject();
-                                System.out.println("Message: " + message + " line 117");
+                                    String message = (String) receive.readObject();
+                                    System.out.println("Message: " + message + " line 117");
 
-                                System.out.println("about to add message to array list");
-                                chat.sendMessage(message, username);
-                                System.out.println("message successfully added to arraylist");
-                                send.writeObject("Message sent!");
-                                send.flush();
-                                send.writeObject("Would you like to send another message? (Y/N)");
-                                send.flush();
-                                String response = (String) receive.readObject();
-                                if (response.equals("N")) {
-                                    break;
+                                    System.out.println("about to add message to array list");
+                                    chat.sendMessage(message, username);
+                                    System.out.println("message successfully added to arraylist");
+                                    send.writeObject("Message sent!");
+                                    send.flush();
+                                    send.writeObject("Would you like to send another message? (Y/N)");
+                                    send.flush();
+                                    String response = (String) receive.readObject();
+                                    if (response.equals("N")) {
+                                        break;
+                                    } else {
+                                        continue;
+                                    }
                                 }
-                            }
-                        } else {
-                            send.writeObject("User does not exist.");
-                            continue;
-                        }
-                        break;
+                                } else {
+                                    send.writeObject("User does not exist.");
+                                    continue;
+                                }
+                            case "3":
+                                send.writeObject("Exit"); //exit message for exit option
+                                    break;
+                            
+                        }break;
 
 
                     case "2"://user search option
@@ -147,7 +199,7 @@ public class ServerClient implements Runnable {
                         if (d.containsObject("user", searchUser)) { //check if username entered exists in database and print it
                             send.writeObject("Please Choose 1: \n 1. Friend user\n 2. Block user \n 3. Exit"); // print menu
                             send.flush();
-                            String action = (String) receive.readObject(); //store action option from choices input
+                            action = (String) receive.readObject(); //store action option from choices input
                             switch (action) {
                                 case "1"://add user as friend
                                     String userName = ((User) d.getData("user", searchUser)).getUserName();

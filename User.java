@@ -25,7 +25,7 @@ public class User implements UserInterface, Serializable {
     private List<String> friendsList; // stores all frreinds id numbers
     // using lists for easier access and this way we know that things wont get complicated with lengths of a basic array
     private List<String> blockedUsers; // stores blocked friends id numbers
-
+    private List<String> chatIds;
     private static Database database = new Database();
 
     public User(String username,
@@ -71,6 +71,18 @@ public class User implements UserInterface, Serializable {
         return false;
     }
 
+    public boolean addChat(String Id){
+        if(chatIds.contains(Id)){
+            System.out.println("This id is already in the list");
+            return false;
+        }
+        else{
+            chatIds.add(Id);
+            database.writeData(this, "user");
+            return true;
+        }
+    }
+
     public boolean removeFriend(String friendsName) {//removes friend and returns confirmation
         if (friendsList.contains(friendsName)) {
             friendsList.remove(friendsName);
@@ -113,6 +125,10 @@ public class User implements UserInterface, Serializable {
     // getters and setters
     public String getUserID() {
         return userID;
+    }
+
+    public List<String> getChatIds(){
+        return chatIds;
     }
     
     public String getPassword() {
