@@ -1,10 +1,15 @@
-import java.io.*;
-import java.net.*;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.Scanner;
+
 /**
  * A framework to run public test cases for the User class.
  *
- * <p>Purdue University -- CS18000 -- Fall 2024</p>
+ * <p>
+ * Purdue University -- CS18000 -- Fall 2024</p>
  *
  * @author Purdue CS
  * @author Matthew Clingerman
@@ -14,14 +19,10 @@ import java.util.Scanner;
  * @author Sid Songirkar
  * @version November 3, 2024
  */
-
 public class UserClient {
 
     public static void main(String[] args) {
-        try (Socket socket = new Socket("localhost", 4343);
-             ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream());
-             ObjectInputStream receive = new ObjectInputStream(socket.getInputStream());
-             Scanner sc = new Scanner(System.in)) {
+        try (Socket socket = new Socket("localhost", 4343); ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream()); ObjectInputStream receive = new ObjectInputStream(socket.getInputStream()); Scanner sc = new Scanner(System.in)) {
 
             String chatUser = "";
             boolean loggedIn = false;
@@ -75,6 +76,7 @@ public class UserClient {
                     System.out.println("Server: " + receive.readObject());
                 } else {
                     System.out.println("Server: " + receive.readObject());
+                    continue;
                 }
             }
 
@@ -99,7 +101,7 @@ public class UserClient {
                         send.writeObject(input);
                         send.flush();
 
-                        switch(input) {
+                        switch (input) {
                             case "1":
                                 System.out.println("Server: " + receive.readObject());
                                 send.writeObject(chatUser);
@@ -119,8 +121,8 @@ public class UserClient {
 
                                 String output = (String) receive.readObject();
                                 System.out.println(output);
-                                if (output.equals("User does not exist.") ||
-                                        output.equals("You are blocked by this user.")) {
+                                if (output.equals("User does not exist.")
+                                        || output.equals("You are blocked by this user.")) {
                                     continue;
                                 }
 
@@ -230,6 +232,9 @@ public class UserClient {
                     case "5":
                         System.out.println("Server: " + receive.readObject());
                         break;
+                    default:
+                        System.out.println("Server: " + receive.readObject());
+                        continue;
                 }
 
             }

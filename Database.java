@@ -1,11 +1,17 @@
-import java.io.*;
-import java.util.*;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * A framework to run public test cases for the User class.
  *
- * <p>Purdue University -- CS18000 -- Fall 2024</p>
+ * <p>
+ * Purdue University -- CS18000 -- Fall 2024</p>
  *
  * @author Purdue CS
  * @author Matthew Clingerman
@@ -15,8 +21,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Sid Songirkar
  * @version November 3, 2024
  */
-
-
 public class Database implements DatabaseInterface {
 
     // going to be doing a lot of experimenting if things dont make sense sorry ask me in person
@@ -24,7 +28,6 @@ public class Database implements DatabaseInterface {
     // anyway im going to be using in memory and out memory has maps that will hopefully
     // work and stay even after resets
     // we will be using hashmap tabels and the tables will all have their own info stored
-
     private Map<String, User> userTable = new ConcurrentHashMap();
     private Map<String, Chat> chatTable = new ConcurrentHashMap<>();
     private Map<String, Message> messageTable = new ConcurrentHashMap<>();
@@ -34,7 +37,6 @@ public class Database implements DatabaseInterface {
     private final String messageDataFile = "messageTable.ser";
     //create a gatekeeper to prevent multiple instances of the database
     private static Object object = new Object();
-
 
     public void loadOldData() { // this needs loadtable method made
         userTable = loadTableUser(userDataFile);
@@ -49,7 +51,6 @@ public class Database implements DatabaseInterface {
             e.printStackTrace();
         }
     }
-
 
     // this saves the hasmap to a file so that i can be kept on refresh of the server
     public synchronized void saveTableChat(Map<String, Chat> table, String filename) {
@@ -67,7 +68,6 @@ public class Database implements DatabaseInterface {
             e.printStackTrace();
         }
     }
-
 
     // so this basiclly just on refresh load the hashmaps again
     public Map<String, User> loadTableUser(String filename) {
@@ -98,8 +98,8 @@ public class Database implements DatabaseInterface {
     }
 
     // this just runs the load method to get the data for the database to work!!
-    public void  initializeDatabase() {
-        
+    public void initializeDatabase() {
+
         System.out.println("Initializing database...");
         userTable = loadTableUser(userDataFile);
         messageTable = loadTableMessage(messageDataFile);
@@ -107,7 +107,7 @@ public class Database implements DatabaseInterface {
 
         System.out.println("Database initialized!!!");
     }
-    
+
     // synchronized to prevent multiple threads from accessing the same data
     public synchronized boolean writeData(Object data, String tableName) {
         switch (tableName) {
@@ -171,7 +171,7 @@ public class Database implements DatabaseInterface {
                 return messageTable.get(key);
             default:
                 System.out.println("Invalid table name!");
-                System.out.println("Location: GetData");
+                System.out.println("Location: GetData method");
                 return null;
         }
     }
@@ -209,6 +209,7 @@ public class Database implements DatabaseInterface {
         }
         return false;
     }
+
     // synchronized to prevent multiple threads from accessing the same data
     public synchronized boolean deleteData(String tableName, String key) {
         switch (tableName) {
@@ -224,7 +225,7 @@ public class Database implements DatabaseInterface {
                 if (chatTable.remove(key) != null) {
                     System.out.println("Chat " + key + " has been deleted!");
                     chatTable.remove(key);
-                    saveTableChat(chatTable,chatDataFile);
+                    saveTableChat(chatTable, chatDataFile);
                     return true;
                 }
                 break;

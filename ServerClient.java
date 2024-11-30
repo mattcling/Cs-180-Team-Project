@@ -1,11 +1,15 @@
-import java.io.*;
-import java.net.*;
-import java.util.*;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  * A framework to run the public test cases for the User class.
  *
- * <p>Purdue University -- CS18000 -- Fall 2024</p>
+ * <p>
+ * Purdue University -- CS18000 -- Fall 2024</p>
  *
  * @author Purdue CS
  * @author Matthew Clingerman
@@ -15,9 +19,8 @@ import java.util.*;
  * @author Sid Songirkar
  * @version November 3, 2024
  */
-
-
 public class ServerClient implements Runnable {
+
     Socket socket;
     public static Database d = new Database();
     boolean stop;
@@ -30,8 +33,7 @@ public class ServerClient implements Runnable {
         System.out.printf("Connection received from %s\n", socket); //connection established
         String username = null;
 
-        try (ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream());
-             ObjectInputStream receive = new ObjectInputStream(socket.getInputStream())) {
+        try (ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream()); ObjectInputStream receive = new ObjectInputStream(socket.getInputStream())) {
 
             boolean loggedIn = false;
             while (!loggedIn) { //loop while login is not complete (before login)
@@ -58,10 +60,12 @@ public class ServerClient implements Runnable {
                             send.flush();
                             loggedIn = true;
                         } else {
-                            send.writeObject("Invalid password."); //error message for mismatching password
+                            send.writeObject("Invalid password.");
+                            continue;//error message for mismatching password
                         }
                     } else {
-                        send.writeObject("Invalid username."); //error message for nonexisting username in database
+                        send.writeObject("Invalid username.");
+                        continue; //error message for nonexisting username in database
                     }
                 } else if ("2".equals(response)) { // Create a new user option
                     while (true) {
@@ -74,6 +78,8 @@ public class ServerClient implements Runnable {
                             send.writeObject("Username is already taken.");
                             //error message for already existing user
                             send.flush();
+                            continue;
+
                         } else {
                             send.writeObject("Username is available."); //confirmation message
                             send.flush();
@@ -89,17 +95,20 @@ public class ServerClient implements Runnable {
                     //create new user object with given inputs as User fields
                     d.writeData(newUser, "user");
 
-                    send.writeObject("User created successfully! Please login to continue."); //confirmation message
+                    send.writeObject("User created successfully! Please login to continue.");
+                    continue;//confirmation message
                 } else {
                     send.writeObject("Invalid option selected. Retry");
+                    continue;
                     //error message for invalid option from menu entered
                 }
             }
-
             // Main menu
+            boolean quit = false;
+
             while (true) {
-                send.writeObject("Please choose an option:\n1. Create / Open Chat \n2. User Search " +
-                        "\n3. Friends list \n4. Blocked Users List \n5. Quit");
+                send.writeObject("Please choose an option:\n1. Create / Open Chat \n2. User Search "
+                        + "\n3. Friends list \n4. Blocked Users List \n5. Quit");
                 send.flush();
                 String choice = (String) receive.readObject();
                 String chatUser = "";
@@ -114,18 +123,19 @@ public class ServerClient implements Runnable {
                         }
                         send.writeObject("\n");
                         send.flush();
-                        send.writeObject("Please choose 1: \n1." +
-                                " Open existing Chat(doesnt work until gui is implemented.) \n2." +
-                                " Create new chat \n3. Exit");
+                        send.writeObject("Please choose 1: \n1."
+                                + " Open existing Chat(doesnt work until gui is implemented.) \n2."
+                                + " Create new chat \n3. Exit");
                         send.flush();
                         action = (String) receive.readObject();
                         chatUser = "";
 
                         switch (action) {
                             case "1":
-                                send.writeObject("Please enter the id of the chat
-                                                 you want to open: Non Functional");
+                                send.writeObject(
+                                        "Please enter the id of the chat you want to open: Non Functional");
                                 send.flush();
+                                //last thing that sends rn
                                 for (String chats : (((User) d.getData("user", username)).getChatIds())) {
                                     send.writeObject(chats);
                                     send.flush();
@@ -135,19 +145,18 @@ public class ServerClient implements Runnable {
 
                                 chatUser = (String) receive.readObject();
 
-                                //Chat existingChat = (Chat) d.getData("chat", chatUser);
-                                // List<Message> messages = existingChat.getMessages();
-                                // for (Message message : messages) {
-                                //     send.writeObject(message.getSenderID() + ": " + message.getContents());
-                                //     send.flush();
-                                // }
-                                // send.writeObject("\n");
-                                // send.flush();
-                                // break;
-
+                            //Chat existingChat = (Chat) d.getData("chat", chatUser);
+                            // List<Message> messages = existingChat.getMessages();
+                            // for (Message message : messages) {
+                            //     send.writeObject(message.getSenderID() + ": " + message.getContents());
+                            //     send.flush();
+                            // }
+                            // send.writeObject("\n");
+                            // send.flush();
+                            // break;
                             case "2":
-                                send.writeObject("Please enter the username of the" +
-                                        " person you would like to chat with:");
+                                send.writeObject("Please enter the username of the"
+                                        + " person you would like to chat with:");
                                 send.flush();
                                 chatUser = (String) receive.readObject();
 
@@ -187,6 +196,10 @@ public class ServerClient implements Runnable {
                             case "3":
                                 send.writeObject("Exit");
                                 break;
+                            default:
+                                send.writeObject("Invalid option selected.");
+                                continue;
+
                         }
                         break;
 
@@ -358,25 +371,36 @@ public class ServerClient implements Runnable {
 
                             case "2":
                                 send.writeObject("Exited");
+                                quit = true;
                                 break;
 
                             default:
                                 send.writeObject("Invalid option selected.");
                                 continue;
                         }
+
                         break;
 
                     case "5": //quit
                         send.writeObject("Goodbye!");
                         break;
+                    default:
+                        send.writeObject("Invalid option selected.");
+                        continue;
                 }
+                if (quit) {
+                    break;
+                }
+
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+
     }
 
     public static void main(String[] args) {
+
         d.initializeDatabase();
 
         try (ServerSocket serverSocket = new ServerSocket(4343)) {
