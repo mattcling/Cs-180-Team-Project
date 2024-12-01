@@ -30,11 +30,15 @@ public class User implements UserInterface, Serializable {
     // using lists for easier access and this way we know that things wont get complicated with lengths of a basic array
     private List<String> blockedUsers; // stores blocked friends id numbers
     private List<String> chatIds;
-    private static Database database = new Database();
+    private static Database d = new Database();
 
     public User(String username,
-            String password) {//creates new user with a username passowrd, empty friends and blocked lists, and a random id
+        String password) {//creates new user with a username passowrd, empty friends and blocked lists, and a random id
+        
+        d.loadOldData();
+
         this.userID = generateUserID(); // this method uses a io class to make a random sting of numbers and letters
+
         this.password = password;
 
         this.userName = username;
@@ -46,18 +50,18 @@ public class User implements UserInterface, Serializable {
 
     public boolean createAccount(String username, String newPassword) {//makes a new account if user does nto exist
 
-        database.initializeDatabase();
-        if (database.getData("user", username) != null) {
+        d.initializeDatabase();
+        if (d.getData("user", username) != null) {
             System.out.println("User already exists");
             return false;
         }
 
         User newUser = new User(username, newPassword);
-        return database.writeData(newUser, "user");
+        return d.writeData(newUser, "user");
     }
 
     public boolean login(String username, String userpassword) {//login function with username and password - checking if logged in and returning
-        User user = (User) database.getData("user", username);
+        User user = (User) d.getData("user", username);
         if (user != null && user.password.equals(userpassword)) {
             System.out.println("User logged in");
             return true;
@@ -77,13 +81,16 @@ public class User implements UserInterface, Serializable {
     }
 
     public boolean addChat(String Id) {
-        if (chatIds.contains(Id)) {
+        if (chatIds == null) {
+            chatIds = new ArrayList<>();
+        }
+        if (chatIds.isEmpty() || !chatIds.contains(Id)) {
+            chatIds.add(Id);
+            d.writeData(this, "user");
+            return true;
+        } else {
             System.out.println("This id is already in the list");
             return false;
-        } else {
-            chatIds.add(Id);
-            database.writeData(this, "user");
-            return true;
         }
     }
 
@@ -119,7 +126,7 @@ public class User implements UserInterface, Serializable {
 
     public String generateUserID() {//method to randomly generate the id 
         String temp = "UID" + UUID.randomUUID();
-        if (database.getData("user", temp) != null) {
+        if (d.getData("user", temp) != null) {
             return generateUserID();
         } else {
             return temp;
@@ -132,7 +139,7 @@ public class User implements UserInterface, Serializable {
     }
 
     public List<String> getChatIds() {
-        return chatIds;
+        return this.chatIds;
     }
 
     public String getPassword() {

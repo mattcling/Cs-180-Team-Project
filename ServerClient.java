@@ -4,6 +4,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 
 /**
  * A framework to run the public test cases for the User class.
@@ -132,10 +133,16 @@ public class ServerClient implements Runnable {
 
                         switch (action) {
                             case "1":
-                                send.writeObject(
-                                        "Please enter the id of the chat you want to open: Non Functional");
+                                send.writeObject("Below is all of your chats you can access");
                                 send.flush();
-                                //last thing that sends rn
+                                
+                                if (((User) d.getData("user", username)).getChatIds().isEmpty()) {
+                                    send.writeObject("You have no chats.");
+                                    send.flush();
+                                    send.writeObject("\n");
+                                    send.flush();
+                                    break;
+                                }
                                 for (String chats : (((User) d.getData("user", username)).getChatIds())) {
                                     send.writeObject(chats);
                                     send.flush();
@@ -143,17 +150,23 @@ public class ServerClient implements Runnable {
                                 send.writeObject("\n");
                                 send.flush();
 
-                                chatUser = (String) receive.readObject();
+                                send.writeObject("Please enter the ID of chat you want to open");
+                                send.flush();
 
-                            //Chat existingChat = (Chat) d.getData("chat", chatUser);
-                            // List<Message> messages = existingChat.getMessages();
-                            // for (Message message : messages) {
-                            //     send.writeObject(message.getSenderID() + ": " + message.getContents());
-                            //     send.flush();
-                            // }
-                            // send.writeObject("\n");
-                            // send.flush();
-                            // break;
+                                String chatOpen = (String) receive.readObject();
+
+                                d.loadOldData();
+                                Chat existingChat = (Chat) d.getData("chat", chatOpen);
+                                List<Message> messages = existingChat.getMessages();
+                                for (Message message : messages) {
+                                    send.writeObject(message.getSenderID() + ": " + message.getContents());
+                                    send.flush();
+                                }
+                                send.writeObject("\n");
+                                send.flush();
+
+                                chatUser = "";
+                                break;
                             case "2":
                                 send.writeObject("Please enter the username of the"
                                         + " person you would like to chat with:");

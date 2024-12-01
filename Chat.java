@@ -1,7 +1,6 @@
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * A framework to run public test cases for the User class.
@@ -34,8 +33,11 @@ public class Chat implements Serializable, ChatInterface {
         this.participants = new ArrayList<>();
         participants.add(user1);
         participants.add(user2);
-        this.chatID = generateChatID();
+        chatID = generateChatID();
+        User user = (User) d.getData("user", user1);
+        System.out.println(user.addChat(chatID));        
         d.writeData(this, "chat");
+        d.writeData(user, "user");
     }
 
     public String generateChatID() {
@@ -65,6 +67,7 @@ public class Chat implements Serializable, ChatInterface {
         System.out.println(this.chatID);
         Message message = new Message(this.chatID, sender, mess);
         messages.add(message);
+        d.writeData(message, "message");
     }
 
     public void removeMessage(Message message) {

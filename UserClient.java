@@ -104,7 +104,7 @@ public class UserClient {
                         switch (input) {
                             case "1":
                                 System.out.println("Server: " + receive.readObject());
-                                send.writeObject(chatUser);
+                                //no worky :(
                                 while (true) {
                                     String item = (String) receive.readObject();
                                     if ("\n".equals(item)) {
@@ -112,6 +112,20 @@ public class UserClient {
                                     }
                                     System.out.println(item);
                                 }
+
+                                System.out.println("Server: " + receive.readObject());
+                                String chosenChat = sc.nextLine();
+                                send.writeObject(chosenChat);
+                                send.flush();
+
+                                while (true) {
+                                    String item = (String) receive.readObject();
+                                    if ("\n".equals(item)) {
+                                        break;
+                                    }
+                                    System.out.println(item);
+                                }
+
                                 break;
                             case "2":
                                 System.out.println("Server: " + receive.readObject());
