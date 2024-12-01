@@ -117,7 +117,8 @@ public class UserClient {
                                 String chosenChat = sc.nextLine();
                                 send.writeObject(chosenChat);
                                 send.flush();
-
+                                
+                                //no worky :(
                                 while (true) {
                                     String item = (String) receive.readObject();
                                     if ("\n".equals(item)) {

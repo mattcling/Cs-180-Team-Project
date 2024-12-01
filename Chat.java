@@ -67,7 +67,8 @@ public class Chat implements Serializable, ChatInterface {
         System.out.println(this.chatID);
         Message message = new Message(this.chatID, sender, mess);
         messages.add(message);
-        d.writeData(message, "message");
+        //d.writeData(message, "message");
+        d.writeData(this, "chat");
     }
 
     public void removeMessage(Message message) {

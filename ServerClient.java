@@ -125,7 +125,7 @@ public class ServerClient implements Runnable {
                         send.writeObject("\n");
                         send.flush();
                         send.writeObject("Please choose 1: \n1."
-                                + " Open existing Chat(doesnt work until gui is implemented.) \n2."
+                                + " Open existing Chat \n2."
                                 + " Create new chat \n3. Exit");
                         send.flush();
                         action = (String) receive.readObject();
@@ -157,6 +157,7 @@ public class ServerClient implements Runnable {
 
                                 d.loadOldData();
                                 Chat existingChat = (Chat) d.getData("chat", chatOpen);
+                                // this no print
                                 List<Message> messages = existingChat.getMessages();
                                 for (Message message : messages) {
                                     send.writeObject(message.getSenderID() + ": " + message.getContents());
