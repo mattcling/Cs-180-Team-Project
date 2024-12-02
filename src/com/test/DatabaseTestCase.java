@@ -9,10 +9,10 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
-import Chat;
-import Database;
-import Message;
-import User;
+import main.Chat;
+import main.Database;
+import main.Message;
+import main.User;
 
 import java.lang.reflect.*;
 

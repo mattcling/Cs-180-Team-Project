@@ -1,3 +1,4 @@
+package main;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +36,7 @@ public class Chat implements Serializable, ChatInterface {
         participants.add(user1);
         participants.add(user2);
         chatID = generateChatID();
-        User user = (User) d.getData("user", user1);
-        System.out.println(user.addChat(chatID));        
+        User user = (User) d.getData("user", user1);        
         d.writeData(this, "chat");
         d.writeData(user, "user");
     }

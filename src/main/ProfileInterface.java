@@ -1,3 +1,4 @@
+package main;
 /**
  * A framework for the Profile class
  *

@@ -1,3 +1,4 @@
+package main;
 import java.util.List;
 /**
  * The blueprint for our user class.
