@@ -1,4 +1,4 @@
-package tests;
+package com.test;
 import java.time.LocalDateTime;
 
 import org.junit.Before;
@@ -44,9 +44,9 @@ public class DatabaseTestCase {
     @Before
     public void setUp() throws Exception {
         db = new Database();
-        testinguser = new User("testinguser", "1234", db);
-        testingchat = new Chat("1234");
-        testingmessage = new Message("messageID", "sendingUser", "recivingUser", "contents");
+        testinguser = new User("testinguser", "1234");
+        testingchat = new Chat("user1", "user2");
+        testingmessage = new Message(testingchat.getChatID(), "sendingUser", "recivingUser");
 
         db.writeData(testinguser, "user");
         db.writeData(testingchat, "chats");
