@@ -2,7 +2,6 @@ package com.test;
 
 import main.Chat;
 import main.Message;
-import main.User;
 import org.junit.Before;
 import org.junit.Test;
 
