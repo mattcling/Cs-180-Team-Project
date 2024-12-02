@@ -1,6 +1,6 @@
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
+
 
 /**
  * A framework to run public test cases for the User class.
