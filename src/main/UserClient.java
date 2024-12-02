@@ -1,10 +1,15 @@
 package main;
 
+import java.awt.BorderLayout;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 /**
  * A class which acts as the user client for the chat application.
@@ -21,9 +26,11 @@ import java.util.Scanner;
  * @author Sid Songirkar
  * @version November 3, 2024
  */
-public class UserClient {
+public class UserClient implements Runnable {
 
     public static void main(String[] args) {
+        //UserClient b = new UserClient();
+        SwingUtilities.invokeLater(new UserClient());
         try (Socket socket = new Socket("localhost", 4343); ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream()); ObjectInputStream receive = new ObjectInputStream(socket.getInputStream()); Scanner sc = new Scanner(System.in)) {
 
             String chatUser = "";
@@ -261,6 +268,17 @@ public class UserClient {
     }
 
     public void run() {
+        JFrame jf = new JFrame("Empty Frame");
+        //Container content = frame.getContentPane(); maybe go back and add
+        jf.setSize(1000, 1000);
+        jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
+        JButton jbCenter = new JButton("Test");
+        
+        jf.add(jbCenter, BorderLayout.CENTER);
+        
+
+
     }
 }
+

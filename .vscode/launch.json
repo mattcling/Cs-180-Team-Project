@@ -5,6 +5,20 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "UserClient",
+            "request": "launch",
+            "mainClass": "main.UserClient",
+            "projectName": "Cs-180-Team-Project_5424012a"
+        },
+        {
+            "type": "java",
+            "name": "ServerClient",
+            "request": "launch",
+            "mainClass": "main.ServerClient",
+            "projectName": "Cs-180-Team-Project_5424012a"
+        },
+        {
             "type": "jdk",
             "request": "launch",
             "name": "Launch Java App"
