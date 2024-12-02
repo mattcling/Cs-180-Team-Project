@@ -16,8 +16,6 @@ import java.util.List;
 
 public interface UserInterface {
 
-    boolean createAccount(String username, String password);
-
     boolean login(String username, String password);
 
     String generateUserID();

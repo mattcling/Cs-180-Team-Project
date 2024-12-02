@@ -22,7 +22,7 @@ public interface ProfileInterface {
 
     public String getBio();
 
-    public void setBio(String bio);
+    public void editBio(String bio);
 
     public String getprofilePicture();
 

@@ -32,6 +32,7 @@ public class User implements UserInterface, Serializable {
     // using lists for easier access and this way we know that things wont get complicated with lengths of a basic array
     private List<String> blockedUsers; // stores blocked friends id numbers
     private List<String> chatIds;
+    private Profile profile;
     private static Database d = new Database();
 
     public User(String username,
@@ -47,6 +48,7 @@ public class User implements UserInterface, Serializable {
         this.blockedUsers = new ArrayList<>();
         this.friendsList = new ArrayList<>();
         this.chatIds = new ArrayList<>();
+        profile = new Profile(userName, "This is my bio", "profilePic.jpg");
 
     }
 

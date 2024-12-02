@@ -42,7 +42,7 @@ public class ProfileTest {
         assertNotNull("UserID should not be null", profile.getUserID());
         assertEquals("UserID should match", "testUserID", profile.getUserID());
         assertEquals("Bio should match", "This is my bio", profile.getBio());
-        assertEquals("Profile picture should match", "profilePic.jpg", profile.getprofilePicture());
+        assertEquals("Profile picture should match", "src/photos/profilePic.jpg", profile.getprofilePicture());
     }
 
     @Test
@@ -71,7 +71,7 @@ public class ProfileTest {
     @Test
     public void testSetBio() {
         // Verifying that the bio can be updated correctly
-        profile.setBio("New bio content");
+        profile.editBio("New bio content");
         assertEquals("Bio should be updated", "New bio content", profile.getBio());
     }
 

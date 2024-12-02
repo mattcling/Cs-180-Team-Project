@@ -20,14 +20,15 @@ public class Profile implements Serializable, ProfileInterface {//will be used i
 
     public String userID;
     public String bio;
-    public String profilePicture;
+    public String profilePicture;//name of the photo
 
 
     public Profile(String userID, String bio, String userProfilePicture) {//creats new profile
         
         this.userID = userID;
         this.bio = bio;
-        this.profilePicture = userProfilePicture;
+        //we need to generate a unique string for the profile picture file name
+        this.profilePicture = "src/photos/" + userProfilePicture;
     }
 
     public String getUserID() {
@@ -42,7 +43,7 @@ public class Profile implements Serializable, ProfileInterface {//will be used i
         return bio;
     }
 
-    public void setBio(String bio) {
+    public void editBio(String bio) {
         this.bio = bio;
     }
 
@@ -55,7 +56,7 @@ public class Profile implements Serializable, ProfileInterface {//will be used i
     }
 
     public void updateProfile(String userbio, String userProfilePicture) {
-        setBio(userbio);
+        editBio(userbio);
         setprofilePicture(userProfilePicture);
         System.out.println("Profile updated successfully.");
     }
