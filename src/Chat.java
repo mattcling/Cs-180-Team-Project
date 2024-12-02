@@ -1,9 +1,10 @@
-import java.io.*;
-import java.util.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
- * A framework to run public test cases for the User class.
+ * A class which represents a chat between two users.
  *
  * <p>Purdue University -- CS18000 -- Fall 2024</p>
  *

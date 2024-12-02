@@ -1,9 +1,9 @@
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
-import java.io.Serializable;
 
 /**
- * A framework to run public test cases for the User class.
+ * A class that represents a message sent between two users
  *
  * <p>Purdue University -- CS18000 -- Fall 2024</p>
  *

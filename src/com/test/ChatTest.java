@@ -7,10 +7,6 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
-import Chat;
-import ChatInterface;
-import Message;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +15,7 @@ import static org.junit.Assert.*;
 
 
 /**
- * A framework to run public test cases for the User class.
+ * A framework to run public test cases for the Chat class.
  *
  * <p>Purdue University -- CS18000 -- Fall 2024</p>
  *

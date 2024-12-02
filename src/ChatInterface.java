@@ -1,7 +1,7 @@
-import java.util.*;
+import java.util.List;
 
 /**
- * A framework to run public test cases for the User class.
+ * A framework for the Chat class.
  *
  * <p>Purdue University -- CS18000 -- Fall 2024</p>
  *

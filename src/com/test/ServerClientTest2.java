@@ -5,7 +5,7 @@ import java.net.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 /**
- * A framework to run public test cases for the User class.
+ * a file that tests the server class in our java project for our server
  *
  * <p>Purdue University -- CS18000 -- Fall 2024</p>
  *

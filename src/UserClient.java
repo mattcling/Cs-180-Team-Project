@@ -6,7 +6,8 @@ import java.net.Socket;
 import java.util.Scanner;
 
 /**
- * A framework to run public test cases for the User class.
+ * A class which acts as the user client for the chat application.
+ * it allows the user to interact with the server side of the chat application.
  *
  * <p>
  * Purdue University -- CS18000 -- Fall 2024</p>

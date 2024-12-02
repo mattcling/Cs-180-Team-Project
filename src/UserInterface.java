@@ -1,6 +1,6 @@
 import java.util.List;
 /**
- * A framework to run public test cases for the User class.
+ * The blueprint for our user class.
  *
  * <p>Purdue University -- CS18000 -- Fall 2024</p>
  *

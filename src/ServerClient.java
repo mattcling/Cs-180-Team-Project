@@ -7,7 +7,8 @@ import java.net.Socket;
 import java.util.List;
 
 /**
- * A framework to run the public test cases for the User class.
+ * A class which acts as the server side of the chat application.
+ * It receives messages from the user and sends messages to the user.
  *
  * <p>
  * Purdue University -- CS18000 -- Fall 2024</p>

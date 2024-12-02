@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * A framework to run public test cases for the User class.
+ * A class that represents a database that stores the hashmaps in a file.
  *
  * <p>
  * Purdue University -- CS18000 -- Fall 2024</p>

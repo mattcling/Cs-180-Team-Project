@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 import static org.junit.Assert.*;
 
 /**
- * A framework to run public test cases for the User class.
+ * A framework to run public test cases for our profile class.
  *
  * <p>Purdue University -- CS18000 -- Fall 2024</p>
  *

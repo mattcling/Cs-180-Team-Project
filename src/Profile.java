@@ -1,7 +1,7 @@
 import java.io.Serializable;
 
 /**
- * A framework to run public test cases for the User class.
+ * A class that represents the profile of a user.
  *
  * <p>Purdue University -- CS18000 -- Fall 2024</p>
  *

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.AfterEach;
 
 import static org.junit.jupiter.api.Assertions.*;
 /**
- * A framework to run public test cases for the User class.
+ * a file that runs test cases for the user client class and tests the server socket.
  *
  * <p>Purdue University -- CS18000 -- Fall 2024</p>
  *

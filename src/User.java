@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * A framework to run public test cases for the User class.
+ * this class store the data and accesses the data on our users of our social media platform
+ * this class also works with the chat class to make chats and store them
  *
  * <p>
  * Purdue University -- CS18000 -- Fall 2024</p>

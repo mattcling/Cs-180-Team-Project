@@ -19,7 +19,7 @@ import java.lang.reflect.*;
 import static org.junit.Assert.*;
 
 /**
- * A framework to run public test cases for the User class.
+ * A framework to run public test cases for the database class.
  *
  * <p>Purdue University -- CS18000 -- Fall 2024</p>
  *

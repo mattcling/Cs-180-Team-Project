@@ -1,7 +1,7 @@
 import java.time.LocalDateTime;
 
 /**
- * A framework to run public test cases for the User class.
+ * A framework for the Messages class.
  *
  * <p>Purdue University -- CS18000 -- Fall 2024</p>
  *
