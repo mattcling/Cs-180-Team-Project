@@ -22,7 +22,7 @@ public class ChatTest {
     }
 
     @Test
-    public void testInitialChatID() {
+    public void tesChatID() {
         // Check that the chat ID is correctly generated based on participants.
         String expectedChatID = "user1user2";
         assertEquals("Chat ID should be the concatenation of participant usernames.", expectedChatID, chat.getChatID());
@@ -80,7 +80,7 @@ public class ChatTest {
     }
 
     @Test
-    public void testGetParticipantsInitially() {
+    public void testGetParticipants() {
         // Verify the initial participants are correctly set.
         List<String> participants = chat.getParticipants();
         assertEquals("Participants list should contain two users initially.", 2, participants.size());

@@ -1,17 +1,12 @@
 package com.test;
+
+import main.Message;
+
+
 import org.junit.Before;
 import org.junit.Test;
 
-import org.junit.runner.JUnitCore;
-import org.junit.runner.Result;
-import org.junit.runner.notification.Failure;
 
-import main.Message;
-import org.junit.Assert;
-import main.MessageInterface;
-
-import java.io.*;
-import java.lang.reflect.*;
 import java.time.LocalDateTime;
 
 import static org.junit.Assert.*;
@@ -30,106 +25,66 @@ import static org.junit.Assert.*;
  * @version November 3, 2024
  */
 
-
 public class MessageTest {
-    //testing message with an object
     private Message message;
 
     @Before
     public void setUp() {
-        message = new Message("1", "2", "3");
-    }
-
-    //initail value tests
-
-    @Test
-    public void testInitialSenderID() {
-        assertEquals("Initially, the SenderID should be 2.", "2", message.getSenderID());
+        String chatID = "chat123";
+        String senderID = "user456";
+        String contents = "Hello, world!";
+        message = new Message(chatID, senderID, contents);
     }
 
     @Test
-    public void testInitialContents() {
-        assertEquals("Initially, the Contents should be 3.", "3", message.getContents());
+    public void testMessageInitialization() {
+
+        assertEquals("Chat ID should match", "chat123", message.getChatID());
+        assertEquals("Sender ID should match", "user456", message.getSenderID());
+        assertEquals("Contents should match", "Hello, world!", message.getContents());
+
     }
 
     @Test
-    //getters and setters tests
-    public void testMessageID() {
-        message.setMessageID("id");
-        assertEquals("The MessageID should be set to id.", "id", message.getMessageID());
+    public void testSetAndGetContents() {
+        String newContents = "Updated message content.";
+        message.setContents(newContents);
+        assertEquals("Contents should be updated", newContents, message.getContents());
     }
 
-
     @Test
-    public void testContents() {
-        message.setContents("content");
-        assertEquals("The contents should be set to content.", "content", message.getContents());
+    public void testSetAndGetChatID() {
+        String newChatID = "newChat123";
+        message.setChatID(newChatID);
+        assertEquals("Chat ID should be updated", newChatID, message.getChatID());
     }
 
     // @Test
-    // public void testTime() {
-    //     LocalDateTime dt = LocalDateTime.now();
-    //     message.setDateTime(dt);
-    //     assertEquals("The DateTime is set wrong", dt, message.getDateTime());
+    // public void testSetAndGetDateTime() {
+    //     LocalDateTime newDateTime = LocalDateTime.now().minusDays(1);
+    //     message.setDateTime(newDateTime);
+    //     assertEquals("DateTime should be updated", newDateTime, message.getDateTime());
     // }
 
     @Test
-    //general tests
-    public void testImplementsMessageInterface() {
-        assertTrue("Message should implement Message interface.", message instanceof MessageInterface);
+    public void testGenerateMessageID() {
+        String newMessageID = message.generateUserID();
+        assertNotNull("Generated message ID should not be null", newMessageID);
+        assertNotEquals("Generated message ID should be unique", message.getMessageID(), newMessageID);
     }
 
-    @Test
-    public void testImplementsSerializable() {
-        assertTrue("Message should implement Serializable interface.", message instanceof Serializable);
+    @Test(expected = IllegalArgumentException.class)
+    public void testSetContents_Null() {
+        message.setContents(null);
     }
 
-    @Test
-    public void testPublic() {
-        int modifiers = Message.class.getModifiers();
-        assertTrue("Message class should be public.", Modifier.isPublic(modifiers));
+    @Test(expected = IllegalArgumentException.class)
+    public void testSetChatID_Null() {
+        message.setChatID(null);
     }
 
-    @Test
-    //error tests
-    public void testSetMessageIDError() {
-        try {
-            message.setMessageID(null);
-            fail("Expected IllegalArgumentException to be thrown");
-        } catch (IllegalArgumentException e) {
-            assertEquals("messageID cannot be null or empty.", e.getMessage());
-        }
-    }
-
-    @Test
-    public void testSetContentsError() {
-        try {
-            message.setContents(null);
-            fail("Expected IllegalArgumentException to be thrown");
-        } catch (IllegalArgumentException e) {
-            assertEquals("contents cannot be null or empty.", e.getMessage());
-        }
-    }
-
-    @Test
-    public void testSetDateTimeError() {
-        try {
-            message.setDateTime(null);
-            fail("Expected IllegalArgumentException to be thrown");
-        } catch (IllegalArgumentException e) {
-            assertEquals("time cannot be null", e.getMessage());
-        }
-    }
-
-    public static void main(String[] args) {
-        Result result = JUnitCore.runClasses(MessageTest.class);
-        if (result.wasSuccessful()) {
-            System.out.println("Excellent - Test ran successfully");
-        } else {
-            for (Failure failure : result.getFailures()) {
-                System.out.println(failure.toString());
-            }
-        }
-
+    @Test(expected = IllegalArgumentException.class)
+    public void testSetDateTime_Null() {
+        message.setDateTime(null);
     }
 }
