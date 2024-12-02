@@ -50,17 +50,7 @@ public class User implements UserInterface, Serializable {
 
     }
 
-    public boolean createAccount(String username, String newPassword) {//makes a new account if user does nto exist
-
-        d.initializeDatabase();
-        if (d.getData("user", username) != null) {
-            System.out.println("User already exists");
-            return false;
-        }
-
-        User newUser = new User(username, newPassword);
-        return d.writeData(newUser, "user");
-    }
+    
 
     public boolean login(String username, String userpassword) {//login function with username and password - checking if logged in and returning
         User user = (User) d.getData("user", username);

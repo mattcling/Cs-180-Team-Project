@@ -1,20 +1,11 @@
-package tests;
+package com.test;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import org.junit.runner.JUnitCore;
-import org.junit.runner.Result;
-import org.junit.runner.notification.Failure;
-
-import main.Profile;
-import main.ProfileInterface;
-
-import java.io.*;
-import java.lang.reflect.*;
-import java.time.LocalDateTime;
-
 import static org.junit.Assert.*;
 
+import main.Profile; // Assuming Profile class is located in the 'main' package
 /**
  * A framework to run public test cases for our profile class.
  *
@@ -30,70 +21,64 @@ import static org.junit.Assert.*;
  */
 
 
+
+
+/**
+ * Test class for the Profile class.
+ */
 public class ProfileTest {
-    public static void main(String[] args) {
-        Result result = JUnitCore.runClasses(ProfileTest.class);
-        if (result.wasSuccessful()) {
-            System.out.println("Excellent - Test ran successfully");
-        } else {
-            for (Failure failure : result.getFailures()) {
-                System.out.println(failure.toString());
-            }
-        }
 
-    }
-
-    //testing profile with an object
     private Profile profile;
 
     @Before
     public void setUp() {
-        profile = new Profile("0", "Purdue CS 2028", "Trees");
+        // Initializing a Profile object before each test
+        profile = new Profile("testUserID", "This is my bio", "profilePic.jpg");
     }
 
     @Test
-
-    //initail value tests
-    public void testInitialUserID() {
-        assertEquals("Initially, the userID should be 0", "0", profile.getUserID());
+    public void testProfileInitialization() {
+        // Verifying that the Profile is correctly initialized
+        assertNotNull("UserID should not be null", profile.getUserID());
+        assertEquals("UserID should match", "testUserID", profile.getUserID());
+        assertEquals("Bio should match", "This is my bio", profile.getBio());
+        assertEquals("Profile picture should match", "profilePic.jpg", profile.getprofilePicture());
     }
 
-    public void testInitialBio() {
-        assertEquals("Initially, the bio should be null", "null", profile.getBio());
+    @Test
+    public void testUpdateProfile() {
+        // Verifying updating the profile bio and picture
+        profile.updateProfile("Updated bio", "updatedPic.jpg");
+        assertEquals("Bio should be updated", "Updated bio", profile.getBio());
+        assertEquals("Profile picture should be updated", "updatedPic.jpg", profile.getprofilePicture());
     }
 
-    public void testInitialReceiverID() {
-        assertEquals("Initially, the ProfilePicture should be null", "null", profile.getprofilePicture());
+    @Test
+    public void testDisplayProfile() {
+        // Verifying the displayProfile() method (Since it prints to the console, we can
+        // only verify if it does not throw an exception)
+        profile.displayProfile(); // This will print the profile to the console
+        // No assertion here, just ensuring no exceptions are thrown
     }
 
-    //getters and setters tests
-    public void testProfileID() {
-        profile.setUserID("id");
-        assertEquals("The userID should be set to id.", "id", profile.getUserID());
+    @Test
+    public void testSetUserID() {
+        // Verifying that the user ID can be set correctly
+        profile.setUserID("newUserID");
+        assertEquals("UserID should be updated", "newUserID", profile.getUserID());
     }
 
-    public void testBio() {
-        profile.setBio("Purdue CS 2028");
-        assertEquals("The bio should be set to Purdue CS 2028", "Purdue CS 2028", profile.getBio());
+    @Test
+    public void testSetBio() {
+        // Verifying that the bio can be updated correctly
+        profile.setBio("New bio content");
+        assertEquals("Bio should be updated", "New bio content", profile.getBio());
     }
 
-    public void testProfilePicture() {
-        profile.setprofilePicture("Trees");
-        assertEquals("The profile picture should be set to to Trees.", "Trees", profile.getprofilePicture());
+    @Test
+    public void testSetProfilePicture() {
+        // Verifying that the profile picture can be updated correctly
+        profile.setprofilePicture("newProfilePic.jpg");
+        assertEquals("Profile picture should be updated", "newProfilePic.jpg", profile.getprofilePicture());
     }
-
-    //general tests
-    public void testImplementsProfileInterface() {
-        assertTrue("Profile should implement Profile interface.", profile instanceof ProfileInterface);
-    }
-
-    public void testImplementsSerializable() {
-        assertTrue("Profile should implement Serializable interface.", profile instanceof Serializable);
-    }
-
-    public void testPublic() {
-        int modifiers = Profile.class.getModifiers();
-        assertTrue("Profile class should be public.", Modifier.isPublic(modifiers));
-    }
-
 }
