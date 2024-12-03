@@ -1,15 +1,19 @@
 package main;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
+import javax.swing.*;
+import java.awt.event.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.Condition;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 
 /**
  * A class which acts as the user client for the chat application.
@@ -26,66 +30,79 @@ import javax.swing.SwingUtilities;
  * @author Sid Songirkar
  * @version November 3, 2024
  */
-public class UserClient implements Runnable {
+public class UserClient extends JComponent implements Runnable {
 
+    private UserClient user;
+    private JButton loginButton; // a button to change paint color
+    private JButton createNewUserButton; // a button to change paint color
+    private JButton exitButton; // a button to change paint color
+    private final Lock lock = new ReentrantLock();
+    private final Condition choiceMade = lock.newCondition();
+    
+
+    private JTextField usernameText;
+    private JTextField passwordText;
+
+    private static volatile String mainMenuChoice = "";
     public static void main(String[] args) {
-        //UserClient b = new UserClient();
         SwingUtilities.invokeLater(new UserClient());
         try (Socket socket = new Socket("localhost", 4343); ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream()); ObjectInputStream receive = new ObjectInputStream(socket.getInputStream()); Scanner sc = new Scanner(System.in)) {
 
             String chatUser = "";
             boolean loggedIn = false;
             while (!loggedIn) {
-                System.out.println("Server: " + receive.readObject());
-                System.out.println("Server: " + receive.readObject());
+                //System.out.println("Server: " + receive.readObject());
+                //System.out.println("Server: " + receive.readObject());
 
-                String choice = sc.nextLine();
-                send.writeObject(choice);
+                //String choice = sc.nextLine();
+                send.writeObject(mainMenuChoice);
                 send.flush();
-
-                if ("1".equals(choice)) {
-                    System.out.println("Server: " + receive.readObject());
-                    String username = sc.nextLine();
-                    send.writeObject(username);
-                    send.flush();
-
-                    System.out.println("Server: " + receive.readObject());
-                    String password = sc.nextLine();
-                    send.writeObject(password);
-                    send.flush();
-
-                    String text = (String) receive.readObject();
-                    if (text.equals("Welcome, ")) {
-                        System.out.println("Server: " + text);
-                        System.out.println("Server: " + receive.readObject());
-                        loggedIn = true;
-                    } else {
-                        System.out.println("Server: " + receive.readObject());
-                    }
-                } else if ("2".equals(choice)) {
-                    while (true) {
+                if(!mainMenuChoice.equals(" ")) {
+                    if ("1".equals(mainMenuChoice)) {
+                    //mainMenuChoice = "0";
                         System.out.println("Server: " + receive.readObject());
                         String username = sc.nextLine();
                         send.writeObject(username);
                         send.flush();
 
-                        String serverResponse = (String) receive.readObject();
-                        System.out.println("Server: " + serverResponse);
+                        System.out.println("Server: " + receive.readObject());
+                        String password = sc.nextLine();
+                        send.writeObject(password);
+                        send.flush();
 
-                        if ("Username is available.".equals(serverResponse)) {
-                            break;
+                        String text = (String) receive.readObject();
+                        if (text.equals("Welcome, ")) {
+                            System.out.println("Server: " + text);
+                            System.out.println("Server: " + receive.readObject());
+                            loggedIn = true;
+                        } else {
+                            System.out.println("Server: " + receive.readObject());
                         }
+                    } else if ("2".equals(mainMenuChoice)) {
+                        while (true) {
+                            System.out.println("Server: " + receive.readObject());
+                            String username = sc.nextLine();
+                            send.writeObject(username);
+                            send.flush();
+
+                            String serverResponse = (String) receive.readObject();
+                            System.out.println("Server: " + serverResponse);
+
+                            if ("Username is available.".equals(serverResponse)) {
+                                break;
+                            }
+                        }
+
+                        System.out.println("Server: " + receive.readObject());
+                        String password = sc.nextLine();
+                        send.writeObject(password);
+                        send.flush();
+
+                        System.out.println("Server: " + receive.readObject());
+                    } else {
+                        System.out.println("Server: " + receive.readObject());
+                        continue;
                     }
-
-                    System.out.println("Server: " + receive.readObject());
-                    String password = sc.nextLine();
-                    send.writeObject(password);
-                    send.flush();
-
-                    System.out.println("Server: " + receive.readObject());
-                } else {
-                    System.out.println("Server: " + receive.readObject());
-                    continue;
                 }
             }
 
@@ -267,18 +284,66 @@ public class UserClient implements Runnable {
         }
     }
 
-    public void run() {
-        JFrame jf = new JFrame("Empty Frame");
-        //Container content = frame.getContentPane(); maybe go back and add
-        jf.setSize(1000, 1000);
-        jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        JButton jbCenter = new JButton("Test");
-        
-        jf.add(jbCenter, BorderLayout.CENTER);
-        
 
+
+    @Override
+    public void run() {
+        JFrame frame = new JFrame("Test");
+        Container content = frame.getContentPane();
+        content.setLayout(new BorderLayout());
+
+        frame.setSize(600, 400);
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+
+        loginButton = new JButton("Login");
+        createNewUserButton = new JButton("Create New User");
+        exitButton = new JButton("Exit");
+
+        JPanel panel = new JPanel();
+        panel.add(loginButton);
+        panel.add(createNewUserButton);
+        panel.add(exitButton);
+        content.add(panel, BorderLayout.CENTER);
+
+        loginButton.addActionListener(actionListener);
+        createNewUserButton.addActionListener(actionListener);        
+        exitButton.addActionListener(actionListener);
+    }
+
+    public void mainMenuChoice(String input){
 
     }
+    
+
+    ActionListener actionListener = new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            try {
+                if (e.getSource() == loginButton) {
+                    mainMenuChoice = "1";
+                    usernameText = new JTextField(10);
+                    String username = usernameText.getText();
+                    panel.add(usernameText);
+                    //mainMenuMethod(mainMenuChoice);
+                    
+                }
+                if (e.getSource() == createNewUserButton) {
+                    mainMenuChoice = "2";
+                    //mainMenuMethod(mainMenuChoice);            
+                }
+                if (e.getSource() == exitButton) {
+                    mainMenuChoice = "3";
+                    //mainMenuMethod(mainMenuChoice);
+                }
+                choiceMade.signal();
+                
+            } finally {
+                lock.unlock();
+            }
+            }
+    };
 }
+
+
 

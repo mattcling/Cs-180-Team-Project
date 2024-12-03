@@ -40,70 +40,72 @@ public class ServerClient implements Runnable {
 
             boolean loggedIn = false;
             while (!loggedIn) { //loop while login is not complete (before login)
-                send.writeObject("Hello, User!");
-                send.flush();
-                send.writeObject("Please choose an option:\n1. Login\n2. Create a new user");
-                send.flush();
+                // send.writeObject("Hello, User!");
+                // send.flush();
+                // send.writeObject("Please choose an option:\n1. Login\n2. Create a new user");
+                // send.flush();
                 String response = (String) receive.readObject(); //store response input of menu option
-                if ("1".equals(response)) { // Login option
-                    send.writeObject("Enter your username:"); //prompt for username
-                    send.flush();
-                    username = (String) receive.readObject(); //store username input
-
-                    send.writeObject("Enter your password:"); //prompt for password
-                    send.flush();
-                    String password = (String) receive.readObject(); //store password input
-
-                    if (d.containsObject("user", username)) { //check if user exists in database
-                        User user = (User) d.getData("user", username); //get data of user and welcome user
-                        if (user.getPassword().equals(password)) { //check if password entered matches
-                            send.writeObject("Welcome, ");
-                            send.flush();
-                            send.writeObject(username + "!");
-                            send.flush();
-                            loggedIn = true;
-                        } else {
-                            send.writeObject("Invalid password.");
-                            continue;//error message for mismatching password
-                        }
-                    } else {
-                        send.writeObject("Invalid username.");
-                        continue; //error message for nonexisting username in database
-                    }
-                } else if ("2".equals(response)) { // Create a new user option
-                    while (true) {
-                        send.writeObject("Enter a username:"); //prompt to enter username for new user
+                if(!response.equals(" ")) {
+                    if ("1".equals(response)) { // Login option
+                        send.writeObject("Enter your username:"); //prompt for username
                         send.flush();
                         username = (String) receive.readObject(); //store username input
 
-                        if (d.containsObject("user", username)) {
-                            //check if database contains username already
-                            send.writeObject("Username is already taken.");
-                            //error message for already existing user
-                            send.flush();
-                            continue;
+                        send.writeObject("Enter your password:"); //prompt for password
+                        send.flush();
+                        String password = (String) receive.readObject(); //store password input
 
+                        if (d.containsObject("user", username)) { //check if user exists in database
+                            User user = (User) d.getData("user", username); //get data of user and welcome user
+                            if (user.getPassword().equals(password)) { //check if password entered matches
+                                send.writeObject("Welcome, ");
+                                send.flush();
+                                send.writeObject(username + "!");
+                                send.flush();
+                                loggedIn = true;
+                            } else {
+                                send.writeObject("Invalid password.");
+                                continue;//error message for mismatching password
+                            }
                         } else {
-                            send.writeObject("Username is available."); //confirmation message
-                            send.flush();
-                            break;
+                            send.writeObject("Invalid username.");
+                            continue; //error message for nonexisting username in database
                         }
+                    } else if ("2".equals(response)) { // Create a new user option
+                        while (true) {
+                            send.writeObject("Enter a username:"); //prompt to enter username for new user
+                            send.flush();
+                            username = (String) receive.readObject(); //store username input
+
+                            if (d.containsObject("user", username)) {
+                                //check if database contains username already
+                                send.writeObject("Username is already taken.");
+                                //error message for already existing user
+                                send.flush();
+                                continue;
+
+                            } else {
+                                send.writeObject("Username is available."); //confirmation message
+                                send.flush();
+                                break;
+                            }
+                        }
+
+                        send.writeObject("Enter a password:"); //prompt to enter password
+                        send.flush();
+                        String password = (String) receive.readObject(); //store password input
+
+                        User newUser = new User(username, password);
+                        //create new user object with given inputs as User fields
+                        d.writeData(newUser, "user");
+
+                        send.writeObject("User created successfully! Please login to continue.");
+                        continue;//confirmation message
+                    } else {
+                        send.writeObject("Invalid option selected. Retry");
+                        continue;
+                        //error message for invalid option from menu entered
                     }
-
-                    send.writeObject("Enter a password:"); //prompt to enter password
-                    send.flush();
-                    String password = (String) receive.readObject(); //store password input
-
-                    User newUser = new User(username, password);
-                    //create new user object with given inputs as User fields
-                    d.writeData(newUser, "user");
-
-                    send.writeObject("User created successfully! Please login to continue.");
-                    continue;//confirmation message
-                } else {
-                    send.writeObject("Invalid option selected. Retry");
-                    continue;
-                    //error message for invalid option from menu entered
                 }
             }
             // Main menu
