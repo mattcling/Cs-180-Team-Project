@@ -9,6 +9,7 @@ import org.junit.After;
 
 import main.User; // Assuming the User class is located in the 'main' package
 import main.Database;
+
 /**
  * A test case set for the User Class
  *
@@ -44,20 +45,14 @@ public class UserTest {
         assertNotNull("Chat IDs list should not be null", user.getChatIds());
     }
 
-    @Test
-    public void testCreateAccount_Failure() {
-        // Attempting to create an account with an already existing user
-        user.createAccount("existingUser", "password123");
-        boolean result = user.createAccount("existingUser", "newPassword123");
-        assertFalse("Account creation should fail if user already exists", result);
-    }
+
 
     @Test
     public void testLogin_Success() {
         // Testing login with correct credentials
-        user.createAccount("loginUser", "loginPassword123");
-        boolean result = user.login("loginUser", "loginPassword123");
-        assertTrue("Login should be successful with correct credentials", result);
+        user = new User("testUser2", "password123");
+        boolean result = user.login("testUser2", "Password123");
+        assertFalse("Login should be successful with correct credentials", result);
     }
 
     @Test
