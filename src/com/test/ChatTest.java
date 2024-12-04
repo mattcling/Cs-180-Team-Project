@@ -10,8 +10,20 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 /**
- * Unit tests for the Chat class.
+ * A test cases for the chat class
+ *
+ * <p>
+ * Purdue University -- CS18000 -- Fall 2024</p>
+ *
+ * @author Purdue CS
+ * @author Matthew Clingerman
+ * @author Charlotte Falus
+ * @author Luke Guiboux
+ * @author Kimaya Deshpande
+ * @author Sid Songirkar
+ * @version November 3, 2024
  */
+
 public class ChatTest {
     private Chat chat;
 

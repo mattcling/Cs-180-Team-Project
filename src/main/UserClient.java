@@ -324,7 +324,7 @@ public class UserClient extends JComponent implements Runnable {
                     mainMenuChoice = "1";
                     usernameText = new JTextField(10);
                     String username = usernameText.getText();
-                    panel.add(usernameText);
+//                    panel.add(usernameText);
                     //mainMenuMethod(mainMenuChoice);
                     
                 }

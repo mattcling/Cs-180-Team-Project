@@ -19,13 +19,6 @@ import main.Profile; // Assuming Profile class is located in the 'main' package
  * @author Sid Songirkar
  * @version November 3, 2024
  */
-
-
-
-
-/**
- * Test class for the Profile class.
- */
 public class ProfileTest {
 
     private Profile profile;
