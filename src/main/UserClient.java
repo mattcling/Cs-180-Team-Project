@@ -544,13 +544,13 @@ public class UserClient extends JComponent implements Runnable {
         JButton friendsListButton = new JButton("Friends List");
         JButton blockedUsersButton = new JButton("Blocked User List");
         JButton userSearchButton = new JButton("User Search");
-        JButton exitButton = new JButton("Exit");
+        JButton logOutButton = new JButton("Log out");
 
         chatButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         friendsListButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         blockedUsersButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         userSearchButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        logOutButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Add components to the panel
         chatPanel.add(welcomeLabel);
@@ -563,7 +563,7 @@ public class UserClient extends JComponent implements Runnable {
         chatPanel.add(Box.createVerticalStrut(10));
         chatPanel.add(userSearchButton);
         chatPanel.add(Box.createVerticalStrut(10));
-        chatPanel.add(exitButton);
+        chatPanel.add(logOutButton);
 
         // Add panel to frame
         frame.getContentPane().removeAll();
@@ -576,7 +576,7 @@ public class UserClient extends JComponent implements Runnable {
         friendsListButton.addActionListener(e -> handleFriendsList(frame, username));
         blockedUsersButton.addActionListener(e -> handleBlockedUsers(frame, username));
         userSearchButton.addActionListener(e -> handleUserSearch(frame, username));
-        exitButton.addActionListener(e -> returnToMainMenu(frame));
+        logOutButton.addActionListener(e -> returnToMainMenu(frame));
     }
 
     private void handleMessages(JFrame frame, String username) {
