@@ -1,9 +1,9 @@
 package main;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+
+import java.awt.event.*;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -13,6 +13,8 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import javax.swing.*;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -62,10 +64,7 @@ public class UserClient extends JComponent implements Runnable {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new UserClient());
-        try (Socket socket = new Socket("localhost", 4343);
-                ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream());
-                ObjectInputStream receive = new ObjectInputStream(socket.getInputStream());
-                Scanner sc = new Scanner(System.in)) {
+        try (Socket socket = new Socket("localhost", 4343); ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream()); ObjectInputStream receive = new ObjectInputStream(socket.getInputStream()); Scanner sc = new Scanner(System.in)) {
 
             String chatUser = "";
             boolean loggedIn = false;
@@ -187,8 +186,7 @@ public class UserClient extends JComponent implements Runnable {
 
                                 String output = (String) receive.readObject();
                                 System.out.println(output);
-                                if (output.equals("User does not exist.")
-                                        || output.equals("You are blocked by this user.")) {
+                                if (output.equals("User does not exist.") || output.equals("You are blocked by this user.")) {
                                     continue;
                                 }
 
@@ -431,128 +429,170 @@ public class UserClient extends JComponent implements Runnable {
     }
 
     private void handleLogin(JFrame frame) {
-    String username = usernameText.getText();
-    String password = passwordText.getText();
+        String username = usernameText.getText();
+        String password = passwordText.getText();
 
-    if (username.isEmpty() || password.isEmpty()) {
-        JOptionPane.showMessageDialog(frame, "Please enter both username and password.", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    try (Socket socket = new Socket("localhost", 4343);
-         ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream());
-         ObjectInputStream receive = new ObjectInputStream(socket.getInputStream())) {
-
-        // Send login request
-        send.writeObject("1"); // Option 1 for login
-        send.flush();
-
-        // Step 1: Server asks for username
-        String serverPrompt = (String) receive.readObject();
-        if (!serverPrompt.equals("Enter your username:")) {
-            JOptionPane.showMessageDialog(frame, "Unexpected response from server.", "Error", JOptionPane.ERROR_MESSAGE);
+        if (username.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(frame, "Please enter both username and password.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        send.writeObject(username);
-        send.flush();
 
-        // Step 2: Server asks for password
-        serverPrompt = (String) receive.readObject();
-        if (!serverPrompt.equals("Enter your password:")) {
-            JOptionPane.showMessageDialog(frame, "Unexpected response from server.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
+        try (Socket socket = new Socket("localhost", 4343); ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream()); ObjectInputStream receive = new ObjectInputStream(socket.getInputStream())) {
+
+            // Send login request
+            send.writeObject("1"); // Option 1 for login
+            send.flush();
+
+            // Step 1: Server asks for username
+            String serverPrompt = (String) receive.readObject();
+            if (!serverPrompt.equals("Enter your username:")) {
+                JOptionPane.showMessageDialog(frame, "Unexpected response from server.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            send.writeObject(username);
+            send.flush();
+
+            // Step 2: Server asks for password
+            serverPrompt = (String) receive.readObject();
+            if (!serverPrompt.equals("Enter your password:")) {
+                JOptionPane.showMessageDialog(frame, "Unexpected response from server.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            send.writeObject(password);
+            send.flush();
+
+            // Step 3: Server response (success or failure)
+            String response = (String) receive.readObject();
+            if (response.equals("Welcome, ")) {
+                String welcomeMessage = (String) receive.readObject();
+                JOptionPane.showMessageDialog(frame, response + welcomeMessage, "Login Successful", JOptionPane.INFORMATION_MESSAGE);
+                switchToChatWindow(frame, username);
+            } else {
+                JOptionPane.showMessageDialog(frame, response, "Login Failed", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (IOException | ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(frame, "Connection error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-        send.writeObject(password);
-        send.flush();
-
-        // Step 3: Server response (success or failure)
-        String response = (String) receive.readObject();
-        if (response.equals("Welcome, ")) {
-            String welcomeMessage = (String) receive.readObject();
-            JOptionPane.showMessageDialog(frame, response + welcomeMessage, "Login Successful", JOptionPane.INFORMATION_MESSAGE);
-            switchToChatWindow(frame, username);
-        } else {
-            JOptionPane.showMessageDialog(frame, response, "Login Failed", JOptionPane.ERROR_MESSAGE);
-        }
-
-    } catch (IOException | ClassNotFoundException e) {
-        JOptionPane.showMessageDialog(frame, "Connection error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
     }
-}
 
 
     private void handleCreateUser(JFrame frame) {
-    String username = usernameText.getText();
-    String password = passwordText.getText();
+        String username = usernameText.getText();
+        String password = passwordText.getText();
 
-    if (username.isEmpty() || password.isEmpty()) {
-        JOptionPane.showMessageDialog(frame, "Please enter both username and password.", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
+        if (username.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(frame, "Please enter both username and password.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try (Socket socket = new Socket("localhost", 4343); ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream()); ObjectInputStream receive = new ObjectInputStream(socket.getInputStream())) {
+
+            // Send create user request
+            send.writeObject("2"); // Option 2 for creating a user
+            send.flush();
+
+            // Step 1: Enter username
+            String serverPrompt = (String) receive.readObject();
+            if (!serverPrompt.equals("Enter a username:")) {
+                JOptionPane.showMessageDialog(frame, "Unexpected response from server.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            send.writeObject(username);
+            send.flush();
+
+            // Step 2: Check username availability
+            String usernameResponse = (String) receive.readObject();
+            if (usernameResponse.equals("Username is already taken.")) {
+                JOptionPane.showMessageDialog(frame, usernameResponse, "Create User Failed", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Step 3: Enter password
+            serverPrompt = (String) receive.readObject();
+            if (!serverPrompt.equals("Enter a password:")) {
+                JOptionPane.showMessageDialog(frame, "Unexpected response from server.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            send.writeObject(password);
+            send.flush();
+
+            // Step 4: Success or failure
+            String finalResponse = (String) receive.readObject();
+            if (finalResponse.equals("User created successfully! Please login to continue.")) {
+                JOptionPane.showMessageDialog(frame, finalResponse, "Success", JOptionPane.INFORMATION_MESSAGE);
+                returnToMainMenu(frame);
+            } else {
+                JOptionPane.showMessageDialog(frame, "Unexpected error: " + finalResponse, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (IOException | ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(frame, "Connection error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
     }
-
-    try (Socket socket = new Socket("localhost", 4343);
-         ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream());
-         ObjectInputStream receive = new ObjectInputStream(socket.getInputStream())) {
-
-        // Send create user request
-        send.writeObject("2"); // Option 2 for creating a user
-        send.flush();
-
-        // Step 1: Enter username
-        String serverPrompt = (String) receive.readObject();
-        if (!serverPrompt.equals("Enter a username:")) {
-            JOptionPane.showMessageDialog(frame, "Unexpected response from server.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        send.writeObject(username);
-        send.flush();
-
-        // Step 2: Check username availability
-        String usernameResponse = (String) receive.readObject();
-        if (usernameResponse.equals("Username is already taken.")) {
-            JOptionPane.showMessageDialog(frame, usernameResponse, "Create User Failed", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        // Step 3: Enter password
-        serverPrompt = (String) receive.readObject();
-        if (!serverPrompt.equals("Enter a password:")) {
-            JOptionPane.showMessageDialog(frame, "Unexpected response from server.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        send.writeObject(password);
-        send.flush();
-
-        // Step 4: Success or failure
-        String finalResponse = (String) receive.readObject();
-        if (finalResponse.equals("User created successfully! Please login to continue.")) {
-            JOptionPane.showMessageDialog(frame, finalResponse, "Success", JOptionPane.INFORMATION_MESSAGE);
-            returnToMainMenu(frame);
-        } else {
-            JOptionPane.showMessageDialog(frame, "Unexpected error: " + finalResponse, "Error", JOptionPane.ERROR_MESSAGE);
-        }
-
-    } catch (IOException | ClassNotFoundException e) {
-        JOptionPane.showMessageDialog(frame, "Connection error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-    }
-}
 
     private void switchToChatWindow(JFrame frame, String username) {
         JPanel chatPanel = new JPanel();
-        JLabel welcomeLabel = new JLabel("Welcome to the Chat, " + username + "!");
-        JButton logoutButton = new JButton("Logout");
+        chatPanel.setLayout(new BoxLayout(chatPanel, BoxLayout.Y_AXIS));
 
+        JLabel welcomeLabel = new JLabel("Welcome, " + username + "!");
+        welcomeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JButton chatButton = new JButton("Chats");
+        JButton friendsListButton = new JButton("Friends List");
+        JButton blockedUsersButton = new JButton("Blocked User List");
+        JButton userSearchButton = new JButton("User Search");
+        JButton exitButton = new JButton("Exit");
+
+        chatButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        friendsListButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        blockedUsersButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        userSearchButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Add components to the panel
         chatPanel.add(welcomeLabel);
-        chatPanel.add(logoutButton);
+        chatPanel.add(Box.createVerticalStrut(20)); // Add spacing
+        chatPanel.add(chatButton);
+        chatPanel.add(Box.createVerticalStrut(10));
+        chatPanel.add(friendsListButton);
+        chatPanel.add(Box.createVerticalStrut(10));
+        chatPanel.add(blockedUsersButton);
+        chatPanel.add(Box.createVerticalStrut(10));
+        chatPanel.add(userSearchButton);
+        chatPanel.add(Box.createVerticalStrut(10));
+        chatPanel.add(exitButton);
 
+        // Add panel to frame
         frame.getContentPane().removeAll();
         frame.add(chatPanel, BorderLayout.CENTER);
         frame.revalidate();
         frame.repaint();
 
-        logoutButton.addActionListener(e -> returnToMainMenu(frame));
+        // Define button actions
+        chatButton.addActionListener(e -> handleMessages(frame, username));
+        friendsListButton.addActionListener(e -> handleFriendsList(frame, username));
+        blockedUsersButton.addActionListener(e -> handleBlockedUsers(frame, username));
+        userSearchButton.addActionListener(e -> handleUserSearch(frame, username));
+        exitButton.addActionListener(e -> returnToMainMenu(frame));
+    }
+
+    private void handleMessages(JFrame frame, String username) {
+        JOptionPane.showMessageDialog(frame, "Messages functionality is not implemented yet.", "Messages", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void handleFriendsList(JFrame frame, String username) {
+        JOptionPane.showMessageDialog(frame, "Friends List functionality is not implemented yet.", "Friends List", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void handleBlockedUsers(JFrame frame, String username) {
+        JOptionPane.showMessageDialog(frame, "Blocked User List functionality is not implemented yet.", "Blocked User List", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void handleUserSearch(JFrame frame, String username) {
+        JOptionPane.showMessageDialog(frame, "User Search functionality is not implemented yet.", "User Search", JOptionPane.INFORMATION_MESSAGE);
     }
 
 }
