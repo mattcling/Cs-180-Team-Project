@@ -46,6 +46,7 @@ public class ServerClient implements Runnable {
                 // send.flush();
                 String response = (String) receive.readObject(); //store response input of menu option
                 if(!response.equals(" ")) {
+                    //System.out.println("in the first if in the while");
                     if ("1".equals(response)) { // Login option
                         send.writeObject("Enter your username:"); //prompt for username
                         send.flush();
@@ -101,10 +102,11 @@ public class ServerClient implements Runnable {
 
                         send.writeObject("User created successfully! Please login to continue.");
                         continue;//confirmation message
+                    } else if ("3".equals(response)) {
+                        send.writeObject("Goodbye!");
+                        break;
                     } else {
-                        send.writeObject("Invalid option selected. Retry");
                         continue;
-                        //error message for invalid option from menu entered
                     }
                 }
             }
@@ -139,7 +141,7 @@ public class ServerClient implements Runnable {
                             case "1":
                                 send.writeObject("Below is all of your chats you can access");
                                 send.flush();
-                                
+
                                 if (((User) d.getData("user", username)).getChatIds().isEmpty()) {
                                     send.writeObject("You have no chats.");
                                     send.flush();
