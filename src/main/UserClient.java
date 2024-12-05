@@ -1,18 +1,26 @@
 package main;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Scanner;
-import javax.swing.*;
-import java.awt.event.*;
+import java.util.*;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.locks.Condition;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 
 /**
@@ -38,12 +46,19 @@ public class UserClient extends JComponent implements Runnable {
     private JButton exitButton; // a button to change paint color
     private final Lock lock = new ReentrantLock();
     private final Condition choiceMade = lock.newCondition();
+    private JButton loginEnter;
+    private JButton createEnter;
     
+    //panels
+    JPanel panel = new JPanel();
+    
+    private static volatile ArrayList<String> sendingText;
 
-    private JTextField usernameText;
-    private JTextField passwordText;
+    private static volatile JTextField usernameText;
+    private static volatile JTextField passwordText;
 
-    private static volatile String mainMenuChoice = "";
+    private static volatile String mainMenuChoice = "0";
+    private static volatile String inMainMenu = "";
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new UserClient());
         try (Socket socket = new Socket("localhost", 4343); ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream()); ObjectInputStream receive = new ObjectInputStream(socket.getInputStream()); Scanner sc = new Scanner(System.in)) {
@@ -58,27 +73,33 @@ public class UserClient extends JComponent implements Runnable {
                 send.writeObject(mainMenuChoice);
                 send.flush();
                 if(!mainMenuChoice.equals(" ")) {
-                    if ("1".equals(mainMenuChoice)) {
-                    //mainMenuChoice = "0";
-                        System.out.println("Server: " + receive.readObject());
-                        String username = sc.nextLine();
-                        send.writeObject(username);
-                        send.flush();
-
-                        System.out.println("Server: " + receive.readObject());
-                        String password = sc.nextLine();
-                        send.writeObject(password);
-                        send.flush();
-
-                        String text = (String) receive.readObject();
-                        if (text.equals("Welcome, ")) {
-                            System.out.println("Server: " + text);
+                    if ("1".equals(mainMenuChoice)) {//login
+                        //System.out.println("in login");
+                        if ("4".equals(mainMenuChoice)) {//pressed enter button
+                            System.out.println("in enter button");
                             System.out.println("Server: " + receive.readObject());
-                            loggedIn = true;
-                        } else {
+                            String username = usernameText.getText();
+                            send.writeObject(username);
+                            send.flush();
+
                             System.out.println("Server: " + receive.readObject());
+                            String password = passwordText.getText();
+                            send.writeObject(password);
+                            send.flush();
+
+                            
+                            String text = (String) receive.readObject();
+                            if (text.equals("Welcome, ")) {
+                                sendingText = new ArrayList<>();
+                                sendingText.add(text);
+                                sendingText.add("\n" + (String)receive.readObject());
+                                loggedIn = true;
+                            } else {
+                                sendingText = new ArrayList<>();
+                                sendingText.add((String)receive.readObject());
+                            }
                         }
-                    } else if ("2".equals(mainMenuChoice)) {
+                    } else if ("2".equals(mainMenuChoice)) { // Create New User
                         while (true) {
                             System.out.println("Server: " + receive.readObject());
                             String username = sc.nextLine();
@@ -99,8 +120,10 @@ public class UserClient extends JComponent implements Runnable {
                         send.flush();
 
                         System.out.println("Server: " + receive.readObject());
-                    } else {
+                    } else if ("3".equals(mainMenuChoice)) { //exit
                         System.out.println("Server: " + receive.readObject());
+                        break;
+                    } else {
                         continue;
                     }
                 }
@@ -284,10 +307,36 @@ public class UserClient extends JComponent implements Runnable {
         }
     }
 
+    ActionListener mainMenuAction = new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            lock.lock();
+            try {
+                if (e.getSource() == loginButton) {
+                    mainMenuChoice = "1";
+                    System.out.println("changed variable - 1");
+                }
+                if (e.getSource() == createNewUserButton) {
+                    mainMenuChoice = "2";
+                    System.out.println("changed variable - 2");
+                }
+                if (e.getSource() == exitButton) {
+                    mainMenuChoice = "3";
+                    System.out.println("changed variable - 3");
+                }
+                if (e.getSource() == loginEnter) {
+                    mainMenuChoice = "4";
+                    System.out.println("changed variable - 4");
+                }
 
+                choiceMade.signal();
+            } finally {
+                lock.unlock();
+            }
+        }
+    };
 
     @Override
-    public void run() {
+    public void run() { //open the program!
         JFrame frame = new JFrame("Test");
         Container content = frame.getContentPane();
         content.setLayout(new BorderLayout());
@@ -297,54 +346,83 @@ public class UserClient extends JComponent implements Runnable {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
-        loginButton = new JButton("Login");
-        createNewUserButton = new JButton("Create New User");
-        exitButton = new JButton("Exit");
+        switch (mainMenuChoice) {
+            case "0":// main menu
+                loginButton = new JButton("Login");
+                createNewUserButton = new JButton("Create New User");
+                exitButton = new JButton("Exit");
 
-        JPanel panel = new JPanel();
-        panel.add(loginButton);
-        panel.add(createNewUserButton);
-        panel.add(exitButton);
-        content.add(panel, BorderLayout.CENTER);
+                panel.add(loginButton);
+                panel.add(createNewUserButton);
+                panel.add(exitButton);
+                content.add(panel, BorderLayout.CENTER);
 
-        loginButton.addActionListener(actionListener);
-        createNewUserButton.addActionListener(actionListener);        
-        exitButton.addActionListener(actionListener);
-    }
-
-    public void mainMenuChoice(String input){
-
-    }
-    
-
-    ActionListener actionListener = new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-            try {
-                if (e.getSource() == loginButton) {
-                    mainMenuChoice = "1";
-                    usernameText = new JTextField(10);
-                    String username = usernameText.getText();
-
-                   //panel.add(usernameText);
-
-                    //mainMenuMethod(mainMenuChoice);
-                    
-                }
-                if (e.getSource() == createNewUserButton) {
-                    mainMenuChoice = "2";
-                    //mainMenuMethod(mainMenuChoice);            
-                }
-                if (e.getSource() == exitButton) {
-                    mainMenuChoice = "3";
-                    //mainMenuMethod(mainMenuChoice);
-                }
-                choiceMade.signal();
+                loginButton.addActionListener(mainMenuAction);
+                createNewUserButton.addActionListener(mainMenuAction);        
+                exitButton.addActionListener(mainMenuAction);
                 
-            } finally {
-                lock.unlock();
-            }
-            }
-    };
+            case "1": //login
+                System.out.println("Login line 340");
+                panel.removeAll();
+                
+                JLabel instructions1 = new JLabel("Please enter your username and password:");
+                usernameText = new JTextField(10);
+                passwordText = new JTextField(10);
+                
+                panel.add(instructions1);
+                panel.add(usernameText);
+                panel.add(passwordText);
+                panel.add(loginEnter);
+                panel.add(exitButton);
+                content.add(panel, BorderLayout.NORTH);
+
+                loginEnter.addActionListener(mainMenuAction);
+                
+                panel.revalidate();
+                panel.repaint();
+                break;
+            case "2": //create new user
+                System.out.println("Create New User");
+                panel.removeAll();
+                
+                JLabel instructions2 = new JLabel("Please enter a username and password:");
+                usernameText = new JTextField(10);
+                passwordText = new JTextField(10);
+                createEnter = new JButton("Enter");
+                
+                panel.add(instructions2);
+                panel.add(usernameText);
+                panel.add(passwordText);
+                panel.add(createEnter);
+                content.add(panel, BorderLayout.NORTH);
+                
+                panel.revalidate();
+                panel.repaint();
+                break;
+            case "3": //exit
+                System.out.println("Exit");
+                panel.removeAll();
+                JLabel exitText = new JLabel("Have a good day!");
+            
+                panel.add(exitText);
+                content.add(panel, BorderLayout.NORTH);
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                frame.dispose();
+                break;
+            case "4"://clicked enter button on login
+                usernameText.setText("");
+                passwordText.setText("");
+                
+                 JOptionPane.showMessageDialog(null, "Error","Error!!",JOptionPane.INFORMATION_MESSAGE);
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 

@@ -35,6 +35,9 @@ public class User implements UserInterface, Serializable {
     private Profile profile;
     private static Database d = new Database();
 
+    // protected String input1;
+    // protected String input2;
+
     public User(String username,
         String password) {//creates new user with a username passowrd, empty friends and blocked lists, and a random id
         
