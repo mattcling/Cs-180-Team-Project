@@ -141,7 +141,7 @@ public class ServerClient implements Runnable {
                             case "1":
                                 send.writeObject("Below is all of your chats you can access");
                                 send.flush();
-                                
+
                                 if (((User) d.getData("user", username)).getChatIds().isEmpty()) {
                                     send.writeObject("You have no chats.");
                                     send.flush();
