@@ -156,7 +156,7 @@ public class UserClient extends JComponent implements Runnable {
                         switch (input) {
                             case "1":
                                 System.out.println("Server: " + receive.readObject());
-                                // no worky :(
+
                                 while (true) {
                                     String item = (String) receive.readObject();
                                     if ("\n".equals(item)) {
@@ -170,7 +170,6 @@ public class UserClient extends JComponent implements Runnable {
                                 send.writeObject(chosenChat);
                                 send.flush();
 
-                                // no worky :(
                                 while (true) {
                                     String item = (String) receive.readObject();
                                     if ("\n".equals(item)) {
@@ -432,30 +431,128 @@ public class UserClient extends JComponent implements Runnable {
     }
 
     private void handleLogin(JFrame frame) {
-        String username = usernameText.getText();
-        String password = passwordText.getText();
+    String username = usernameText.getText();
+    String password = passwordText.getText();
 
-        if (username.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(frame, "Please enter both username and password.", "Error",
-                    JOptionPane.ERROR_MESSAGE);
-        } else {
-            // Add logic for sending login credentials to the server
-            JOptionPane.showMessageDialog(frame, "Logging in...", "Login", JOptionPane.INFORMATION_MESSAGE);
-            // Transition to the next screen or handle errors
-        }
+    if (username.isEmpty() || password.isEmpty()) {
+        JOptionPane.showMessageDialog(frame, "Please enter both username and password.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
     }
+
+    try (Socket socket = new Socket("localhost", 4343);
+         ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream());
+         ObjectInputStream receive = new ObjectInputStream(socket.getInputStream())) {
+
+        // Send login request
+        send.writeObject("1"); // Option 1 for login
+        send.flush();
+
+        // Step 1: Server asks for username
+        String serverPrompt = (String) receive.readObject();
+        if (!serverPrompt.equals("Enter your username:")) {
+            JOptionPane.showMessageDialog(frame, "Unexpected response from server.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        send.writeObject(username);
+        send.flush();
+
+        // Step 2: Server asks for password
+        serverPrompt = (String) receive.readObject();
+        if (!serverPrompt.equals("Enter your password:")) {
+            JOptionPane.showMessageDialog(frame, "Unexpected response from server.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        send.writeObject(password);
+        send.flush();
+
+        // Step 3: Server response (success or failure)
+        String response = (String) receive.readObject();
+        if (response.equals("Welcome, ")) {
+            String welcomeMessage = (String) receive.readObject();
+            JOptionPane.showMessageDialog(frame, response + welcomeMessage, "Login Successful", JOptionPane.INFORMATION_MESSAGE);
+            switchToChatWindow(frame, username);
+        } else {
+            JOptionPane.showMessageDialog(frame, response, "Login Failed", JOptionPane.ERROR_MESSAGE);
+        }
+
+    } catch (IOException | ClassNotFoundException e) {
+        JOptionPane.showMessageDialog(frame, "Connection error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+}
+
 
     private void handleCreateUser(JFrame frame) {
-        String username = usernameText.getText();
-        String password = passwordText.getText();
+    String username = usernameText.getText();
+    String password = passwordText.getText();
 
-        if (username.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(frame, "Please enter both username and password.", "Error",
-                    JOptionPane.ERROR_MESSAGE);
-        } else {
-            // Add logic for sending new user data to the server
-            JOptionPane.showMessageDialog(frame, "Creating user...", "Create User", JOptionPane.INFORMATION_MESSAGE);
-            // Transition to the next screen or handle errors
-        }
+    if (username.isEmpty() || password.isEmpty()) {
+        JOptionPane.showMessageDialog(frame, "Please enter both username and password.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
     }
+
+    try (Socket socket = new Socket("localhost", 4343);
+         ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream());
+         ObjectInputStream receive = new ObjectInputStream(socket.getInputStream())) {
+
+        // Send create user request
+        send.writeObject("2"); // Option 2 for creating a user
+        send.flush();
+
+        // Step 1: Enter username
+        String serverPrompt = (String) receive.readObject();
+        if (!serverPrompt.equals("Enter a username:")) {
+            JOptionPane.showMessageDialog(frame, "Unexpected response from server.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        send.writeObject(username);
+        send.flush();
+
+        // Step 2: Check username availability
+        String usernameResponse = (String) receive.readObject();
+        if (usernameResponse.equals("Username is already taken.")) {
+            JOptionPane.showMessageDialog(frame, usernameResponse, "Create User Failed", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Step 3: Enter password
+        serverPrompt = (String) receive.readObject();
+        if (!serverPrompt.equals("Enter a password:")) {
+            JOptionPane.showMessageDialog(frame, "Unexpected response from server.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        send.writeObject(password);
+        send.flush();
+
+        // Step 4: Success or failure
+        String finalResponse = (String) receive.readObject();
+        if (finalResponse.equals("User created successfully! Please login to continue.")) {
+            JOptionPane.showMessageDialog(frame, finalResponse, "Success", JOptionPane.INFORMATION_MESSAGE);
+            returnToMainMenu(frame);
+        } else {
+            JOptionPane.showMessageDialog(frame, "Unexpected error: " + finalResponse, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    } catch (IOException | ClassNotFoundException e) {
+        JOptionPane.showMessageDialog(frame, "Connection error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+}
+
+    private void switchToChatWindow(JFrame frame, String username) {
+        JPanel chatPanel = new JPanel();
+        JLabel welcomeLabel = new JLabel("Welcome to the Chat, " + username + "!");
+        JButton logoutButton = new JButton("Logout");
+
+        chatPanel.add(welcomeLabel);
+        chatPanel.add(logoutButton);
+
+        frame.getContentPane().removeAll();
+        frame.add(chatPanel, BorderLayout.CENTER);
+        frame.revalidate();
+        frame.repaint();
+
+        logoutButton.addActionListener(e -> returnToMainMenu(frame));
+    }
+
 }
