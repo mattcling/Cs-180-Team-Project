@@ -40,10 +40,10 @@ public class ServerClient implements Runnable {
 
             boolean loggedIn = false;
             while (!loggedIn) { //loop while login is not complete (before login)
-                // send.writeObject("Hello, User!");
-                // send.flush();
-                // send.writeObject("Please choose an option:\n1. Login\n2. Create a new user");
-                // send.flush();
+                send.writeObject("Hello, User!");
+                send.flush();
+                send.writeObject("Please choose an option:\n1. Login\n2. Create a new user");
+                send.flush();
                 String response = (String) receive.readObject(); //store response input of menu option
                 if(!response.equals(" ")) {
                     if ("1".equals(response)) { // Login option
@@ -139,7 +139,7 @@ public class ServerClient implements Runnable {
                             case "1":
                                 send.writeObject("Below is all of your chats you can access");
                                 send.flush();
-                                
+                                d.loadOldData();
                                 if (((User) d.getData("user", username)).getChatIds().isEmpty()) {
                                     send.writeObject("You have no chats.");
                                     send.flush();
@@ -147,6 +147,7 @@ public class ServerClient implements Runnable {
                                     send.flush();
                                     break;
                                 }
+                                
                                 for (String chats : (((User) d.getData("user", username)).getChatIds())) {
                                     send.writeObject(chats);
                                     send.flush();
@@ -187,7 +188,7 @@ public class ServerClient implements Runnable {
                                     }
 
                                     Chat chat = new Chat(username, chatUser);
-                                    //((User) d.getData("user", username)).addChat(chat.getChatID());
+                                    ((User) d.getData("user", username)).addChat(chat.getChatID());
                                     send.writeObject("Chat created with " + chatUser);
                                     send.flush();
                                     while (true) {
@@ -401,7 +402,7 @@ public class ServerClient implements Runnable {
 
                     case "5": //quit
                         send.writeObject("Goodbye!");
-                        break;
+                        System.exit(0);
                     default:
                         send.writeObject("Invalid option selected.");
                         continue;

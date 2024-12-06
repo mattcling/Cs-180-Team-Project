@@ -49,12 +49,14 @@ public class User implements UserInterface, Serializable {
         this.friendsList = new ArrayList<>();
         this.chatIds = new ArrayList<>();
         profile = new Profile(userName, "This is my bio", "profilePic.jpg");
+        d.writeData(this, "user");
 
     }
 
     
 
     public boolean login(String username, String userpassword) {//login function with username and password - checking if logged in and returning
+        d.loadOldData();
         User user = (User) d.getData("user", username);
         if (user != null && user.password.equals(userpassword)) {
             System.out.println("User logged in");
@@ -133,6 +135,7 @@ public class User implements UserInterface, Serializable {
     }
 
     public List<String> getChatIds() {
+        d.loadOldData();
         return this.chatIds;
     }
 
