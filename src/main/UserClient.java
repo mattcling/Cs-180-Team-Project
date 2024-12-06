@@ -592,7 +592,117 @@ public class UserClient extends JComponent implements Runnable {
     }
 
     private void handleUserSearch(JFrame frame, String username) {
-        JOptionPane.showMessageDialog(frame, "User Search functionality is not implemented yet.", "User Search", JOptionPane.INFORMATION_MESSAGE);
+    JPanel userSearchPanel = new JPanel();
+    userSearchPanel.setLayout(new BoxLayout(userSearchPanel, BoxLayout.Y_AXIS));
+
+    JLabel instructions = new JLabel("Search for a user:");
+    instructions.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+    JTextField searchField = new JTextField(20);
+    JButton searchButton = new JButton("Search");
+    JPanel searchInputPanel = new JPanel();
+    searchInputPanel.add(searchField);
+    searchInputPanel.add(searchButton);
+
+    JPanel resultsPanel = new JPanel();
+    resultsPanel.setLayout(new BoxLayout(resultsPanel, BoxLayout.Y_AXIS));
+    JScrollPane scrollPane = new JScrollPane(resultsPanel);
+
+    JButton backButton = new JButton("Back");
+
+    userSearchPanel.add(instructions);
+    userSearchPanel.add(Box.createVerticalStrut(10));
+    userSearchPanel.add(searchInputPanel);
+    userSearchPanel.add(Box.createVerticalStrut(10));
+    userSearchPanel.add(scrollPane);
+    userSearchPanel.add(Box.createVerticalStrut(10));
+    userSearchPanel.add(backButton);
+
+    frame.getContentPane().removeAll();
+    frame.add(userSearchPanel, BorderLayout.CENTER);
+    frame.revalidate();
+    frame.repaint();
+
+    // Action for search button
+    searchButton.addActionListener(e -> {
+        String searchQuery = searchField.getText().trim();
+        if (searchQuery.isEmpty()) {
+            JOptionPane.showMessageDialog(frame, "Please enter a username to search.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        performUserSearch(username, searchQuery, resultsPanel, frame);
+    });
+
+    // Action for back button
+    backButton.addActionListener(e -> switchToChatWindow(frame, username));
+}
+
+private void performUserSearch(String currentUser, String query, JPanel resultsPanel, JFrame frame) {
+    resultsPanel.removeAll(); // Clear previous results
+
+    try (Socket socket = new Socket("localhost", 4343);
+         ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream());
+         ObjectInputStream receive = new ObjectInputStream(socket.getInputStream())) {
+
+        // Send search request to server
+        send.writeObject("2"); // Option 2 for user search
+        send.flush();
+        send.writeObject(query);
+        send.flush();
+
+        // Get server response
+        String serverResponse = (String) receive.readObject();
+        if (serverResponse.equals("Please Choose 1: \n 1. Friend user\n 2. Block user \n 3. Exit")) {
+            JButton userButton = new JButton(query);
+            userButton.addActionListener(e -> showUserOptions(currentUser, query, frame, send, receive));
+            resultsPanel.add(userButton);
+        } else {
+            JLabel noResultsLabel = new JLabel("No users found.");
+            noResultsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            resultsPanel.add(noResultsLabel);
+        }
+
+        resultsPanel.revalidate();
+        resultsPanel.repaint();
+
+    } catch (IOException | ClassNotFoundException e) {
+        JOptionPane.showMessageDialog(frame, "Error connecting to the server: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
     }
+}
+
+private void showUserOptions(String currentUser, String targetUser, JFrame frame,
+                              ObjectOutputStream send, ObjectInputStream receive) {
+    Object[] options = {"Add Friend", "Block User", "Cancel"};
+    int choice = JOptionPane.showOptionDialog(
+            frame,
+            "What would you like to do with user \"" + targetUser + "\"?",
+            "User Options",
+            JOptionPane.YES_NO_CANCEL_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            options,
+            options[2]
+    );
+
+    try {
+        if (choice == JOptionPane.YES_OPTION) {
+            // Send Add Friend action
+            send.writeObject("1"); // Action 1 for adding friend
+            send.flush();
+            String response = (String) receive.readObject();
+            JOptionPane.showMessageDialog(frame, response, "Friend Request", JOptionPane.INFORMATION_MESSAGE);
+        } else if (choice == JOptionPane.NO_OPTION) {
+            // Send Block User action
+            send.writeObject("2"); // Action 2 for blocking user
+            send.flush();
+            String response = (String) receive.readObject();
+            JOptionPane.showMessageDialog(frame, response, "Block User", JOptionPane.INFORMATION_MESSAGE);
+        }
+    } catch (IOException | ClassNotFoundException e) {
+        JOptionPane.showMessageDialog(frame, "Error processing the request: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+}
 
 }
