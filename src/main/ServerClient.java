@@ -139,7 +139,7 @@ public class ServerClient implements Runnable {
                             case "1":
                                 send.writeObject("Below is all of your chats you can access");
                                 send.flush();
-                                
+                                d.loadOldData();
                                 if (((User) d.getData("user", username)).getChatIds().isEmpty()) {
                                     send.writeObject("You have no chats.");
                                     send.flush();
@@ -147,6 +147,7 @@ public class ServerClient implements Runnable {
                                     send.flush();
                                     break;
                                 }
+                                
                                 for (String chats : (((User) d.getData("user", username)).getChatIds())) {
                                     send.writeObject(chats);
                                     send.flush();
@@ -187,7 +188,7 @@ public class ServerClient implements Runnable {
                                     }
 
                                     Chat chat = new Chat(username, chatUser);
-                                    //((User) d.getData("user", username)).addChat(chat.getChatID());
+                                    ((User) d.getData("user", username)).addChat(chat.getChatID());
                                     send.writeObject("Chat created with " + chatUser);
                                     send.flush();
                                     while (true) {
@@ -401,7 +402,7 @@ public class ServerClient implements Runnable {
 
                     case "5": //quit
                         send.writeObject("Goodbye!");
-                        break;
+                        System.exit(0);
                     default:
                         send.writeObject("Invalid option selected.");
                         continue;

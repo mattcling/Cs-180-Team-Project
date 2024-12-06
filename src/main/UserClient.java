@@ -1,19 +1,17 @@
 package main;
 
-import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
-import javax.swing.*;
-import java.awt.event.*;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.locks.Condition;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JTextField;
 
 /**
  * A class which acts as the user client for the chat application.
@@ -45,40 +43,53 @@ public class UserClient extends JComponent implements Runnable {
 
     private static volatile String mainMenuChoice = "";
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new UserClient());
-        try (Socket socket = new Socket("localhost", 4343); ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream()); ObjectInputStream receive = new ObjectInputStream(socket.getInputStream()); Scanner sc = new Scanner(System.in)) {
+        //SwingUtilities.invokeLater(new UserClient());
+        try (Socket socket = new Socket("localhost", 4343);
+                ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream());
+                ObjectInputStream receive = new ObjectInputStream(socket.getInputStream());
+                Scanner sc = new Scanner(System.in)) {
 
             String chatUser = "";
             boolean loggedIn = false;
             while (!loggedIn) {
-                //System.out.println("Server: " + receive.readObject());
-                //System.out.println("Server: " + receive.readObject());
+                System.out.println("Server: " + receive.readObject());
+                System.out.println("Server: " + receive.readObject());
 
-                //String choice = sc.nextLine();
-                send.writeObject(mainMenuChoice);
+                String choice = sc.nextLine();
+                send.writeObject(choice);
                 send.flush();
-                if(!mainMenuChoice.equals(" ")) {
-                    if ("1".equals(mainMenuChoice)) {
-                    //mainMenuChoice = "0";
-                        System.out.println("Server: " + receive.readObject());
-                        String username = sc.nextLine();
-                        send.writeObject(username);
-                        send.flush();
-
-                        System.out.println("Server: " + receive.readObject());
-                        String password = sc.nextLine();
-                        send.writeObject(password);
-                        send.flush();
-
-                        String text = (String) receive.readObject();
-                        if (text.equals("Welcome, ")) {
-                            System.out.println("Server: " + text);
+                //if (!choice.equals(" ")) {
+                    if ("1".equals(choice)) {// login
+                        // System.out.println("in login");
+                        //if ("4".equals(choice)) {// pressed enter button
+                            System.out.println("in enter button");
                             System.out.println("Server: " + receive.readObject());
-                            loggedIn = true;
-                        } else {
+                            //String username = usernameText.getText();
+                            String username = sc.nextLine();
+                            send.writeObject(username);
+                            send.flush();
+
                             System.out.println("Server: " + receive.readObject());
-                        }
-                    } else if ("2".equals(mainMenuChoice)) {
+                            //String password = passwordText.getText();
+                            String password = sc.nextLine();
+                            send.writeObject(password);
+                            send.flush();
+
+                            String text = (String) receive.readObject();
+                            if (text.equals("Welcome, ")) {
+                                System.out.println(text + (String) receive.readObject());
+                                // sendingText = new ArrayList<>();
+                                // sendingText.add(text);
+                                // sendingText.add("\n" + (String) receive.readObject());
+                                //loggedIn = true;
+                                break;
+                            } else {
+                                continue;
+                                // sendingText = new ArrayList<>();
+                                // sendingText.add((String) receive.readObject());
+                            }
+                        //}
+                    } else if ("2".equals(choice)) { // Create New User
                         while (true) {
                             System.out.println("Server: " + receive.readObject());
                             String username = sc.nextLine();
@@ -103,7 +114,7 @@ public class UserClient extends JComponent implements Runnable {
                         System.out.println("Server: " + receive.readObject());
                         continue;
                     }
-                }
+                //}
             }
 
             while (true) {
@@ -272,7 +283,7 @@ public class UserClient extends JComponent implements Runnable {
                         break;
                     case "5":
                         System.out.println("Server: " + receive.readObject());
-                        break;
+                        System.exit(0);
                     default:
                         System.out.println("Server: " + receive.readObject());
                         continue;
@@ -284,66 +295,250 @@ public class UserClient extends JComponent implements Runnable {
         }
     }
 
+    // ActionListener mainMenuAction = new ActionListener() {
+    //     public void actionPerformed(ActionEvent e) {
+    //         lock.lock();
+    //         try {
+    //             if (e.getSource() == loginButton) {
+    //                 mainMenuChoice = "1";
+    //                 System.out.println("changed variable - 1");
+    //             }
+    //             if (e.getSource() == createNewUserButton) {
+    //                 mainMenuChoice = "2";
+    //                 System.out.println("changed variable - 2");
+    //             }
+    //             if (e.getSource() == exitButton) {
+    //                 mainMenuChoice = "3";
+    //                 System.out.println("changed variable - 3");
+    //             }
+    //             if (e.getSource() == loginEnter) {
+    //                 mainMenuChoice = "4";
+    //                 System.out.println("changed variable - 4");
+    //             }
 
+    //             choiceMade.signal();
+    //         } finally {
+    //             lock.unlock();
+    //         }
+    //     }
+    // };
 
     @Override
     public void run() {
-        JFrame frame = new JFrame("Test");
-        Container content = frame.getContentPane();
-        content.setLayout(new BorderLayout());
+        // // Initialize the JFrame
+        // JFrame frame = new JFrame("Chat Application");
+        // frame.setSize(600, 400);
+        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // frame.setLocationRelativeTo(null);
+        // frame.setLayout(new BorderLayout());
 
-        frame.setSize(600, 400);
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+        // // Create the initial main menu panel
+        // JPanel mainMenuPanel = new JPanel();
+        // loginButton = new JButton("Login");
+        // createNewUserButton = new JButton("Create New User");
+        // exitButton = new JButton("Exit");
 
-        loginButton = new JButton("Login");
-        createNewUserButton = new JButton("Create New User");
-        exitButton = new JButton("Exit");
+        // mainMenuPanel.add(loginButton);
+        // mainMenuPanel.add(createNewUserButton);
+        // mainMenuPanel.add(exitButton);
 
-        JPanel panel = new JPanel();
-        panel.add(loginButton);
-        panel.add(createNewUserButton);
-        panel.add(exitButton);
-        content.add(panel, BorderLayout.CENTER);
+        // frame.add(mainMenuPanel, BorderLayout.CENTER);
 
-        loginButton.addActionListener(actionListener);
-        createNewUserButton.addActionListener(actionListener);        
-        exitButton.addActionListener(actionListener);
+        // // Define action listeners for main menu buttons
+        // loginButton.addActionListener(e -> switchToLoginPanel(frame));
+        // createNewUserButton.addActionListener(e -> switchToCreateUserPanel(frame));
+        // exitButton.addActionListener(e -> {
+        //     JOptionPane.showMessageDialog(frame, "Goodbye!", "Exit", JOptionPane.INFORMATION_MESSAGE);
+        //     System.exit(0);
+        // });
+
+        // // Make the frame visible
+        // frame.setVisible(true);
     }
 
-    public void mainMenuChoice(String input){
+//     private void switchToLoginPanel(JFrame frame) {
+//         JPanel loginPanel = new JPanel();
+//         JLabel instructions = new JLabel("Please enter your username and password:");
+//         usernameText = new JTextField(10);
+//         passwordText = new JTextField(10);
+//         JButton loginEnter = new JButton("Enter");
+//         JButton backButton = new JButton("Back");
 
-    }
-    
+//         loginPanel.add(instructions);
+//         loginPanel.add(usernameText);
+//         loginPanel.add(passwordText);
+//         loginPanel.add(loginEnter);
+//         loginPanel.add(backButton);
 
-    ActionListener actionListener = new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-            try {
-                if (e.getSource() == loginButton) {
-                    mainMenuChoice = "1";
-                    usernameText = new JTextField(10);
-                    String username = usernameText.getText();
-//                    panel.add(usernameText);
-                    //mainMenuMethod(mainMenuChoice);
-                    
-                }
-                if (e.getSource() == createNewUserButton) {
-                    mainMenuChoice = "2";
-                    //mainMenuMethod(mainMenuChoice);            
-                }
-                if (e.getSource() == exitButton) {
-                    mainMenuChoice = "3";
-                    //mainMenuMethod(mainMenuChoice);
-                }
-                choiceMade.signal();
-                
-            } finally {
-                lock.unlock();
-            }
-            }
-    };
+//         frame.getContentPane().removeAll(); // Clear the frame
+//         frame.add(loginPanel, BorderLayout.CENTER);
+//         frame.revalidate();
+//         frame.repaint();
+
+//         // Define action listeners for login buttons
+//         loginEnter.addActionListener(e -> handleLogin(frame));
+//         backButton.addActionListener(e -> returnToMainMenu(frame));
+//     }
+
+//     private void switchToCreateUserPanel(JFrame frame) {
+//         JPanel createUserPanel = new JPanel();
+//         JLabel instructions = new JLabel("Please enter a username and password:");
+//         usernameText = new JTextField(10);
+//         passwordText = new JTextField(10);
+//         JButton createEnter = new JButton("Create");
+//         JButton backButton = new JButton("Back");
+
+//         createUserPanel.add(instructions);
+//         createUserPanel.add(usernameText);
+//         createUserPanel.add(passwordText);
+//         createUserPanel.add(createEnter);
+//         createUserPanel.add(backButton);
+
+//         frame.getContentPane().removeAll(); // Clear the frame
+//         frame.add(createUserPanel, BorderLayout.CENTER);
+//         frame.revalidate();
+//         frame.repaint();
+
+//         // Define action listeners for create user buttons
+//         createEnter.addActionListener(e -> handleCreateUser(frame));
+//         backButton.addActionListener(e -> returnToMainMenu(frame));
+//     }
+
+//     private void returnToMainMenu(JFrame frame) {
+//         JPanel mainMenuPanel = new JPanel();
+//         mainMenuPanel.add(loginButton);
+//         mainMenuPanel.add(createNewUserButton);
+//         mainMenuPanel.add(exitButton);
+
+//         frame.getContentPane().removeAll(); // Clear the frame
+//         frame.add(mainMenuPanel, BorderLayout.CENTER);
+//         frame.revalidate();
+//         frame.repaint();
+//     }
+
+//     private void handleLogin(JFrame frame) {
+//     String username = usernameText.getText();
+//     String password = passwordText.getText();
+
+//     if (username.isEmpty() || password.isEmpty()) {
+//         JOptionPane.showMessageDialog(frame, "Please enter both username and password.", "Error", JOptionPane.ERROR_MESSAGE);
+//         return;
+//     }
+
+//     try (Socket socket = new Socket("localhost", 4343);
+//          ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream());
+//          ObjectInputStream receive = new ObjectInputStream(socket.getInputStream())) {
+
+//         // Send login request
+//         send.writeObject("1"); // Option 1 for login
+//         send.flush();
+
+//         // Step 1: Server asks for username
+//         String serverPrompt = (String) receive.readObject();
+//         if (!serverPrompt.equals("Enter your username:")) {
+//             JOptionPane.showMessageDialog(frame, "Unexpected response from server.", "Error", JOptionPane.ERROR_MESSAGE);
+//             return;
+//         }
+//         send.writeObject(username);
+//         send.flush();
+
+//         // Step 2: Server asks for password
+//         serverPrompt = (String) receive.readObject();
+//         if (!serverPrompt.equals("Enter your password:")) {
+//             JOptionPane.showMessageDialog(frame, "Unexpected response from server.", "Error", JOptionPane.ERROR_MESSAGE);
+//             return;
+//         }
+//         send.writeObject(password);
+//         send.flush();
+
+//         // Step 3: Server response (success or failure)
+//         String response = (String) receive.readObject();
+//         if (response.equals("Welcome, ")) {
+//             String welcomeMessage = (String) receive.readObject();
+//             JOptionPane.showMessageDialog(frame, response + welcomeMessage, "Login Successful", JOptionPane.INFORMATION_MESSAGE);
+//             switchToChatWindow(frame, username);
+//         } else {
+//             JOptionPane.showMessageDialog(frame, response, "Login Failed", JOptionPane.ERROR_MESSAGE);
+//         }
+
+//     } catch (IOException | ClassNotFoundException e) {
+//         JOptionPane.showMessageDialog(frame, "Connection error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+//         e.printStackTrace();
+//     }
+// }
+
+
+//     private void handleCreateUser(JFrame frame) {
+//     String username = usernameText.getText();
+//     String password = passwordText.getText();
+
+//     if (username.isEmpty() || password.isEmpty()) {
+//         JOptionPane.showMessageDialog(frame, "Please enter both username and password.", "Error", JOptionPane.ERROR_MESSAGE);
+//         return;
+//     }
+
+//     try (Socket socket = new Socket("localhost", 4343);
+//          ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream());
+//          ObjectInputStream receive = new ObjectInputStream(socket.getInputStream())) {
+
+//         // Send create user request
+//         send.writeObject("2"); // Option 2 for creating a user
+//         send.flush();
+
+//         // Step 1: Enter username
+//         String serverPrompt = (String) receive.readObject();
+//         if (!serverPrompt.equals("Enter a username:")) {
+//             JOptionPane.showMessageDialog(frame, "Unexpected response from server.", "Error", JOptionPane.ERROR_MESSAGE);
+//             return;
+//         }
+//         send.writeObject(username);
+//         send.flush();
+
+//         // Step 2: Check username availability
+//         String usernameResponse = (String) receive.readObject();
+//         if (usernameResponse.equals("Username is already taken.")) {
+//             JOptionPane.showMessageDialog(frame, usernameResponse, "Create User Failed", JOptionPane.ERROR_MESSAGE);
+//             return;
+//         }
+
+//         // Step 3: Enter password
+//         serverPrompt = (String) receive.readObject();
+//         if (!serverPrompt.equals("Enter a password:")) {
+//             JOptionPane.showMessageDialog(frame, "Unexpected response from server.", "Error", JOptionPane.ERROR_MESSAGE);
+//             return;
+//         }
+//         send.writeObject(password);
+//         send.flush();
+
+//         // Step 4: Success or failure
+//         String finalResponse = (String) receive.readObject();
+//         if (finalResponse.equals("User created successfully! Please login to continue.")) {
+//             JOptionPane.showMessageDialog(frame, finalResponse, "Success", JOptionPane.INFORMATION_MESSAGE);
+//             returnToMainMenu(frame);
+//         } else {
+//             JOptionPane.showMessageDialog(frame, "Unexpected error: " + finalResponse, "Error", JOptionPane.ERROR_MESSAGE);
+//         }
+
+//     } catch (IOException | ClassNotFoundException e) {
+//         JOptionPane.showMessageDialog(frame, "Connection error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+//         e.printStackTrace();
+//     }
+// }
+
+//     private void switchToChatWindow(JFrame frame, String username) {
+//         JPanel chatPanel = new JPanel();
+//         JLabel welcomeLabel = new JLabel("Welcome to the Chat, " + username + "!");
+//         JButton logoutButton = new JButton("Logout");
+
+//         chatPanel.add(welcomeLabel);
+//         chatPanel.add(logoutButton);
+
+//         frame.getContentPane().removeAll();
+//         frame.add(chatPanel, BorderLayout.CENTER);
+//         frame.revalidate();
+//         frame.repaint();
+
+//         logoutButton.addActionListener(e -> returnToMainMenu(frame));
+//     }
+
 }
-
-
-

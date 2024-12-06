@@ -74,9 +74,11 @@ public class Chat implements Serializable, ChatInterface {
 
     public void removeMessage(Message message) {
         messages.remove(message);
+        d.writeData(this, "chat");
     }
 
     public List<Message> receiveChat(Message message) {
+        d.loadOldData();
         return new ArrayList<>(messages);
     }
 

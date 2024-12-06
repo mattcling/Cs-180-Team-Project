@@ -5,10 +5,10 @@ Clone github repository on IDE (such as VSCode) and run Server side classes to c
 Matthew - Submitted Vocareum workspace on Brightspace for Phase 1 from team github repository
 
 #### Commit history on Team Github Repo:
-Mattew - Submitted Database and Message classes, test cases and interfaces <br>
-Siddesh - Submitted ServerClient and Chat classes, test cases and interfaces <br>
-Charlotte - Submitted UserClient classes, test cases and interfaces <br>
-Kimaya - Submitted ServerClient and User classes, test cases and interfaces and README <br>
+Matthew - Submitted Database, Message, ServerClient, and UserClient classes, test cases and interfaces, and the GUI for Login through UserSearch <br>
+Siddesh - Worked on ServerClient, UserClient, and Chat classes, test cases and interfaces, and the GUI from Login through UserSearch <br>
+Charlotte - Worked on User, UserClient, and ServerClient classes, test cases and interfaces, and the GUI from Login through the inner menu <br>
+Kimaya - Worked on UserClient, ServerClient and User classes, test cases and interfaces and README, and the GUI from Login through the inner menu <br>
 Luke - Helped work on Login for ServerClient <br>
 
 
@@ -20,10 +20,12 @@ Luke - Helped work on Login for ServerClient <br>
 **Relationship** - implements Serializable, ChatInterface <br>
 **Functionality** - Encapsulates the basic functions and variables needed to create a chat, add participants, send and receive messages, and manage the chat's state. <br>
 **Testing** - ChatTest.java test case file <br>
-**Fields** - chatID, messages, participants, static SERIAL_VERSION_UID <br>
+**Fields** - chatID, messages, participants, Database d <br>
 **Constructor** - Chat() <br>
 **Methods** - <br>
 - addParticipantToChat() <br>
+- generateChatID() <br>
+- addParticipantToChat(String participant) <br>
 - sendMessage(String mess, String sender) <br>
 - removeMessage(Message message) <br>
 - receiveChat(Message message) <br>
@@ -55,7 +57,7 @@ Luke - Helped work on Login for ServerClient <br>
 **Relationship** - implements DatabaseInterface <br>
 **Functionality** - Encapsulates the basic functions and variables needed to create a chat, add participants, send and receive messages, and manage the chat's state. <br>
 **Testing** - DatabaseTest.java test case file <br>
-**Fields** - userTable, chatTable, messageTable, userDataFile, chatDataFile, messageDataFile, object <br>
+**Fields** - userTable, chatTable, messageTable, userDataFile, chatDataFile, messageDataFile,Object  object <br>
 **Constructor** - Chat() <br>
 **Methods** - 
 - loadOldData() <br>
@@ -82,6 +84,8 @@ Luke - Helped work on Login for ServerClient <br>
 **Methods** - 
 - writeData(Object data, String tablename) <br>
 - deleteData(String tablename, String key) <br>
+- writeData(Object data, String tablename) <br>
+- deleteData(String tablename, String key) <br>
 - changeData(String tablename, Object data, String key) <br>
 - getData(String tableName, String key) <br>
 - initializeDatabase() <br>
@@ -100,7 +104,7 @@ Luke - Helped work on Login for ServerClient <br>
 **Relationship** - implements Serializable, MessageInterface <br>
 **Functionality** - The Message class represents an individual message in a chat system and enables creating, validating, and managing the data associated with the message <br>
 **Testing** - MessageTest.java test case file <br>
-**Fields** - static Database d, chatID, contents, senderID, LocalDateTime dateTime
+**Fields** - static Database d, messageID, chatID, contents, senderID, dateTime
 **Constructor** - public Message(String chatID, String senderID, String contents) <br>
 **Methods** - 
 - getMessageID() <br>
@@ -123,6 +127,7 @@ Luke - Helped work on Login for ServerClient <br>
 **Testing** - MessageInterfaceTest.java test case file <br>
 **Methods** - 
 - getMessageID() <br>
+- getDateTime() <br>
 - getChatID() <br>
 - getSenderID() <br>
 - getContents() <br>
@@ -163,8 +168,7 @@ Luke - Helped work on Login for ServerClient <br>
 - getUserID() <br>
 - setUserID(String userID) <br>
 - getBio() <br>
-- setBio(String bio) <br>
-- getDateTime() <br>
+- editBio(String bio) <br>
 - getprofilePicture() <br>
 - setprofilePicture(String userProfilePicture) <br>
 - updateProfile(String userbio, String userProfilePicture) <br>
@@ -198,19 +202,21 @@ Luke - Helped work on Login for ServerClient <br>
 **Relationship** - implements UserInterface, Serializable <br>
 **Functionality** - Represents a user in a system, providing functionalities to manage user information, authenticate users, and manage their relationships with others. <br>
 **Testing** - UserTest.java test case file <br>
-**Fields** - userID, password, userName, profilePicture, friendsList, blockedUsers, static SERIAL_VERSION_UID <br>
+**Fields** - userID, password, userName, profilePicture, friendsList, blockedUsers, chatIds, profile, database <br>
 **Constructor** - User(String username, String password) <br>
 **Methods** - 
 - createAccount(String username, String newPassword) <br>
 - login(String username, String userpassword) <br>
 - logout() <br>
 - addFriend(String friendsID) <br>
+- addChat(String Id) <br>
 - removeFriend(String friendsID) <br>
 - addBlockedUser(String blockedUserID) <br>
 - unBlockUser(String blockedUserID) <br>
 - generateUserID() <br>
 - getUserID() <br>
 - getPassword() <br>
+- getChatIds()
 - getUserName() <br>
 - getProfilePicture() <br>
 - getFriendsList() <br>
@@ -227,33 +233,8 @@ Luke - Helped work on Login for ServerClient <br>
 **Name** - UserClient <br>
 **Type** - class <br>
 **Relationship** - public class <br>
-**Functionality** - Implements a client-side program for interacting with a server in a user management system. It facilitates user authentication, account creation, and various user-related actions by exchanging serialized objects over network socket. <br>
+**Functionality** - Implements a client-side program for interacting with a server in a user management system. It facilitates user authentication, account creation, and various user-related actions by exchanging serialized objects over network socket. The program contains the GUI code for user interface design.  <br>
 **Testing** - UserClientTest.java test case file <br>
 **Methods** - 
 - public static void main(String[] args) <br>
 <br><br>
-
-#### UserClientInterface.java <br>
-**Name** - UserClientInterface <br>
-**Type** - interface <br>
-**Relationship** - interface for UserClient class <br>
-**Functionality** -  Defines the structure for a user management system. Specifies the methods for UserClient class, ensuring consistent functionality for user account management, friends and blocked users management, and user details access/modification. <br>
-**Testing** - UserClientInterfaceTest.java test case file <br>
-when testing the methods there are a few created users sid with the pasword monkey and Diya with the pasword monkey and admin with the password monkey if you want to user them current messages are only sent and stored as the implementaion of them only works with a gui. you can add and remove and block users no problem lastly the test cases are weird and used packaging 
-**Methods** - 
-- createAccount(String username, String password) <br>
-- login(String username, String password) <br>
-- logout() <br>
-- generateUserID() <br>
-- addBlockedUser(String blockedUserID) <br>
-- unBlockUser(String blockedUserID) <br>
-- removeFriend(String friendsID) <br>
-- addFriend(String friendsID) <br>
-- getUserID() <br>
-- getProfilePicture() <br>
-- getFriendsList() <br>
-- getBlockedUsers() <br>
-- setUserName(String userName) <br>
-- setProfilePicture(String profilePicture) <br>
-- setFriendsList(List<String> friendsList) <br>
-- setBlockedUsers(List<String> blockedUsers) <br>
