@@ -432,3 +432,5 @@ public class ServerClient implements Runnable {
         }
     }
 }
+
+//Redo the GUI
