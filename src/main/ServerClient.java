@@ -58,17 +58,17 @@ public class ServerClient implements Runnable {
                         if (d.containsObject("user", username)) { //check if user exists in database
                             User user = (User) d.getData("user", username); //get data of user and welcome user
                             if (user.getPassword().equals(password)) { //check if password entered matches
-                                send.writeObject("Welcome, ");//recived
+                                send.writeObject("Welcome, ");//used
                                 send.flush();
                                 // send.writeObject(username + "!");//not recived
                                 // send.flush();
                                 loggedIn = true;
                             } else {
-                                send.writeObject("Invalid password.");
+                                send.writeObject("Invalid password.");//used
                                 continue;//error message for mismatching password
                             }
                         } else {
-                            send.writeObject("Invalid username.");
+                            send.writeObject("Invalid username.");//used
                             continue; //error message for nonexisting username in database
                         }
                     } else if ("2".equals(response)) { // Create a new user option
@@ -120,18 +120,18 @@ public class ServerClient implements Runnable {
                 String action = "";
                 switch (choice) {
                     case "1": //create/open chat option
-                        send.writeObject("Your Friends: ");
-                        send.flush();
+                        //send.writeObject("Your Friends: ");
+                        //send.flush();
                         for (String friend : ((User) d.getData("user", username)).getFriendsList()) {
                             send.writeObject(friend); // display user's friends
                             send.flush();
                         }
-                        send.writeObject("\n");
-                        send.flush();
-                        send.writeObject("Please choose 1: \n1."
-                                + " Open existing Chat \n2."
-                                + " Create new chat \n3. Exit");
-                        send.flush();
+                        // send.writeObject("\n");
+                        // send.flush();
+                        // send.writeObject("Please choose 1: \n1."
+                        //         + " Open existing Chat \n2."
+                        //         + " Create new chat \n3. Exit");
+                        // send.flush();
                         action = (String) receive.readObject();
                         chatUser = "";
 
@@ -223,12 +223,12 @@ public class ServerClient implements Runnable {
                         break;
 
                     case "2"://user search option
-                        send.writeObject("What is the username you would like to search for?");//used for a check
-                        send.flush();
+                        // send.writeObject("What is the username you would like to search for?");//used for a check
+                        // send.flush();
                         String searchUser = (String) receive.readObject();
                         if (d.containsObject("user", searchUser)) {
-                            send.writeObject("Please Choose 1: \n 1. Friend user\n 2. Block user \n 3. Exit");//expected to recieve
-                            send.flush();
+                            // send.writeObject("Please Choose 1: \n 1. Friend user\n 2. Block user \n 3. Exit");//expected to recieve
+                            // send.flush();
                             action = (String) receive.readObject();
                             switch (action) {
                                 case "1":
@@ -238,7 +238,7 @@ public class ServerClient implements Runnable {
                                             getFriendsList()) {
                                         if (friend.equals(userName)) {
                                             stop = true;
-                                            send.writeObject("That user is already your friend");
+                                            send.writeObject("That user is already your friend");//used
                                             break;
                                         }
                                     }
@@ -246,14 +246,14 @@ public class ServerClient implements Runnable {
                                             .getBlockedUsers()) {
                                         if (blocked.equals(userName)) {
                                             stop = true;
-                                            send.writeObject("That user is blocked");
+                                            send.writeObject("That user is blocked");//used
                                             break;
                                         }
                                     }
                                     if (!stop) {
                                         ((User) d.getData("user", username)).addFriend(userName);
                                         d.changeData("user", d.getData("user", username), username);
-                                        send.writeObject("Friend added");
+                                        send.writeObject("Friend added");//used
                                     }
                                     break;
 
@@ -264,22 +264,22 @@ public class ServerClient implements Runnable {
                                             .getBlockedUsers()) {
                                         if (blockedName.equals(userName)) {
                                             stop = true;
-                                            send.writeObject("That user is already blocked");
+                                            send.writeObject("That user is already blocked");//used
                                             break;
                                         }
                                     }
                                     if (!stop) {
                                         ((User) d.getData("user", username)).addBlockedUser(userName);
                                         d.changeData("user", d.getData("user", username), username);
-                                        send.writeObject("User blocked");
+                                        send.writeObject("User blocked");//used
                                     }
                                     break;
 
                                 case "3":
-                                    send.writeObject("Exit");
+                                    //send.writeObject("Exit");//not used
                                     break;
                                 default:
-                                    send.writeObject("Invalid option selected.");
+                                    //send.writeObject("Invalid option selected.");//not used
                                     break;
                             }
                         } else {
@@ -363,8 +363,8 @@ public class ServerClient implements Runnable {
                         }
                         send.writeObject("\n");
                         send.flush();
-                        send.writeObject("Please choose 1: \n 1. UnBlock \n 2. Exit");
-                        send.flush();
+                        // send.writeObject("Please choose 1: \n 1. UnBlock \n 2. Exit");
+                        // send.flush();
                         actionChoice = (String) receive.readObject();
                         switch (actionChoice) {
                             case "1":
@@ -375,14 +375,17 @@ public class ServerClient implements Runnable {
                                 for (String b : ((User) d.getData("user", username)).getBlockedUsers()) {
                                     if ((b.equals(unblock))) {
                                         stop = false;
+                                        System.out.println("stop = false");
+                                        System.out.println(stop);
                                         ((User) d.getData("user", username)).unBlockUser(unblock);
                                         d.changeData("user", d.getData("user", username), username);
                                         send.writeObject("User unblocked");
+                                        System.out.println("blocked HERE");
                                         send.flush();
                                         break;
                                     }
-                                }
-                                if (stop) {
+                                }//says not blocked and then user unblocked afterwards
+                                if (stop == true) {
                                     send.writeObject("That user is not blocked");
                                     send.flush();
                                 }
@@ -394,17 +397,17 @@ public class ServerClient implements Runnable {
                                 break;
 
                             default:
-                                send.writeObject("Invalid option selected.");
+                                //send.writeObject("Invalid option selected.");//not used
                                 continue;
                         }
 
                         break;
 
                     case "5": //quit
-                        send.writeObject("Goodbye!");
+                        send.writeObject("Goodbye!");//used
                         System.exit(0);
                     default:
-                        send.writeObject("Invalid option selected.");
+                        //send.writeObject("Invalid option selected.");//not used
                         continue;
                 }
                 if (quit) {

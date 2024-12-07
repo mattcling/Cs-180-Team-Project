@@ -55,8 +55,10 @@ public class UserClient {
         initLoggedInMenu();
         initChatsPanel();
         initFriendsListPanel();
-        initBlockedUsersPanel();
-
+        initFriendsOptionsPanel();
+        initBlockedListPanel();
+        initBlockedOptionsPanel();
+        
         frame.add(mainPanel);
         frame.setVisible(true);
         showPanel("MainMenu");
@@ -167,7 +169,7 @@ public class UserClient {
         chatsButton.addActionListener(e -> showPanel("Chats"));
         userSearchButton.addActionListener(e -> handleUserSearch());
         friendsListButton.addActionListener(e -> handleFriendsList());
-        blockedUsersButton.addActionListener(e -> handleBlockedUsers());
+        blockedUsersButton.addActionListener(e -> handleBlockedList());
         logoutButton.addActionListener(e -> showPanel("MainMenu"));
 
         loggedInMenu.add(chatsButton);
@@ -221,7 +223,9 @@ public class UserClient {
         friendsArea = new JTextArea();
         friendsArea.setEditable(false);
         JButton backButton = new JButton("Back");
+        JButton editButton = new JButton("Edit List");
 
+        editButton.addActionListener(e -> showPanel("friendsOptionsPanel"));
         backButton.addActionListener(e -> {
             showPanel("LoggedInMenu");
             try {
@@ -233,18 +237,21 @@ public class UserClient {
         });
 
         friendsListPanel.add(new JScrollPane(friendsArea), BorderLayout.CENTER);
+        friendsListPanel.add(editButton, BorderLayout.NORTH);
         friendsListPanel.add(backButton, BorderLayout.SOUTH);
 
         mainPanel.add(friendsListPanel, "FriendsList");
     }
 
-    private void initBlockedUsersPanel() {
-        JPanel blockedListPanel = new JPanel(new BorderLayout());
+    private void initFriendsOptionsPanel() {
+        JPanel friendsOptionsPanel = new JPanel(new GridLayout(3, 1));
 
-        blockedArea = new JTextArea();
-        blockedArea.setEditable(false);
-        JButton backButton = new JButton("Back");
+        JButton unfriendUserButton = new JButton("UnFriend User");
+        JButton blockUserButton = new JButton("Block User");
+        JButton backButton = new JButton("Exit");
 
+        unfriendUserButton.addActionListener(e -> unfriendUser());
+        blockUserButton.addActionListener(e -> blockUser());
         backButton.addActionListener(e -> {
             showPanel("LoggedInMenu");
             try {
@@ -253,11 +260,64 @@ public class UserClient {
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        }); 
+        });
+
+        friendsOptionsPanel.add(unfriendUserButton);
+        friendsOptionsPanel.add(blockUserButton);
+        friendsOptionsPanel.add(backButton);
+
+        mainPanel.add(friendsOptionsPanel, "friendsOptionsPanel");
+        showPanel("friendsOptionsPanel");
+    }
+    
+    private void initBlockedListPanel() {
+        JPanel blockedListPanel = new JPanel(new BorderLayout());
+
+        blockedArea = new JTextArea();
+        blockedArea.setEditable(false);
+        JButton backButton = new JButton("Back");
+        JButton editButton = new JButton("Edit List");
+
+        editButton.addActionListener(e -> showPanel("blockedOptionsPanel"));
+        backButton.addActionListener(e -> {
+            showPanel("LoggedInMenu");
+            try {
+                send.writeObject("3");
+                send.flush();
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
         blockedListPanel.add(new JScrollPane(blockedArea), BorderLayout.CENTER);
+        blockedListPanel.add(editButton, BorderLayout.NORTH);
         blockedListPanel.add(backButton, BorderLayout.SOUTH);
 
         mainPanel.add(blockedListPanel, "BlockedList");
+    }
+
+    private void initBlockedOptionsPanel() {
+        JPanel blockedOptionsPanel = new JPanel(new GridLayout(3, 1));
+
+        JButton unblockUserButton = new JButton("UnBlock User");
+        JButton backButton = new JButton("Exit");
+
+        unblockUserButton.addActionListener(e -> unblockUser());
+        backButton.addActionListener(e -> {
+            showPanel("LoggedInMenu");
+            try {
+                send.writeObject("2");
+                send.flush();
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        blockedOptionsPanel.add(unblockUserButton);
+        blockedOptionsPanel.add(backButton);
+
+        mainPanel.add(blockedOptionsPanel, "blockedOptionsPanel");
+        showPanel("blockedOptionsPanel");
     }
 
     private void showPanel(String panelName) {
@@ -307,9 +367,22 @@ public class UserClient {
                 send.writeObject(searchUser);
                 send.flush();
 
-                String response = (String) receive.readObject();//shown
-                //prints main menu for some reason:FIX
-                JOptionPane.showMessageDialog(frame, response, "Search Result", JOptionPane.INFORMATION_MESSAGE);
+                //String response = (String) receive.readObject();
+                //JOptionPane.showMessageDialog(frame, response, "Search Result", JOptionPane.INFORMATION_MESSAGE);
+
+                //for testing for now:
+                String q2 = JOptionPane.showInputDialog(frame, "what do you want to do?");
+                if (q2 != null && !q2.isEmpty() && q2.equals("friend")) {
+                    send.writeObject("1");
+                    send.flush();
+                    String gha = (String) receive.readObject();
+                    JOptionPane.showMessageDialog(frame, gha, "Search Result", JOptionPane.INFORMATION_MESSAGE);
+                } else if (q2 != null && !q2.isEmpty() && q2.equals("block")) {
+                    send.writeObject("2");
+                    send.flush();
+                    String gha = (String) receive.readObject();
+                    JOptionPane.showMessageDialog(frame, gha, "Search Result", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
         } catch (IOException | ClassNotFoundException e) {
             JOptionPane.showMessageDialog(frame, "Error searching user.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -332,21 +405,91 @@ public class UserClient {
         }
     }
 
-    private void handleBlockedUsers() {
+    private void unfriendUser() {
+        try {
+            String friend = JOptionPane.showInputDialog(frame, "Enter username to search:");
+            if (friend != null && !friend.isEmpty()) {
+                send.writeObject("1");
+                send.flush();
+                send.writeObject(friend);
+                send.flush();
+            }
+            send.writeObject(friend);
+            send.flush();
+            String response = (String) receive.readObject();
+            if (response.equals("That user is not your friend")) {
+                JOptionPane.showMessageDialog(frame, "That user is not your friend", "Info", JOptionPane.INFORMATION_MESSAGE);
+            } else if (response.equals("Friend Removed")) {
+                JOptionPane.showMessageDialog(frame, "Friend Removed", "Info", JOptionPane.INFORMATION_MESSAGE);
+            } 
+            showPanel("LoggedInMenu");
+        } catch (IOException | ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(frame, "Server did not respond properly", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void blockUser() {
+        try {
+            String friend = JOptionPane.showInputDialog(frame, "Enter username to search:");
+            if (friend != null && !friend.isEmpty()) {
+                send.writeObject("2");
+                send.flush();
+                send.writeObject(friend);
+                send.flush();
+            }
+            send.writeObject(friend);
+            send.flush();
+            String response = (String) receive.readObject();
+            if (response.equals("Blocked User")) {
+                JOptionPane.showMessageDialog(frame, "Blocked User", "Info", JOptionPane.INFORMATION_MESSAGE);
+            } else if (response.equals("That user is already blocked")) {
+                JOptionPane.showMessageDialog(frame, "That user is already blocked", "Info", JOptionPane.INFORMATION_MESSAGE);
+            } 
+            showPanel("LoggedInMenu");
+        } catch (IOException | ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(frame, "Server did not respond properly", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void handleBlockedList() {
         try {
             send.writeObject("4");
             send.flush();
-            StringBuilder blockedUsers = new StringBuilder("Blocked Users:\n");
+            StringBuilder blockeds = new StringBuilder("Blocked:\n");
             String blocked;
             while (!(blocked = (String) receive.readObject()).equals("\n")) {
-                blockedUsers.append(blocked).append("\n");
+                blockeds.append(blocked).append("\n");
             }
-            blockedArea.setText(blockedUsers.toString());
+            blockedArea.setText(blockeds.toString());
             showPanel("BlockedList");
         } catch (IOException | ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(frame, "Error retrieving blocked users.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Error retrieving blocked list.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    private void unblockUser() {
+        try {
+            String blocked = JOptionPane.showInputDialog(frame, "Enter username to search:");
+            if (blocked != null && !blocked.isEmpty()) {
+                send.writeObject("1");
+                send.flush();
+                send.writeObject(blocked);
+                send.flush();
+            }
+            send.writeObject(blocked);
+            send.flush();
+            String response = (String) receive.readObject();
+            if (response.equals("User unblocked")) {
+                JOptionPane.showMessageDialog(frame, "User unblocked", "Info", JOptionPane.INFORMATION_MESSAGE);
+            } else if (!response.equals("That user is not blocked")) {
+                JOptionPane.showMessageDialog(frame, "That user is not blocked", "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
+            showPanel("LoggedInMenu");
+        } catch (IOException | ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(frame, "Server did not respond properly", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(UserClient::new);

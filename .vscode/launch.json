@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "UserClient",
+            "request": "launch",
+            "mainClass": "main.UserClient",
+            "projectName": "Cs-180-Team-Project_27b53f2c"
+        },
+        {
+            "type": "java",
+            "name": "ServerClient",
+            "request": "launch",
+            "mainClass": "main.ServerClient",
+            "projectName": "Cs-180-Team-Project_27b53f2c"
+        },
+        {
+            "type": "java",
             "name": "MainGUI",
             "request": "launch",
             "mainClass": "main.MainGUI",
