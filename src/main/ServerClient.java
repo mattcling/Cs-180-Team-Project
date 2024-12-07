@@ -355,8 +355,8 @@ public class ServerClient implements Runnable {
                         break;
 
                     case "4": //blocked Users list
-                        send.writeObject("Your Blocked Users: ");
-                        send.flush();
+                        //send.writeObject("Your Blocked Users: ");
+                        //send.flush();
                         for (String b : ((User) d.getData("user", username)).getBlockedUsers()) {
                             send.writeObject(b);
                             send.flush();

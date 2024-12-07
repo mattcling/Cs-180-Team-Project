@@ -92,8 +92,15 @@ public class UserClient {
         JButton backButton = new JButton("Back");
 
         loginButton.addActionListener(e -> handleLogin());
-        backButton.addActionListener(e -> showPanel("MainMenu"));
-
+        backButton.addActionListener(e -> {
+            showPanel("LoggedInMenu");
+            try {
+                send.writeObject("3");
+                send.flush();
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
         loginPanel.add(usernameField);
         loginPanel.add(passwordField);
         loginPanel.add(loginButton);
@@ -131,8 +138,15 @@ public class UserClient {
             }
         });
 
-        backButton.addActionListener(e -> showPanel("MainMenu"));
-
+        backButton.addActionListener(e -> {
+            showPanel("LoggedInMenu");
+            try {
+                send.writeObject("3");
+                send.flush();
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
         createUserPanel.add(newUserField);
         createUserPanel.add(newPasswordField);
         createUserPanel.add(createButton);
@@ -184,8 +198,15 @@ public class UserClient {
             }
         });
 
-        backButton.addActionListener(e -> showPanel("LoggedInMenu"));
-
+        backButton.addActionListener(e -> {
+            showPanel("LoggedInMenu");
+            try {
+                send.writeObject("3");
+                send.flush();
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
         chatsPanel.add(new JScrollPane(chatArea), BorderLayout.CENTER);
         chatsPanel.add(chatInputField, BorderLayout.SOUTH);
         chatsPanel.add(sendMessageButton, BorderLayout.EAST);
@@ -224,8 +245,15 @@ public class UserClient {
         blockedArea.setEditable(false);
         JButton backButton = new JButton("Back");
 
-        backButton.addActionListener(e -> showPanel("LoggedInMenu"));
-
+        backButton.addActionListener(e -> {
+            showPanel("LoggedInMenu");
+            try {
+                send.writeObject("3");
+                send.flush();
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }); 
         blockedListPanel.add(new JScrollPane(blockedArea), BorderLayout.CENTER);
         blockedListPanel.add(backButton, BorderLayout.SOUTH);
 
