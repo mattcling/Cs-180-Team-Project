@@ -40,28 +40,28 @@ public class ServerClient implements Runnable {
 
             boolean loggedIn = false;
             while (!loggedIn) { //loop while login is not complete (before login)
-                send.writeObject("Hello, User!");
-                send.flush();
-                send.writeObject("Please choose an option:\n1. Login\n2. Create a new user");
-                send.flush();
+                //send.writeObject("Hello, User!");
+                //send.flush();
+                //send.writeObject("Please choose an option:\n1. Login\n2. Create a new user");
+                //send.flush();
                 String response = (String) receive.readObject(); //store response input of menu option
                 if(!response.equals(" ")) {
                     if ("1".equals(response)) { // Login option
-                        send.writeObject("Enter your username:"); //prompt for username
-                        send.flush();
+                        //send.writeObject("Enter your username:"); //prompt for username
+                        //send.flush();
                         username = (String) receive.readObject(); //store username input
 
-                        send.writeObject("Enter your password:"); //prompt for password
-                        send.flush();
+                        //send.writeObject("Enter your password:"); //prompt for password
+                        //send.flush();
                         String password = (String) receive.readObject(); //store password input
 
                         if (d.containsObject("user", username)) { //check if user exists in database
                             User user = (User) d.getData("user", username); //get data of user and welcome user
                             if (user.getPassword().equals(password)) { //check if password entered matches
-                                send.writeObject("Welcome, ");
+                                send.writeObject("Welcome, ");//recived
                                 send.flush();
-                                send.writeObject(username + "!");
-                                send.flush();
+                                // send.writeObject(username + "!");//not recived
+                                // send.flush();
                                 loggedIn = true;
                             } else {
                                 send.writeObject("Invalid password.");
@@ -112,9 +112,9 @@ public class ServerClient implements Runnable {
             boolean quit = false;
 
             while (true) {
-                send.writeObject("Please choose an option:\n1. Create / Open Chat \n2. User Search "
-                        + "\n3. Friends list \n4. Blocked Users List \n5. Quit");
-                send.flush();
+                // send.writeObject("Please choose an option:\n1. Create / Open Chat \n2. User Search "
+                //         + "\n3. Friends list \n4. Blocked Users List \n5. Quit");
+                // send.flush();
                 String choice = (String) receive.readObject();
                 String chatUser = "";
                 String action = "";
@@ -223,11 +223,11 @@ public class ServerClient implements Runnable {
                         break;
 
                     case "2"://user search option
-                        send.writeObject("What is the username you would like to search for?");
+                        send.writeObject("What is the username you would like to search for?");//used for a check
                         send.flush();
                         String searchUser = (String) receive.readObject();
                         if (d.containsObject("user", searchUser)) {
-                            send.writeObject("Please Choose 1: \n 1. Friend user\n 2. Block user \n 3. Exit");
+                            send.writeObject("Please Choose 1: \n 1. Friend user\n 2. Block user \n 3. Exit");//expected to recieve
                             send.flush();
                             action = (String) receive.readObject();
                             switch (action) {
@@ -289,21 +289,21 @@ public class ServerClient implements Runnable {
                         break;
 
                     case "3"://friends list option
-                        send.writeObject("Your Friends: ");
-                        send.flush();
+                        //send.writeObject("Your Friends: ");
+                        //send.flush();
                         for (String friend : ((User) d.getData("user", username)).getFriendsList()) {
-                            send.writeObject(friend);
+                            send.writeObject(friend);//need
                             send.flush();
                         }
-                        send.writeObject("\n");
+                        send.writeObject("\n");//need
                         send.flush();
-                        send.writeObject("Please choose 1: \n 1. UnFriend \n 2. Block \n 3. Exit");
-                        send.flush();
+                        // send.writeObject("Please choose 1: \n 1. UnFriend \n 2. Block \n 3. Exit");
+                        // send.flush();//dont use i dont think
                         String actionChoice = (String) receive.readObject();
                         switch (actionChoice) {
                             case "1":
-                                send.writeObject("Please enter the username to unfriend");
-                                send.flush();
+                                //send.writeObject("Please enter the username to unfriend");
+                                //send.flush();
                                 String unfriend = (String) receive.readObject();
                                 stop = true;
                                 for (String friend : ((User) d.getData("user", username)).getFriendsList()) {
@@ -323,7 +323,7 @@ public class ServerClient implements Runnable {
                                 continue;
 
                             case "2":
-                                send.writeObject("Please enter the username to block");
+                                //send.writeObject("Please enter the username to block");
                                 send.flush();
                                 String block = (String) receive.readObject();
                                 stop = true;
@@ -345,11 +345,11 @@ public class ServerClient implements Runnable {
                                 continue;
 
                             case "3":
-                                send.writeObject("Exited");
+                                //send.writeObject("Exited");
                                 break;
 
                             default:
-                                send.writeObject("Invalid option selected.");
+                                //send.writeObject("Invalid option selected.");
                                 continue;
                         }
                         break;
@@ -410,7 +410,6 @@ public class ServerClient implements Runnable {
                 if (quit) {
                     break;
                 }
-
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

@@ -1,544 +1,326 @@
 package main;
 
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.GridLayout;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Scanner;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.JButton;
-import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
-/**
- * A class which acts as the user client for the chat application.
- * it allows the user to interact with the server side of the chat application.
- *
- * <p>
- * Purdue University -- CS18000 -- Fall 2024</p>
- *
- * @author Purdue CS
- * @author Matthew Clingerman
- * @author Charlotte Falus
- * @author Luke Guiboux
- * @author Kimaya Deshpande
- * @author Sid Songirkar
- * @version November 3, 2024
- */
-public class UserClient extends JComponent implements Runnable {
+public class UserClient {
+    private JFrame frame;
+    private JPanel mainPanel;
+    private CardLayout cardLayout;
 
-    private UserClient user;
-    private JButton loginButton; // a button to change paint color
-    private JButton createNewUserButton; // a button to change paint color
-    private JButton exitButton; // a button to change paint color
-    private final Lock lock = new ReentrantLock();
-    private final Condition choiceMade = lock.newCondition();
-    
+    private JTextField usernameField, passwordField, chatInputField, searchField;
+    private JTextArea chatArea, friendsArea, blockedArea;
 
-    private JTextField usernameText;
-    private JTextField passwordText;
+    private Socket socket;
+    private ObjectOutputStream send;
+    private ObjectInputStream receive;
 
-    private static volatile String mainMenuChoice = "";
-    public static void main(String[] args) {
-        //SwingUtilities.invokeLater(new UserClient());
-        try (Socket socket = new Socket("localhost", 4343);
-                ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream());
-                ObjectInputStream receive = new ObjectInputStream(socket.getInputStream());
-                Scanner sc = new Scanner(System.in)) {
+    private String username;
 
-            String chatUser = "";
-            boolean loggedIn = false;
-            while (!loggedIn) {
-                System.out.println("Server: " + receive.readObject());
-                System.out.println("Server: " + receive.readObject());
+    public UserClient() {
+        try {
+            // Connect to the server
+            socket = new Socket("localhost", 4343);
+            send = new ObjectOutputStream(socket.getOutputStream());
+            receive = new ObjectInputStream(socket.getInputStream());
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Unable to connect to server.", "Error", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
+        }
 
-                String choice = sc.nextLine();
-                send.writeObject(choice);
+        frame = new JFrame("Chat Application");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(500, 400);
+
+        cardLayout = new CardLayout();
+        mainPanel = new JPanel(cardLayout);
+
+        initMainMenu();
+        initLoginPanel();
+        initCreateUserPanel();
+        initLoggedInMenu();
+        initChatsPanel();
+        initFriendsListPanel();
+        initBlockedUsersPanel();
+
+        frame.add(mainPanel);
+        frame.setVisible(true);
+        showPanel("MainMenu");
+    }
+
+    private void initMainMenu() {
+        JPanel mainMenu = new JPanel(new GridLayout(3, 1));
+
+        JButton loginButton = new JButton("Login");
+        JButton createUserButton = new JButton("Create New User");
+        JButton exitButton = new JButton("Exit");
+
+        loginButton.addActionListener(e -> showPanel("Login"));
+        createUserButton.addActionListener(e -> showPanel("CreateUser"));
+        exitButton.addActionListener(e -> {
+            JOptionPane.showMessageDialog(frame, "Goodbye!", "Exit", JOptionPane.INFORMATION_MESSAGE);
+            System.exit(0);
+        });
+
+        mainMenu.add(loginButton);
+        mainMenu.add(createUserButton);
+        mainMenu.add(exitButton);
+
+        mainPanel.add(mainMenu, "MainMenu");
+    }
+
+    private void initLoginPanel() {
+        JPanel loginPanel = new JPanel(new GridLayout(4, 1));
+
+        usernameField = new JTextField("Enter Username");
+        passwordField = new JTextField("Enter Password");
+        JButton loginButton = new JButton("Login");
+        JButton backButton = new JButton("Back");
+
+        loginButton.addActionListener(e -> handleLogin());
+        backButton.addActionListener(e -> showPanel("MainMenu"));
+
+        loginPanel.add(usernameField);
+        loginPanel.add(passwordField);
+        loginPanel.add(loginButton);
+        loginPanel.add(backButton);
+
+        mainPanel.add(loginPanel, "Login");
+    }
+
+    private void initCreateUserPanel() {
+        JPanel createUserPanel = new JPanel(new GridLayout(4, 1));
+
+        JTextField newUserField = new JTextField("Enter Username");
+        JTextField newPasswordField = new JTextField("Enter Password");
+        JButton createButton = new JButton("Create");
+        JButton backButton = new JButton("Back");
+
+        createButton.addActionListener(e -> {
+            try {
+                send.writeObject("2"); // Create new user
                 send.flush();
-                //if (!choice.equals(" ")) {
-                    if ("1".equals(choice)) {// login
-                        // System.out.println("in login");
-                        //if ("4".equals(choice)) {// pressed enter button
-                            System.out.println("in enter button");
-                            System.out.println("Server: " + receive.readObject());
-                            //String username = usernameText.getText();
-                            String username = sc.nextLine();
-                            send.writeObject(username);
-                            send.flush();
-
-                            System.out.println("Server: " + receive.readObject());
-                            //String password = passwordText.getText();
-                            String password = sc.nextLine();
-                            send.writeObject(password);
-                            send.flush();
-
-                            String text = (String) receive.readObject();
-                            if (text.equals("Welcome, ")) {
-                                System.out.println(text + (String) receive.readObject());
-                                // sendingText = new ArrayList<>();
-                                // sendingText.add(text);
-                                // sendingText.add("\n" + (String) receive.readObject());
-                                //loggedIn = true;
-                                break;
-                            } else {
-                                continue;
-                                // sendingText = new ArrayList<>();
-                                // sendingText.add((String) receive.readObject());
-                            }
-                        //}
-                    } else if ("2".equals(choice)) { // Create New User
-                        while (true) {
-                            System.out.println("Server: " + receive.readObject());
-                            String username = sc.nextLine();
-                            send.writeObject(username);
-                            send.flush();
-
-                            String serverResponse = (String) receive.readObject();
-                            System.out.println("Server: " + serverResponse);
-
-                            if ("Username is available.".equals(serverResponse)) {
-                                break;
-                            }
-                        }
-
-                        System.out.println("Server: " + receive.readObject());
-                        String password = sc.nextLine();
-                        send.writeObject(password);
-                        send.flush();
-
-                        System.out.println("Server: " + receive.readObject());
-                    } else {
-                        System.out.println("Server: " + receive.readObject());
-                        continue;
-                    }
-                //}
-            }
-
-            while (true) {
-                System.out.println("Server: " + receive.readObject());
-                String choice = sc.nextLine();
-                send.writeObject(choice);
+                send.writeObject(newUserField.getText());
                 send.flush();
-
-                switch (choice) {
-                    case "1":
-                        while (true) {
-                            String item = (String) receive.readObject();
-                            if ("\n".equals(item)) {
-                                break;
-                            }
-                            System.out.println(item);
-                        }
-
-                        System.out.println("Options: " + receive.readObject());
-                        String input = sc.nextLine();
-                        send.writeObject(input);
-                        send.flush();
-
-                        switch (input) {
-                            case "1":
-                                System.out.println("Server: " + receive.readObject());
-                                //no worky :(
-                                while (true) {
-                                    String item = (String) receive.readObject();
-                                    if ("\n".equals(item)) {
-                                        break;
-                                    }
-                                    System.out.println(item);
-                                }
-
-                                System.out.println("Server: " + receive.readObject());
-                                String chosenChat = sc.nextLine();
-                                send.writeObject(chosenChat);
-                                send.flush();
-                                
-                                //no worky :(
-                                while (true) {
-                                    String item = (String) receive.readObject();
-                                    if ("\n".equals(item)) {
-                                        break;
-                                    }
-                                    System.out.println(item);
-                                }
-
-                                break;
-                            case "2":
-                                System.out.println("Server: " + receive.readObject());
-                                chatUser = sc.nextLine();
-                                send.writeObject(chatUser);
-                                send.flush();
-
-                                String output = (String) receive.readObject();
-                                System.out.println(output);
-                                if (output.equals("User does not exist.")
-                                        || output.equals("You are blocked by this user.")) {
-                                    continue;
-                                }
-
-                                while (true) {
-                                    System.out.println("Server: " + receive.readObject());
-                                    String message = sc.nextLine();
-
-                                    send.writeObject(message);
-                                    send.flush();
-
-                                    System.out.println("Server: " + receive.readObject());
-                                    System.out.println("Server: " + receive.readObject());
-                                    String response = sc.nextLine();
-                                    send.writeObject(response);
-                                    send.flush();
-                                    if (response.equals("N")) {
-                                        break;
-                                    }
-                                }
-                                break;
-                            default:
-                                System.out.println("Server: " + receive.readObject());
-                                continue;
-                        }
-                        break;
-                    case "2":
-                        System.out.println("Server: " + receive.readObject());
-                        String searchUser = sc.nextLine();
-                        send.writeObject(searchUser);
-                        send.flush();
-                        String serverString = ((String) receive.readObject());
-                        if ("Please Choose 1: \n 1. Friend user\n 2. Block user \n 3. Exit".equals(serverString)) {
-                            System.out.println("Server: " + serverString);
-                            String action = sc.nextLine();
-                            send.writeObject(action);
-                            send.flush();
-                            System.out.println("Server: " + receive.readObject());
-                        } else {
-                            System.out.println("Server: " + serverString);
-                        }
-                        break;
-                    case "3":
-                        System.out.println("Server: " + receive.readObject());
-                        while (true) {
-                            String item = (String) receive.readObject();
-                            if ("\n".equals(item)) {
-                                break;
-                            }
-                            System.out.println("Server: " + item);
-                        }
-                        System.out.println("Server: " + receive.readObject());
-                        String actionChoice = sc.nextLine();
-                        send.writeObject(actionChoice);
-                        send.flush();
-                        switch (actionChoice) {
-                            case "1":
-                                System.out.println("Server: " + receive.readObject());
-                                String unfriend = sc.nextLine();
-                                send.writeObject(unfriend);
-                                send.flush();
-                                System.out.println("Server: " + receive.readObject());
-                                break;
-                            case "2":
-                                System.out.println("Server: " + receive.readObject());
-                                String block = sc.nextLine();
-                                send.writeObject(block);
-                                send.flush();
-                                System.out.println("Server: " + receive.readObject());
-                                break;
-                            case "3":
-                                System.out.println("Server: " + receive.readObject());
-                                break;
-                            default:
-                                System.out.println("Server: " + receive.readObject());
-                                break;
-                        }
-                        break;
-                    case "4":
-                        System.out.println("Server: " + receive.readObject());
-                        while (true) {
-                            String item = (String) receive.readObject();
-                            if ("\n".equals(item)) {
-                                break;
-                            }
-                            System.out.println("Server: " + item);
-                        }
-                        System.out.println("Server: " + receive.readObject());
-                        actionChoice = sc.nextLine();
-                        send.writeObject(actionChoice);
-                        send.flush();
-                        switch (actionChoice) {
-                            case "1":
-                                System.out.println("Server: " + receive.readObject());
-                                String unblock = sc.nextLine();
-                                send.writeObject(unblock);
-                                send.flush();
-                                System.out.println("Server: " + receive.readObject());
-                                break;
-                            case "2":
-                                System.out.println("Server: " + receive.readObject());
-                                break;
-                            default:
-                                System.out.println("Server: " + receive.readObject());
-                                break;
-                        }
-                        break;
-                    case "5":
-                        System.out.println("Server: " + receive.readObject());
-                        System.exit(0);
-                    default:
-                        System.out.println("Server: " + receive.readObject());
-                        continue;
+                String serverResponse = (String) receive.readObject();
+                if (serverResponse.equals("Username is already taken.")) {
+                    JOptionPane.showMessageDialog(frame, serverResponse, "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
 
+                send.writeObject(newPasswordField.getText());
+                send.flush();
+                JOptionPane.showMessageDialog(frame, "User created successfully! Please log in.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                showPanel("Login");
+            } catch (IOException | ClassNotFoundException ex) {
+                JOptionPane.showMessageDialog(frame, "Error creating user.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        backButton.addActionListener(e -> showPanel("MainMenu"));
+
+        createUserPanel.add(newUserField);
+        createUserPanel.add(newPasswordField);
+        createUserPanel.add(createButton);
+        createUserPanel.add(backButton);
+
+        mainPanel.add(createUserPanel, "CreateUser");
+    }
+
+    private void initLoggedInMenu() {
+        JPanel loggedInMenu = new JPanel(new GridLayout(5, 1));
+
+        JButton chatsButton = new JButton("Chats");
+        JButton userSearchButton = new JButton("Search Users");
+        JButton friendsListButton = new JButton("Friends List");
+        JButton blockedUsersButton = new JButton("Blocked Users");
+        JButton logoutButton = new JButton("Logout");
+
+        chatsButton.addActionListener(e -> showPanel("Chats"));
+        userSearchButton.addActionListener(e -> handleUserSearch());
+        friendsListButton.addActionListener(e -> handleFriendsList());
+        blockedUsersButton.addActionListener(e -> handleBlockedUsers());
+        logoutButton.addActionListener(e -> showPanel("MainMenu"));
+
+        loggedInMenu.add(chatsButton);
+        loggedInMenu.add(userSearchButton);
+        loggedInMenu.add(friendsListButton);
+        loggedInMenu.add(blockedUsersButton);
+        loggedInMenu.add(logoutButton);
+
+        mainPanel.add(loggedInMenu, "LoggedInMenu");
+    }
+
+    private void initChatsPanel() {
+        JPanel chatsPanel = new JPanel(new BorderLayout());
+
+        chatArea = new JTextArea();
+        chatArea.setEditable(false);
+        chatInputField = new JTextField();
+
+        JButton sendMessageButton = new JButton("Send");
+        JButton backButton = new JButton("Back");
+
+        sendMessageButton.addActionListener(e -> {
+            String message = chatInputField.getText();
+            if (!message.isEmpty()) {
+                sendMessageToServer(message);
+                chatArea.append("Me: " + message + "\n");
+                chatInputField.setText("");
+            }
+        });
+
+        backButton.addActionListener(e -> showPanel("LoggedInMenu"));
+
+        chatsPanel.add(new JScrollPane(chatArea), BorderLayout.CENTER);
+        chatsPanel.add(chatInputField, BorderLayout.SOUTH);
+        chatsPanel.add(sendMessageButton, BorderLayout.EAST);
+        chatsPanel.add(backButton, BorderLayout.NORTH);
+
+        mainPanel.add(chatsPanel, "Chats");
+    }
+
+    private void initFriendsListPanel() {
+        JPanel friendsListPanel = new JPanel(new BorderLayout());
+
+        friendsArea = new JTextArea();
+        friendsArea.setEditable(false);
+        JButton backButton = new JButton("Back");
+
+        backButton.addActionListener(e -> {
+            showPanel("LoggedInMenu");
+            try {
+                send.writeObject("3");
+                send.flush();
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        friendsListPanel.add(new JScrollPane(friendsArea), BorderLayout.CENTER);
+        friendsListPanel.add(backButton, BorderLayout.SOUTH);
+
+        mainPanel.add(friendsListPanel, "FriendsList");
+    }
+
+    private void initBlockedUsersPanel() {
+        JPanel blockedListPanel = new JPanel(new BorderLayout());
+
+        blockedArea = new JTextArea();
+        blockedArea.setEditable(false);
+        JButton backButton = new JButton("Back");
+
+        backButton.addActionListener(e -> showPanel("LoggedInMenu"));
+
+        blockedListPanel.add(new JScrollPane(blockedArea), BorderLayout.CENTER);
+        blockedListPanel.add(backButton, BorderLayout.SOUTH);
+
+        mainPanel.add(blockedListPanel, "BlockedList");
+    }
+
+    private void showPanel(String panelName) {
+        cardLayout.show(mainPanel, panelName);
+    }
+
+    private void handleLogin() {
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+
+        try {
+            send.writeObject("1"); // Login
+            send.flush();
+            send.writeObject(username);
+            send.flush();
+            send.writeObject(password);
+            send.flush();
+
+            String response = (String) receive.readObject();
+            if (response.startsWith("Welcome")) {
+                this.username = username;
+                JOptionPane.showMessageDialog(frame, response + " " + username, "Login Successful", JOptionPane.INFORMATION_MESSAGE);
+                showPanel("LoggedInMenu");
+            } else {
+                JOptionPane.showMessageDialog(frame, response, "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(frame, "Error logging in.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    // ActionListener mainMenuAction = new ActionListener() {
-    //     public void actionPerformed(ActionEvent e) {
-    //         lock.lock();
-    //         try {
-    //             if (e.getSource() == loginButton) {
-    //                 mainMenuChoice = "1";
-    //                 System.out.println("changed variable - 1");
-    //             }
-    //             if (e.getSource() == createNewUserButton) {
-    //                 mainMenuChoice = "2";
-    //                 System.out.println("changed variable - 2");
-    //             }
-    //             if (e.getSource() == exitButton) {
-    //                 mainMenuChoice = "3";
-    //                 System.out.println("changed variable - 3");
-    //             }
-    //             if (e.getSource() == loginEnter) {
-    //                 mainMenuChoice = "4";
-    //                 System.out.println("changed variable - 4");
-    //             }
-
-    //             choiceMade.signal();
-    //         } finally {
-    //             lock.unlock();
-    //         }
-    //     }
-    // };
-
-    @Override
-    public void run() {
-        // // Initialize the JFrame
-        // JFrame frame = new JFrame("Chat Application");
-        // frame.setSize(600, 400);
-        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // frame.setLocationRelativeTo(null);
-        // frame.setLayout(new BorderLayout());
-
-        // // Create the initial main menu panel
-        // JPanel mainMenuPanel = new JPanel();
-        // loginButton = new JButton("Login");
-        // createNewUserButton = new JButton("Create New User");
-        // exitButton = new JButton("Exit");
-
-        // mainMenuPanel.add(loginButton);
-        // mainMenuPanel.add(createNewUserButton);
-        // mainMenuPanel.add(exitButton);
-
-        // frame.add(mainMenuPanel, BorderLayout.CENTER);
-
-        // // Define action listeners for main menu buttons
-        // loginButton.addActionListener(e -> switchToLoginPanel(frame));
-        // createNewUserButton.addActionListener(e -> switchToCreateUserPanel(frame));
-        // exitButton.addActionListener(e -> {
-        //     JOptionPane.showMessageDialog(frame, "Goodbye!", "Exit", JOptionPane.INFORMATION_MESSAGE);
-        //     System.exit(0);
-        // });
-
-        // // Make the frame visible
-        // frame.setVisible(true);
+    private void sendMessageToServer(String message) {
+        try {
+            send.writeObject(message);
+            send.flush();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(frame, "Failed to send message.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
-//     private void switchToLoginPanel(JFrame frame) {
-//         JPanel loginPanel = new JPanel();
-//         JLabel instructions = new JLabel("Please enter your username and password:");
-//         usernameText = new JTextField(10);
-//         passwordText = new JTextField(10);
-//         JButton loginEnter = new JButton("Enter");
-//         JButton backButton = new JButton("Back");
+    private void handleUserSearch() {
+        try {
+            String searchUser = JOptionPane.showInputDialog(frame, "Enter username to search:");
+            if (searchUser != null && !searchUser.isEmpty()) {
+                send.writeObject("2");
+                send.flush();
+                send.writeObject(searchUser);
+                send.flush();
 
-//         loginPanel.add(instructions);
-//         loginPanel.add(usernameText);
-//         loginPanel.add(passwordText);
-//         loginPanel.add(loginEnter);
-//         loginPanel.add(backButton);
+                String response = (String) receive.readObject();//shown
+                //prints main menu for some reason:FIX
+                JOptionPane.showMessageDialog(frame, response, "Search Result", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(frame, "Error searching user.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
-//         frame.getContentPane().removeAll(); // Clear the frame
-//         frame.add(loginPanel, BorderLayout.CENTER);
-//         frame.revalidate();
-//         frame.repaint();
+    private void handleFriendsList() {
+        try {
+            send.writeObject("3");
+            send.flush();
+            StringBuilder friends = new StringBuilder("Friends:\n");
+            String friend;
+            while (!(friend = (String) receive.readObject()).equals("\n")) {
+                friends.append(friend).append("\n");
+            }
+            friendsArea.setText(friends.toString());
+            showPanel("FriendsList");
+        } catch (IOException | ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(frame, "Error retrieving friends list.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
-//         // Define action listeners for login buttons
-//         loginEnter.addActionListener(e -> handleLogin(frame));
-//         backButton.addActionListener(e -> returnToMainMenu(frame));
-//     }
+    private void handleBlockedUsers() {
+        try {
+            send.writeObject("4");
+            send.flush();
+            StringBuilder blockedUsers = new StringBuilder("Blocked Users:\n");
+            String blocked;
+            while (!(blocked = (String) receive.readObject()).equals("\n")) {
+                blockedUsers.append(blocked).append("\n");
+            }
+            blockedArea.setText(blockedUsers.toString());
+            showPanel("BlockedList");
+        } catch (IOException | ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(frame, "Error retrieving blocked users.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
-//     private void switchToCreateUserPanel(JFrame frame) {
-//         JPanel createUserPanel = new JPanel();
-//         JLabel instructions = new JLabel("Please enter a username and password:");
-//         usernameText = new JTextField(10);
-//         passwordText = new JTextField(10);
-//         JButton createEnter = new JButton("Create");
-//         JButton backButton = new JButton("Back");
-
-//         createUserPanel.add(instructions);
-//         createUserPanel.add(usernameText);
-//         createUserPanel.add(passwordText);
-//         createUserPanel.add(createEnter);
-//         createUserPanel.add(backButton);
-
-//         frame.getContentPane().removeAll(); // Clear the frame
-//         frame.add(createUserPanel, BorderLayout.CENTER);
-//         frame.revalidate();
-//         frame.repaint();
-
-//         // Define action listeners for create user buttons
-//         createEnter.addActionListener(e -> handleCreateUser(frame));
-//         backButton.addActionListener(e -> returnToMainMenu(frame));
-//     }
-
-//     private void returnToMainMenu(JFrame frame) {
-//         JPanel mainMenuPanel = new JPanel();
-//         mainMenuPanel.add(loginButton);
-//         mainMenuPanel.add(createNewUserButton);
-//         mainMenuPanel.add(exitButton);
-
-//         frame.getContentPane().removeAll(); // Clear the frame
-//         frame.add(mainMenuPanel, BorderLayout.CENTER);
-//         frame.revalidate();
-//         frame.repaint();
-//     }
-
-//     private void handleLogin(JFrame frame) {
-//     String username = usernameText.getText();
-//     String password = passwordText.getText();
-
-//     if (username.isEmpty() || password.isEmpty()) {
-//         JOptionPane.showMessageDialog(frame, "Please enter both username and password.", "Error", JOptionPane.ERROR_MESSAGE);
-//         return;
-//     }
-
-//     try (Socket socket = new Socket("localhost", 4343);
-//          ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream());
-//          ObjectInputStream receive = new ObjectInputStream(socket.getInputStream())) {
-
-//         // Send login request
-//         send.writeObject("1"); // Option 1 for login
-//         send.flush();
-
-//         // Step 1: Server asks for username
-//         String serverPrompt = (String) receive.readObject();
-//         if (!serverPrompt.equals("Enter your username:")) {
-//             JOptionPane.showMessageDialog(frame, "Unexpected response from server.", "Error", JOptionPane.ERROR_MESSAGE);
-//             return;
-//         }
-//         send.writeObject(username);
-//         send.flush();
-
-//         // Step 2: Server asks for password
-//         serverPrompt = (String) receive.readObject();
-//         if (!serverPrompt.equals("Enter your password:")) {
-//             JOptionPane.showMessageDialog(frame, "Unexpected response from server.", "Error", JOptionPane.ERROR_MESSAGE);
-//             return;
-//         }
-//         send.writeObject(password);
-//         send.flush();
-
-//         // Step 3: Server response (success or failure)
-//         String response = (String) receive.readObject();
-//         if (response.equals("Welcome, ")) {
-//             String welcomeMessage = (String) receive.readObject();
-//             JOptionPane.showMessageDialog(frame, response + welcomeMessage, "Login Successful", JOptionPane.INFORMATION_MESSAGE);
-//             switchToChatWindow(frame, username);
-//         } else {
-//             JOptionPane.showMessageDialog(frame, response, "Login Failed", JOptionPane.ERROR_MESSAGE);
-//         }
-
-//     } catch (IOException | ClassNotFoundException e) {
-//         JOptionPane.showMessageDialog(frame, "Connection error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-//         e.printStackTrace();
-//     }
-// }
-
-
-//     private void handleCreateUser(JFrame frame) {
-//     String username = usernameText.getText();
-//     String password = passwordText.getText();
-
-//     if (username.isEmpty() || password.isEmpty()) {
-//         JOptionPane.showMessageDialog(frame, "Please enter both username and password.", "Error", JOptionPane.ERROR_MESSAGE);
-//         return;
-//     }
-
-//     try (Socket socket = new Socket("localhost", 4343);
-//          ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream());
-//          ObjectInputStream receive = new ObjectInputStream(socket.getInputStream())) {
-
-//         // Send create user request
-//         send.writeObject("2"); // Option 2 for creating a user
-//         send.flush();
-
-//         // Step 1: Enter username
-//         String serverPrompt = (String) receive.readObject();
-//         if (!serverPrompt.equals("Enter a username:")) {
-//             JOptionPane.showMessageDialog(frame, "Unexpected response from server.", "Error", JOptionPane.ERROR_MESSAGE);
-//             return;
-//         }
-//         send.writeObject(username);
-//         send.flush();
-
-//         // Step 2: Check username availability
-//         String usernameResponse = (String) receive.readObject();
-//         if (usernameResponse.equals("Username is already taken.")) {
-//             JOptionPane.showMessageDialog(frame, usernameResponse, "Create User Failed", JOptionPane.ERROR_MESSAGE);
-//             return;
-//         }
-
-//         // Step 3: Enter password
-//         serverPrompt = (String) receive.readObject();
-//         if (!serverPrompt.equals("Enter a password:")) {
-//             JOptionPane.showMessageDialog(frame, "Unexpected response from server.", "Error", JOptionPane.ERROR_MESSAGE);
-//             return;
-//         }
-//         send.writeObject(password);
-//         send.flush();
-
-//         // Step 4: Success or failure
-//         String finalResponse = (String) receive.readObject();
-//         if (finalResponse.equals("User created successfully! Please login to continue.")) {
-//             JOptionPane.showMessageDialog(frame, finalResponse, "Success", JOptionPane.INFORMATION_MESSAGE);
-//             returnToMainMenu(frame);
-//         } else {
-//             JOptionPane.showMessageDialog(frame, "Unexpected error: " + finalResponse, "Error", JOptionPane.ERROR_MESSAGE);
-//         }
-
-//     } catch (IOException | ClassNotFoundException e) {
-//         JOptionPane.showMessageDialog(frame, "Connection error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-//         e.printStackTrace();
-//     }
-// }
-
-//     private void switchToChatWindow(JFrame frame, String username) {
-//         JPanel chatPanel = new JPanel();
-//         JLabel welcomeLabel = new JLabel("Welcome to the Chat, " + username + "!");
-//         JButton logoutButton = new JButton("Logout");
-
-//         chatPanel.add(welcomeLabel);
-//         chatPanel.add(logoutButton);
-
-//         frame.getContentPane().removeAll();
-//         frame.add(chatPanel, BorderLayout.CENTER);
-//         frame.revalidate();
-//         frame.repaint();
-
-//         logoutButton.addActionListener(e -> returnToMainMenu(frame));
-//     }
-
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(UserClient::new);
+    }
 }
