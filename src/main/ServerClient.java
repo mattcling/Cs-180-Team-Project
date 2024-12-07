@@ -40,10 +40,10 @@ public class ServerClient implements Runnable {
 
             boolean loggedIn = false;
             while (!loggedIn) { //loop while login is not complete (before login)
-                // send.writeObject("Hello, User!");
-                // send.flush();
-                // send.writeObject("Please choose an option:\n1. Login\n2. Create a new user");
-                // send.flush();
+                send.writeObject("Hello, User!");
+                send.flush();
+                send.writeObject("Please choose an option:\n1. Login\n2. Create a new user");
+                send.flush();
                 String response = (String) receive.readObject(); //store response input of menu option
                 if(!response.equals(" ")) {
                     if ("1".equals(response)) { // Login option
