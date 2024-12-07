@@ -114,8 +114,8 @@ public class UserClient {
     private void initCreateUserPanel() {
         JPanel createUserPanel = new JPanel(new GridLayout(4, 1));
 
-        JTextField newUserField = new JTextField("Enter Username");
-        JTextField newPasswordField = new JTextField("Enter Password");
+        JTextField newUserField = new JTextField("Sid");
+        JTextField newPasswordField = new JTextField("monkey");
         JButton createButton = new JButton("Create");
         JButton backButton = new JButton("Back");
 
@@ -170,7 +170,15 @@ public class UserClient {
         userSearchButton.addActionListener(e -> handleUserSearch());
         friendsListButton.addActionListener(e -> handleFriendsList());
         blockedUsersButton.addActionListener(e -> handleBlockedList());
-        logoutButton.addActionListener(e -> showPanel("MainMenu"));
+        logoutButton.addActionListener(e -> {
+            showPanel("MainMenu");
+            try {
+                send.writeObject("5");
+                send.flush();
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
 
         loggedInMenu.add(chatsButton);
         loggedInMenu.add(userSearchButton);
@@ -371,17 +379,22 @@ public class UserClient {
                 //JOptionPane.showMessageDialog(frame, response, "Search Result", JOptionPane.INFORMATION_MESSAGE);
 
                 //for testing for now:
-                String q2 = JOptionPane.showInputDialog(frame, "what do you want to do?");
-                if (q2 != null && !q2.isEmpty() && q2.equals("friend")) {
-                    send.writeObject("1");
-                    send.flush();
-                    String gha = (String) receive.readObject();
-                    JOptionPane.showMessageDialog(frame, gha, "Search Result", JOptionPane.INFORMATION_MESSAGE);
-                } else if (q2 != null && !q2.isEmpty() && q2.equals("block")) {
-                    send.writeObject("2");
-                    send.flush();
-                    String gha = (String) receive.readObject();
-                    JOptionPane.showMessageDialog(frame, gha, "Search Result", JOptionPane.INFORMATION_MESSAGE);
+                String response = (String) receive.readObject();
+                if (response.equals("found")) {
+                    String q2 = JOptionPane.showInputDialog(frame, "what do you want to do? write \"friend\", \"search\", or, \"exit\"");
+                    if (q2 != null && !q2.isEmpty() && q2.equals("friend")) {
+                        send.writeObject("1");
+                        send.flush();
+                        String gha = (String) receive.readObject();
+                        JOptionPane.showMessageDialog(frame, gha, "Search Result", JOptionPane.INFORMATION_MESSAGE);
+                    } else if (q2 != null && !q2.isEmpty() && q2.equals("block")) {
+                        send.writeObject("2");
+                        send.flush();
+                        String gha = (String) receive.readObject();
+                        JOptionPane.showMessageDialog(frame, gha, "Search Result", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } else if (response.equals("User Does Not exist.")) {
+                    JOptionPane.showMessageDialog(frame, response, "Search Result", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         } catch (IOException | ClassNotFoundException e) {

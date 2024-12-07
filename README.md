@@ -5,10 +5,10 @@ Clone github repository on IDE (such as VSCode) and run Server side classes to c
 Matthew - Submitted Vocareum workspace on Brightspace for Phase 1, 2, and 3 from team github repository
 
 #### Commit history on Team Github Repo:
-Mattew - Submitted Database, UserClient, ServerClient and Message classes, test cases and interfaces, and GUI <br>
+Mattew - Submitted Database, UserClient, ServerClient and Message classes, test cases and interfaces, and GUI, plus did part 1 and submitted the report <br>
 Siddesh - Submitted UserClient, ServerClient and Chat classes, test cases and interfaces, and GUI <br>
-Charlotte - Submitted User, UserClient, and ServerClient classes, test cases and interfaces, and GUI and README <br>
-Kimaya - Submitted ServerClient and User classes, test cases and interfaces and README <br>
+Charlotte - Submitted User, UserClient, and ServerClient classes, test cases and interfaces, and GUI and README, plus did the slides <br>
+Kimaya - Submitted ServerClient and User classes, test cases and interfaces and README, plus did the slides <br>
 Luke - Helped work on Login for ServerClient <br>
 
 
