@@ -88,8 +88,8 @@ public class UserClient {
     private void initLoginPanel() {
         JPanel loginPanel = new JPanel(new GridLayout(4, 1));
 
-        usernameField = new JTextField("Enter Username");
-        passwordField = new JTextField("Enter Password");
+        usernameField = new JTextField("Sid");
+        passwordField = new JTextField("monkey");
         JButton loginButton = new JButton("Login");
         JButton backButton = new JButton("Back");
 
@@ -114,8 +114,8 @@ public class UserClient {
     private void initCreateUserPanel() {
         JPanel createUserPanel = new JPanel(new GridLayout(4, 1));
 
-        JTextField newUserField = new JTextField("Sid");
-        JTextField newPasswordField = new JTextField("monkey");
+        JTextField newUserField = new JTextField("Username");
+        JTextField newPasswordField = new JTextField("Password");
         JButton createButton = new JButton("Create");
         JButton backButton = new JButton("Back");
 

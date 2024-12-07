@@ -73,8 +73,8 @@ public class ServerClient implements Runnable {
                             }
                         } else if ("2".equals(response)) { // Create a new user option
                             while (true) {
-                                send.writeObject("Enter a username:"); //prompt to enter username for new user
-                                send.flush();
+                                //send.writeObject("Enter a username:"); //prompt to enter username for new user
+                                //send.flush();
                                 username = (String) receive.readObject(); //store username input
 
                                 if (d.containsObject("user", username)) {
@@ -91,15 +91,15 @@ public class ServerClient implements Runnable {
                                 }
                             }
 
-                            send.writeObject("Enter a password:"); //prompt to enter password
-                            send.flush();
+                            //send.writeObject("Enter a password:"); //prompt to enter password
+                            //send.flush();
                             String password = (String) receive.readObject(); //store password input
 
                             User newUser = new User(username, password);
                             //create new user object with given inputs as User fields
                             d.writeData(newUser, "user");
 
-                            send.writeObject("User created successfully! Please login to continue.");
+                            //send.writeObject("User created successfully! Please login to continue.");
                             continue;//confirmation message
                         } else {
                             send.writeObject("Invalid option selected. Retry");
