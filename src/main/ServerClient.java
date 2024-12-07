@@ -102,7 +102,7 @@ public class ServerClient implements Runnable {
                             //send.writeObject("User created successfully! Please login to continue.");
                             continue;//confirmation message
                         } else {
-                            send.writeObject("Invalid option selected. Retry");
+                            //send.writeObject("Invalid option selected. Retry");
                             continue;
                             //error message for invalid option from menu entered
                         }
@@ -216,7 +216,7 @@ public class ServerClient implements Runnable {
                                     send.writeObject("Exit");
                                     break;
                                 default:
-                                    send.writeObject("Invalid option selected.");
+                                    //send.writeObject("Invalid option selected.");
                                     continue;
 
                             }
@@ -406,6 +406,33 @@ public class ServerClient implements Runnable {
                             //send.writeObject("Goodbye!");//used
                             quit = true;
                             loggedIn = false;
+                            break;
+                        case "6": //profile case
+                            String bio = ((User) d.getData("user", username)).getProfile().getBio();
+                            //username and password are stored alr
+                            String password = ((User) d.getData("user", username)).getPassword();
+
+                            send.writeObject(username);
+                            send.writeObject(bio);
+                            send.writeObject(password);
+                            send.flush();
+
+                            String response = (String) receive.readObject();
+                            switch (response) {
+                                case "1"://edited recives
+                                    bio = (String) receive.readObject();
+                                    username = (String) receive.readObject();
+                                    password = (String) receive.readObject();
+                                    ((User) d.getData("user", username)).getProfile().editBio(bio);
+                                    ((User) d.getData("user", username)).setUserName(username);
+                                    ((User) d.getData("user", username)).setPassword(password);
+                                    d.writeData((User) d.getData("user", username), "user");
+                                    break;
+                                case "2"://exit
+                                    break;
+                                default:
+                                    break;
+                            }
                             break;
                         default:
                             //send.writeObject("Invalid option selected.");//not used

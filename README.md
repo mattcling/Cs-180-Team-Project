@@ -210,12 +210,14 @@ Luke - Helped work on Login for ServerClient <br>
 - getProfilePicture() <br>
 - getFriendsList() <br>
 - getBlockedUsers() <br>
+- getProfile() <br>
 - setUserName(String userName) <br>
 - setProfilePicture(String profilePicture) <br>
 - setFriendsList(List<String> friendsList) <br>
 - setBlockedUsers(List<String> blockedUsers) <br>
 - setPassword(String password) <br>
 - setUserID(String userID) <br>
+- setProfile(Profile profile) <br>
 <br><br>
 
 #### UserClient.java <br>

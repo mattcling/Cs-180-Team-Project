@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,8 +23,9 @@ public class UserClient {
     private JPanel mainPanel;
     private CardLayout cardLayout;
 
-    private JTextField usernameField, passwordField, chatInputField, searchField;
-    private JTextArea chatArea, friendsArea, blockedArea;
+    private JTextField usernameField, passwordField, chatInputField, searchField, bioEditField;
+    
+    private JTextArea chatArea, friendsArea, blockedArea, instructionsArea;
 
     private Socket socket;
     private ObjectOutputStream send;
@@ -53,6 +55,7 @@ public class UserClient {
         initLoginPanel();
         initCreateUserPanel();
         initLoggedInMenu();
+        initProfilePanel();
         initChatsPanel();
         initFriendsListPanel();
         initFriendsOptionsPanel();
@@ -95,7 +98,7 @@ public class UserClient {
 
         loginButton.addActionListener(e -> handleLogin());
         backButton.addActionListener(e -> {
-            showPanel("LoggedInMenu");
+            showPanel("MainMenu");
             try {
                 send.writeObject("3");
                 send.flush();
@@ -160,12 +163,14 @@ public class UserClient {
     private void initLoggedInMenu() {
         JPanel loggedInMenu = new JPanel(new GridLayout(5, 1));
 
+        JButton profileButton = new JButton("Edit Profile");
         JButton chatsButton = new JButton("Chats");
         JButton userSearchButton = new JButton("Search Users");
         JButton friendsListButton = new JButton("Friends List");
         JButton blockedUsersButton = new JButton("Blocked Users");
         JButton logoutButton = new JButton("Logout");
 
+        profileButton.addActionListener(e -> showPanel("ProfilePanel"));
         chatsButton.addActionListener(e -> showPanel("Chats"));
         userSearchButton.addActionListener(e -> handleUserSearch());
         friendsListButton.addActionListener(e -> handleFriendsList());
@@ -187,6 +192,41 @@ public class UserClient {
         loggedInMenu.add(logoutButton);
 
         mainPanel.add(loggedInMenu, "LoggedInMenu");
+    }
+
+    private void initProfilePanel() {//uner development profile page
+        ArrayList<String> info = receiveProfile();
+        JPanel profilePanel = new JPanel(new GridLayout(4, 1));
+
+        JTextArea instructionsArea = new JTextArea("Edit your username, bio, and password here(displayed in order)");
+        instructionsArea.setEditable(false);
+        JTextField usernameEditField = new JTextField(info.get(0));
+        JTextField passwordEditField = new JTextField(info.get(1));
+        JTextField bioEditField = new JTextField(info.get(2));
+        JButton saveButton = new JButton("Save Changes");
+        JButton backButton = new JButton("Exit");
+
+        saveButton.addActionListener(e -> {
+            handleSaveProfile();
+        });
+        backButton.addActionListener(e -> {
+            showPanel("MainMenu");
+            try {
+                send.writeObject("2");
+                send.flush();
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        profilePanel.add(instructionsArea);
+        profilePanel.add(usernameEditField);
+        profilePanel.add(passwordEditField);
+        profilePanel.add(bioEditField);
+        profilePanel.add(saveButton);
+        profilePanel.add(backButton);
+
+        mainPanel.add(profilePanel, "ProfilePanel");
     }
 
     private void initChatsPanel() {
@@ -366,6 +406,36 @@ public class UserClient {
         }
     }
 
+    private void handleSaveProfile() {
+        try {
+            send.writeObject("1");
+            send.flush();
+            send.writeObject(usernameField.getText());
+            send.flush();
+            send.writeObject(bioEditField.getText());
+            send.flush();
+            send.writeObject(passwordField.getText());
+            send.flush();            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(frame, "Failed to edit profile.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private ArrayList<String> receiveProfile() {
+        try {
+            send.writeObject("6");// sending they selected edit profile
+            send.flush();
+            ArrayList<String> profile = new ArrayList<>();
+            profile.add((String) receive.readObject());
+            profile.add((String) receive.readObject());
+            profile.add((String) receive.readObject());
+            return profile;
+        } catch (IOException | ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(frame, "Failed to receive profile.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return null;
+    }
+
     private void handleUserSearch() {
         try {
             String searchUser = JOptionPane.showInputDialog(frame, "Enter username to search:");
@@ -380,7 +450,8 @@ public class UserClient {
 
                 //for testing for now:
                 String response = (String) receive.readObject();
-                if (response.equals("found")) {
+                if (response.equals("found")) {//change so it checks if it says user panel
+                    //recive  mroe for the details
                     String q2 = JOptionPane.showInputDialog(frame, "what do you want to do? write \"friend\", \"search\", or, \"exit\"");
                     if (q2 != null && !q2.isEmpty() && q2.equals("friend")) {
                         send.writeObject("1");
