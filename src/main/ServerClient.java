@@ -178,6 +178,14 @@ public class ServerClient implements Runnable {
                                             + " person you would like to chat with:");
                                     send.flush();
                                     chatUser = (String) receive.readObject();
+                                    Chat chat;
+                                    String checkingChatId = username + chatUser;
+                                    if (d.containsObject("chat", checkingChatId)) {
+                                        chat = (Chat) d.getData("chat", checkingChatId);
+                                    } else {
+                                        chat = new Chat(username, chatUser);
+                                        d.writeData(chat, "chat");
+                                    }
 
                                     if (d.containsObject("user", chatUser)) {
                                         if (((User) d.getData("user", chatUser)).
@@ -187,7 +195,7 @@ public class ServerClient implements Runnable {
                                             continue;
                                         }
 
-                                        Chat chat = new Chat(username, chatUser);
+                                        //Chat chat = new Chat(username, chatUser);
                                         ((User) d.getData("user", username)).addChat(chat.getChatID());
                                         send.writeObject("Chat created with " + chatUser);
                                         send.flush();

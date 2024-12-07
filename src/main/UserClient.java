@@ -174,7 +174,7 @@ public class UserClient {
             initProfilePanel();
             showPanel("ProfilePanel");
         });
-        chatsButton.addActionListener(e -> showPanel("Chats"));
+        chatsButton.addActionListener(e -> handleChat());
         userSearchButton.addActionListener(e -> handleUserSearch());
         friendsListButton.addActionListener(e -> handleFriendsList());
         blockedUsersButton.addActionListener(e -> handleBlockedList());
@@ -439,6 +439,15 @@ public class UserClient {
             JOptionPane.showMessageDialog(frame, "Failed to receive profile.", "Error", JOptionPane.ERROR_MESSAGE);
         }
         return null;
+    }
+
+    private void handleChat() {
+        try {
+            showPanel("Chats");
+            String usernameToChat = JOptionPane.showInputDialog(frame, ("Enter the username of the person you want to chat with: "));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(frame, "Failed to chat w smtn.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void handleUserSearch() {

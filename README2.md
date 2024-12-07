@@ -52,4 +52,4 @@ Step three: if they dont have a chat make a chat else open the existing chat.
 
 Step four: next we need start listening for new message and load when there are new messages basiclly refresh the print of messages.A
 
-Step five:
+Step five: when users send message add it the database so that when the database loads messages then it works.
