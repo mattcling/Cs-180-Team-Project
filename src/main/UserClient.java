@@ -23,7 +23,7 @@ public class UserClient {
     private JPanel mainPanel;
     private CardLayout cardLayout;
 
-    private JTextField usernameField, passwordField, chatInputField, searchField, bioEditField;
+    private JTextField usernameField, passwordField, chatInputField, searchField, bioEditField , usernameEditField , passwordEditField;
     
     private JTextArea chatArea, friendsArea, blockedArea, instructionsArea;
 
@@ -55,7 +55,7 @@ public class UserClient {
         initLoginPanel();
         initCreateUserPanel();
         initLoggedInMenu();
-        initProfilePanel();
+        //initProfilePanel();
         initChatsPanel();
         initFriendsListPanel();
         initFriendsOptionsPanel();
@@ -170,7 +170,10 @@ public class UserClient {
         JButton blockedUsersButton = new JButton("Blocked Users");
         JButton logoutButton = new JButton("Logout");
 
-        profileButton.addActionListener(e -> showPanel("ProfilePanel"));
+        profileButton.addActionListener(e -> {
+            initProfilePanel();
+            showPanel("ProfilePanel");
+        });
         chatsButton.addActionListener(e -> showPanel("Chats"));
         userSearchButton.addActionListener(e -> handleUserSearch());
         friendsListButton.addActionListener(e -> handleFriendsList());
@@ -185,6 +188,7 @@ public class UserClient {
             }
         });
 
+        loggedInMenu.add(profileButton);
         loggedInMenu.add(chatsButton);
         loggedInMenu.add(userSearchButton);
         loggedInMenu.add(friendsListButton);
@@ -196,21 +200,23 @@ public class UserClient {
 
     private void initProfilePanel() {//uner development profile page
         ArrayList<String> info = receiveProfile();
-        JPanel profilePanel = new JPanel(new GridLayout(4, 1));
+        JPanel profilePanel = new JPanel(new GridLayout(6, 1));
 
-        JTextArea instructionsArea = new JTextArea("Edit your username, bio, and password here(displayed in order)");
+        JTextArea instructionsArea = new JTextArea("     Edit your bio, and password here (displayed in order)", 1, 30); 
         instructionsArea.setEditable(false);
-        JTextField usernameEditField = new JTextField(info.get(0));
-        JTextField passwordEditField = new JTextField(info.get(1));
-        JTextField bioEditField = new JTextField(info.get(2));
+        usernameEditField = new JTextField(info.get(0));
+        usernameEditField.setEditable(false);
+        passwordEditField = new JTextField(info.get(1));
+        bioEditField = new JTextField(info.get(2));
         JButton saveButton = new JButton("Save Changes");
         JButton backButton = new JButton("Exit");
 
         saveButton.addActionListener(e -> {
             handleSaveProfile();
+            showPanel("LoggedInMenu");
         });
         backButton.addActionListener(e -> {
-            showPanel("MainMenu");
+            showPanel("LoggedInMenu");
             try {
                 send.writeObject("2");
                 send.flush();
@@ -410,14 +416,13 @@ public class UserClient {
         try {
             send.writeObject("1");
             send.flush();
-            send.writeObject(usernameField.getText());
-            send.flush();
             send.writeObject(bioEditField.getText());
             send.flush();
-            send.writeObject(passwordField.getText());
+            send.writeObject(passwordEditField.getText());
             send.flush();            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(frame, "Failed to edit profile.", "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }
 
@@ -451,8 +456,10 @@ public class UserClient {
                 //for testing for now:
                 String response = (String) receive.readObject();
                 if (response.equals("found")) {//change so it checks if it says user panel
-                    //recive  mroe for the details
-                    String q2 = JOptionPane.showInputDialog(frame, "what do you want to do? write \"friend\", \"search\", or, \"exit\"");
+                    //recive  mroe for the details (3)
+                    String usernameSearched = (String) receive.readObject();
+                    String bioSearched =  (String) receive.readObject();
+                    String q2 = JOptionPane.showInputDialog(frame, ("Profile:\n     Username: " + usernameSearched + "\n     Bio: " + bioSearched + "\nWhat you want to do? write \"friend\", \"search\", or, \"exit\""));
                     if (q2 != null && !q2.isEmpty() && q2.equals("friend")) {
                         send.writeObject("1");
                         send.flush();

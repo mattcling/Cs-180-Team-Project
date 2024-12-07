@@ -227,8 +227,14 @@ public class ServerClient implements Runnable {
                             // send.flush();
                             String searchUser = (String) receive.readObject();
                             if (d.containsObject("user", searchUser)) {
-                                // send.writeObject("Please Choose 1: \n 1. Friend user\n 2. Block user \n 3. Exit");//expected to recieve
-                                // send.flush();
+                                send.writeObject("found");//expected to recieve
+                                send.flush();
+                                //now sending profile details:
+                                String bioSend = ((User) d.getData("user", searchUser)).getProfile().getBio();
+                                send.writeObject(searchUser);
+                                send.writeObject(bioSend);
+                                send.flush();
+                                //reciving input
                                 action = (String) receive.readObject();
                                 switch (action) {
                                     case "1":
@@ -420,11 +426,14 @@ public class ServerClient implements Runnable {
                             String response = (String) receive.readObject();
                             switch (response) {
                                 case "1"://edited recives
-                                    bio = (String) receive.readObject();
-                                    username = (String) receive.readObject();
+                                    //username = (String) receive.readObject();
                                     password = (String) receive.readObject();
+                                    bio = (String) receive.readObject();
+                                    // System.out.println(username);
+                                    // System.out.println(password);
+                                    // System.out.println(bio);
                                     ((User) d.getData("user", username)).getProfile().editBio(bio);
-                                    ((User) d.getData("user", username)).setUserName(username);
+                                    //((User) d.getData("user", username)).setUserName(username);
                                     ((User) d.getData("user", username)).setPassword(password);
                                     d.writeData((User) d.getData("user", username), "user");
                                     break;
