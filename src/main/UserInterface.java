@@ -40,6 +40,10 @@ public interface UserInterface {
 
     public void setProfilePicture(String profilePicture);
 
+    public void setProfile(Profile profile);
+
+    public Profile getProfile();
+
     public void setFriendsList(List<String> friendsList);
 
     public void setBlockedUsers(List<String> blockedUsers);

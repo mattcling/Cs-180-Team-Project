@@ -2,6 +2,7 @@ package main;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -97,5 +98,10 @@ public class Chat implements Serializable, ChatInterface {
     public List<Message> getMessages(){
         return messages;
     }
+    public List<Message> getMessagesAfter(long timestamp) {
+    return messages.stream()
+            .filter(message -> message.getTimestamp() > timestamp)
+            .collect(Collectors.toList());
+}
 
 }

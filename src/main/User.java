@@ -147,6 +147,10 @@ public class User implements UserInterface, Serializable {
         return userName;
     }
 
+    public Profile getProfile() {
+        return profile;
+    }
+
     public String getProfilePicture() {
         return profilePicture;
     }
@@ -161,6 +165,7 @@ public class User implements UserInterface, Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+        d.writeData(this, "user");
     }
 
     public void setProfilePicture(String profilePicture) {
@@ -177,10 +182,15 @@ public class User implements UserInterface, Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+        d.writeData(this, "user");
     }
 
     public void setUserID(String userID) {
         this.userID = userID;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 
 }
