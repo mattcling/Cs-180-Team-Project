@@ -37,8 +37,6 @@ public class Database implements DatabaseInterface {
     private final String userDataFile = "userTable.ser";
     private final String chatDataFile = "chatTable.ser";
     private final String messageDataFile = "messageTable.ser";
-    //create a gatekeeper to prevent multiple instances of the database
-    private static Object object = new Object();
 
     public void loadOldData() { // this needs loadtable method made
         userTable = loadTableUser(userDataFile);
