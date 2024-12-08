@@ -120,115 +120,58 @@ public class ServerClient implements Runnable {
                     String action = "";
                     switch (choice) {
                         case "1": //create/open chat option
-                            //send.writeObject("Your Friends: ");
-                            //send.flush();
-                            for (String friend : ((User) d.getData("user", username)).getFriendsList()) {
-                                send.writeObject(friend); // display user's friends
+                            
+                            chatUser = (String) receive.readObject();
+                            Chat chat;
+
+                            if (d.containsObject("user", chatUser)) {
+                                if (((User) d.getData("user", chatUser)).getBlockedUsers()
+                                        .contains(((User) d.getData("user", username)).getUserName())) {
+                                    send.writeObject("You are blocked by this user.");
+                                    continue;
+                                }
+                            } else {
+                                send.writeObject("User does not exist.");
+                                continue;
+                            }
+
+                            String checkingChatId = username + chatUser;
+                            if (d.containsObject("chat", checkingChatId)) { // finds existing chat
+                                chat = (Chat) d.getData("chat", checkingChatId);
+                            } else {
+                                chat = new Chat(username, chatUser);
+                                d.writeData(chat, "chat");
+                            }
+
+                            List<Message> messages = chat.getMessages();
+                            for (Message message : messages) {
+                                send.writeObject(message.getSenderID() + ": " + message.getContents());
                                 send.flush();
                             }
-                            // send.writeObject("\n");
-                            // send.flush();
-                            // send.writeObject("Please choose 1: \n1."
-                            //         + " Open existing Chat \n2."
-                            //         + " Create new chat \n3. Exit");
-                            // send.flush();
-                            action = (String) receive.readObject();
-                            chatUser = "";
+                            send.writeObject("\n");
+                            send.flush();
+                            
 
-                            switch (action) {
-                                case "1":
-                                    send.writeObject("Below is all of your chats you can access");
-                                    send.flush();
-                                    d.loadOldData();
-                                    if (((User) d.getData("user", username)).getChatIds().isEmpty()) {
-                                        send.writeObject("You have no chats.");
-                                        send.flush();
-                                        send.writeObject("\n");
-                                        send.flush();
+                            long lastMessageTimestamp = System.currentTimeMillis();
+                            while (true) {
+                                
+                                if (receive.available() > 0){
+                                    String response = (String) receive.readObject();
+                                    if (response.equals("3")){
                                         break;
                                     }
-                                    
-                                    for (String chats : (((User) d.getData("user", username)).getChatIds())) {
-                                        send.writeObject(chats);
-                                        send.flush();
-                                    }
-                                    send.writeObject("\n");
-                                    send.flush();
-
-                                    send.writeObject("Please enter the ID of chat you want to open");
-                                    send.flush();
-
-                                    String chatOpen = (String) receive.readObject();
-
-                                    d.loadOldData();
-                                    Chat existingChat = (Chat) d.getData("chat", chatOpen);
-                                    // this no print
-                                    List<Message> messages = existingChat.getMessages();
-                                    for (Message message : messages) {
+                                    chat.sendMessage(response, username);
+                                } else {
+                                    List<Message> newMessages = chat.getMessagesAfter(lastMessageTimestamp);
+                                    for (Message message : newMessages) {
                                         send.writeObject(message.getSenderID() + ": " + message.getContents());
                                         send.flush();
+                                        lastMessageTimestamp = Math.max(lastMessageTimestamp, message.getTimestamp());
                                     }
-                                    send.writeObject("\n");
-                                    send.flush();
-
-                                    chatUser = "";
-                                    break;
-                                case "2":
-                                    send.writeObject("Please enter the username of the"
-                                            + " person you would like to chat with:");
-                                    send.flush();
-                                    chatUser = (String) receive.readObject();
-                                    Chat chat;
-                                    String checkingChatId = username + chatUser;
-                                    if (d.containsObject("chat", checkingChatId)) {
-                                        chat = (Chat) d.getData("chat", checkingChatId);
-                                    } else {
-                                        chat = new Chat(username, chatUser);
-                                        d.writeData(chat, "chat");
-                                    }
-
-                                    if (d.containsObject("user", chatUser)) {
-                                        if (((User) d.getData("user", chatUser)).
-                                                getBlockedUsers().contains(((User) d.getData("user", username)).
-                                                        getUserName())) {
-                                            send.writeObject("You are blocked by this user.");
-                                            continue;
-                                        }
-
-                                        //Chat chat = new Chat(username, chatUser);
-                                        ((User) d.getData("user", username)).addChat(chat.getChatID());
-                                        send.writeObject("Chat created with " + chatUser);
-                                        send.flush();
-                                        while (true) {
-                                            send.writeObject("Please enter your message:");
-                                            send.flush();
-
-                                            String message = (String) receive.readObject();
-                                            chat.sendMessage(message, username);
-                                            send.writeObject("Message sent!");
-                                            send.flush();
-                                            send.writeObject("Would you like to send another message? (Y/N)");
-                                            send.flush();
-                                            String response = (String) receive.readObject();
-                                            if (response.equals("N")) {
-                                                break;
-                                            }
-                                        }
-                                    } else {
-                                        send.writeObject("User does not exist.");
-                                        continue;
-                                    }
-                                    break;
-
-                                case "3":
-                                    send.writeObject("Exit");
-                                    break;
-                                default:
-                                    //send.writeObject("Invalid option selected.");
-                                    continue;
-
+                                }
                             }
-                            break;
+                        
+                        break;
 
                         case "2"://user search option
                             // send.writeObject("What is the username you would like to search for?");//used for a check

@@ -26,6 +26,7 @@ public class Message implements Serializable, MessageInterface {
     private String contents;
     private String senderID;
     private LocalDateTime dateTime;
+    private long timestamp;
     private static Database d = new Database();
 
      // this may be a way to track time sent for now im not gunna do much with it.
@@ -37,6 +38,7 @@ public class Message implements Serializable, MessageInterface {
         this.contents = contents;
         this.chatID = chatID;
         this.senderID = senderID;
+        this.timestamp = System.currentTimeMillis();
         this.dateTime = LocalDateTime.now(); // this is how to set it as a variable!!!
         
         if (senderID == null || messageID.isEmpty()) {
@@ -70,6 +72,10 @@ public class Message implements Serializable, MessageInterface {
     
     public LocalDateTime getDateTime() {
         return dateTime;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
     }
 
     public String generateUserID() {//randomly generates message id
