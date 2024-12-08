@@ -136,8 +136,11 @@ public class ServerClient implements Runnable {
                             }
 
                             String checkingChatId = username + chatUser;
+                            String checkingChatId2 = chatUser + username;
                             if (d.containsObject("chat", checkingChatId)) { // finds existing chat
                                 chat = (Chat) d.getData("chat", checkingChatId);
+                            } else if (d.containsObject("chat", checkingChatId2)) {
+                                chat = (Chat) d.getData("chat", checkingChatId2);
                             } else {
                                 chat = new Chat(username, chatUser);
                                 d.writeData(chat, "chat");
@@ -154,24 +157,27 @@ public class ServerClient implements Runnable {
 
                             long lastMessageTimestamp = System.currentTimeMillis();
                             while (true) {
-                                
-                                if (receive.available() > 0){
+                                try {
                                     String response = (String) receive.readObject();
-                                    if (response.equals("3")){
+                                    if ("3".equals(response)) { // Exit chat command
                                         break;
                                     }
+                                    // Add message to chat
                                     chat.sendMessage(response, username);
-                                } else {
-                                    List<Message> newMessages = chat.getMessagesAfter(lastMessageTimestamp);
-                                    for (Message message : newMessages) {
-                                        send.writeObject(message.getSenderID() + ": " + message.getContents());
-                                        send.flush();
-                                        lastMessageTimestamp = Math.max(lastMessageTimestamp, message.getTimestamp());
+
+                                    // Notify all participants of the new message
+                                    for (String participant : chat.getParticipants()) {
+                                        User user = (User) d.getData("user", participant);
+                                        user.addChat(chat.getChatID()); // Ensure chat ID is added to users
                                     }
+                                } catch (IOException | ClassNotFoundException e) {
+                                    System.out.println("Error reading message: " + e.getMessage());
+                                    break;
                                 }
                             }
-                        
-                        break;
+
+
+                            break;
 
                         case "2"://user search option
                             // send.writeObject("What is the username you would like to search for?");//used for a check

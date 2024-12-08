@@ -258,6 +258,7 @@ public class UserClient {
 
         backButton.addActionListener(e -> {
             showPanel("LoggedInMenu");
+            chatArea.setText("");
             leaveChat = true;
             try {
                 send.writeObject("3");
@@ -415,6 +416,7 @@ public class UserClient {
         }
     }
 
+
     private void handleSaveProfile() {
         try {
             send.writeObject("1");
@@ -445,57 +447,49 @@ public class UserClient {
     }
 
     private void handleChat() {
-        sendMessageToServer("1");
-        try {
-            showPanel("Chats");
-            String usernameToChat = JOptionPane.showInputDialog(frame, ("Enter the username of the person you want to chat with: "));
-            if (usernameToChat != null && !usernameToChat.isEmpty()) {
-                send.writeObject(usernameToChat);
-                send.flush();
-                String response = (String) receive.readObject();
-                if (response.equals("User does not exist.") || response.equals("You are blocked by this user.") ) {
-                    JOptionPane.showMessageDialog(frame, response, "Error", JOptionPane.ERROR_MESSAGE);
-                } else {
+        new Thread(() -> {
+            try {
+                sendMessageToServer("1");
+                showPanel("Chats");
+
+                String usernameToChat = JOptionPane.showInputDialog(frame, "Enter the username of the person you want to chat with:");
+                if (usernameToChat != null && !usernameToChat.isEmpty()) {
+                    send.writeObject(usernameToChat);
+                    send.flush();
+
+                    String response = (String) receive.readObject();
+                    if (response.equals("User does not exist.") || response.equals("You are blocked by this user.")) {
+                        JOptionPane.showMessageDialog(frame, response, "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    // Read chat history
+                    SwingUtilities.invokeLater(() -> chatArea.setText(""));
                     while (true) {
                         String item = (String) receive.readObject();
-                        if ("\n".equals(item)) {
-                            break;
-                        }
-                        chatArea.append(item + "\n");
+                        if ("\n".equals(item)) break;
+                        final String chatMessage = item;
+                        SwingUtilities.invokeLater(() -> chatArea.append(chatMessage + "\n"));
                     }
                 }
-            }
-            while (!leaveChat) {
-                // Check if there are new messages from the server
-                if (receive.available() > 0) {
-                    String serverMessage = (String) receive.readObject();
 
-                    // Display new messages in chat area
-                    chatArea.append(serverMessage + "\n");
+                // Listen for new messages
+                while (!leaveChat) {
+                    if (receive.available() > 0) {
+                        String serverMessage = (String) receive.readObject();
+                        SwingUtilities.invokeLater(() -> chatArea.append(serverMessage + "\n"));
+                    }
+
+                    Thread.sleep(100); // Avoid busy-waiting
                 }
-
-            
-                // Check if the user has sent a message
-                if (!chatInputField.getText().isEmpty()) {
-                    String userMessage = chatInputField.getText();
-                    send.writeObject(userMessage); // Send user message to server
-                    send.flush();
-                    chatInputField.setText(""); // Clear input field
-                }
-
-                Thread.sleep(100); // Small delay to prevent busy-waiting
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(frame, "Failed to chat with the server.", "Error", JOptionPane.ERROR_MESSAGE);
             }
-
-            //Live messaging implementation:
-
-            
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(frame, "Failed to chat w smtn.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        }).start();
     }
 
-    
-    
+
+
 
     private void handleUserSearch() {
         try {
