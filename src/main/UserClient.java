@@ -163,7 +163,7 @@ public class UserClient {
     }
 
     private void initLoggedInMenu() {
-        JPanel loggedInMenu = new JPanel(new GridLayout(5, 1));
+        JPanel loggedInMenu = new JPanel(new GridLayout(6, 1));
 
         JButton profileButton = new JButton("Edit Profile");
         JButton chatsButton = new JButton("Chats");
