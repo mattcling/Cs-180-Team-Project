@@ -99,9 +99,23 @@ public class Chat implements Serializable, ChatInterface {
         return messages;
     }
     public List<Message> getMessagesAfter(long timestamp) {
-    return messages.stream()
+        return messages.stream()
             .filter(message -> message.getTimestamp() > timestamp)
             .collect(Collectors.toList());
-}
+    }
+    public boolean deleteLastMessage(String username) {
+        if (messages.size() == 0) {
+            return false;
+        }
+        //remove the last message that was sent by the user
 
+        for (int i = messages.size() - 1; i >= 0; i--) {
+            if (messages.get(i).getSenderID().equals(username)) {
+                messages.remove(i);
+                break;
+            }
+        }
+        d.writeData(this, "chat");
+        return true;
+    }
 }

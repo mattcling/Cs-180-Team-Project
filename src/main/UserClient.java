@@ -246,6 +246,7 @@ public class UserClient {
 
         JButton sendMessageButton = new JButton("Send");
         JButton backButton = new JButton("Back");
+        JButton deleteButton = new JButton("Delete Messages [brokey :(]"); //WE'RE COOKED
 
         sendMessageButton.addActionListener(e -> {
             String message = chatInputField.getText();
@@ -267,10 +268,16 @@ public class UserClient {
                 JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
+
+        deleteButton.addActionListener(e -> {
+            handleDeleteMessages();
+        });
+
         chatsPanel.add(new JScrollPane(chatArea), BorderLayout.CENTER);
         chatsPanel.add(chatInputField, BorderLayout.SOUTH);
         chatsPanel.add(sendMessageButton, BorderLayout.EAST);
         chatsPanel.add(backButton, BorderLayout.NORTH);
+        chatsPanel.add(deleteButton, BorderLayout.WEST);
 
         mainPanel.add(chatsPanel, "Chats");
     }
@@ -486,6 +493,22 @@ public class UserClient {
                 JOptionPane.showMessageDialog(frame, "Failed to chat with the server.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }).start();
+    }
+
+    private void handleDeleteMessages(){
+        try {
+            send.writeObject("4");
+            send.flush();
+            String response = (String) receive.readObject();
+            if (response.equals("Messages Deleted")) {
+                JOptionPane.showMessageDialog(frame, "Messages Deleted", "Info", JOptionPane.INFORMATION_MESSAGE);
+            } else if (response.equals("No messages to delete")) {
+                JOptionPane.showMessageDialog(frame, "No messages to delete", "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
+            showPanel("LoggedInMenu");
+        } catch (IOException | ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(frame, "Server did not respond properly", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
 

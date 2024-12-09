@@ -32,6 +32,8 @@ Luke - Helped work on Login for ServerClient <br>
 - setChatID(String chatId) <br>
 - getParticipants() <br>
 - getMessages() <br>
+- getMessagesAfter(long timestamp) <br>
+- deleteLastMessage((String username)) <br>
 <br><br>
 
 #### ChatInterface.java
@@ -225,7 +227,7 @@ Luke - Helped work on Login for ServerClient <br>
 **Type** - class <br>
 **Relationship** - public class <br>
 **Functionality** - Implements a client-side program for interacting with a server in a user management system. It facilitates user authentication, account creation, and various user-related actions by exchanging serialized objects over network socket. <br>
-**Fields** - frame, mainPanel, cardLayout, usernameFiend, passwordField, chatInputField, searchField, chatArea, friendsArea, blockedArea, socket, send, receive, username<br>
+**Fields** - frame, mainPanel, cardLayout, usernameFiend, passwordField, chatInputField, searchField, bioEditField, usernameEditField, passwordEditField, chatArea, friendsArea, blockedArea, instructionsArea, socket, send, receive, username, leaveChat, info <br>
 **Methods** - 
 - public static void main(String[] args) <br>
 - UserClient() <br>
@@ -233,13 +235,23 @@ Luke - Helped work on Login for ServerClient <br>
 - initLoginPanel() <br>
 - initCreateUserPanel() <br>
 - initLoggedInMenu() <br>
+- initProfilePanel() <br>
 - initChatsPanel() <br>
 - initFriendsListPanel() <br>
-- initBlockedUsersPanel() <br>
+- initFriendsOptionsPanel() <br>
+- initBlockedListPanel() <br>
+- initBlockedOptionsPanel() <br>
 - showPanel(String panelName) <br>
 - handleLogin() <br>
 - sendMessageToServer(String message) <br>
+- handleSaveProfile() <br>
+- receiveProfile() <br>
+- handleChat() <br>
 - handleUserSearch() <br>
+- unfriendUser() <br>
+- blockUser() <br>
 - handleFriendsList() <br>
-- handleBlockedUsers() <br>
+- handleBlockedList() <br>
+- unblockUser() <br>
+- handleDeleteMessages() <br>
 <br><br>

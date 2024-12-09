@@ -162,6 +162,16 @@ public class ServerClient implements Runnable {
                                     if ("3".equals(response)) { // Exit chat command
                                         break;
                                     }
+                                    if ("4".equals(response)){
+                                        //delete the most recent message
+                                        if (chat.deleteLastMessage(username)){
+                                            send.writeObject("Message deleted");
+                                            send.flush();
+                                        } else {
+                                            send.writeObject("No messages to delete");
+                                            send.flush();
+                                        }
+                                    }
                                     // Add message to chat
                                     chat.sendMessage(response, username);
 
