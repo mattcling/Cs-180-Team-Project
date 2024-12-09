@@ -1,4 +1,5 @@
 package main;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -29,18 +30,19 @@ public class Message implements Serializable, MessageInterface {
     private long timestamp;
     private static Database d = new Database();
 
-     // this may be a way to track time sent for now im not gunna do much with it.
+    // this may be a way to track time sent for now im not gunna do much with it.
 
-    public Message(String chatID, String senderID, String contents) {//creates new message and makes sure noting is null/empty
+    public Message(String chatID, String senderID, String contents) {//creates new message and makes sure
+        // noting is null/empty
         d.loadOldData();
-    
+
         this.messageID = generateUserID();
         this.contents = contents;
         this.chatID = chatID;
         this.senderID = senderID;
         this.timestamp = System.currentTimeMillis();
         this.dateTime = LocalDateTime.now(); // this is how to set it as a variable!!!
-        
+
         if (senderID == null || messageID.isEmpty()) {
             throw new IllegalArgumentException("messageID cannot be null or empty.");
         }
@@ -58,18 +60,18 @@ public class Message implements Serializable, MessageInterface {
         return messageID;
     }
 
-    public String getChatID(){
+    public String getChatID() {
         return chatID;
     }
 
-    public String getSenderID(){
+    public String getSenderID() {
         return senderID;
     }
 
     public String getContents() {
         return contents;
     }
-    
+
     public LocalDateTime getDateTime() {
         return dateTime;
     }

@@ -23,8 +23,9 @@ public class UserClient {
     private JPanel mainPanel;
     private CardLayout cardLayout;
 
-    private JTextField usernameField, passwordField, chatInputField, searchField, bioEditField , usernameEditField , passwordEditField;
-    
+    private JTextField usernameField, passwordField, chatInputField, searchField, bioEditField, usernameEditField,
+            passwordEditField;
+
     private JTextArea chatArea, friendsArea, blockedArea, instructionsArea;
 
     private Socket socket;
@@ -42,7 +43,8 @@ public class UserClient {
             send = new ObjectOutputStream(socket.getOutputStream());
             receive = new ObjectInputStream(socket.getInputStream());
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Unable to connect to server.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Unable to connect to server.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
             System.exit(0);
         }
 
@@ -63,7 +65,7 @@ public class UserClient {
         initFriendsOptionsPanel();
         initBlockedListPanel();
         initBlockedOptionsPanel();
-        
+
         frame.add(mainPanel);
         frame.setVisible(true);
         showPanel("MainMenu");
@@ -105,7 +107,8 @@ public class UserClient {
                 send.writeObject("3");
                 send.flush();
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
         loginPanel.add(usernameField);
@@ -138,10 +141,12 @@ public class UserClient {
 
                 send.writeObject(newPasswordField.getText());
                 send.flush();
-                JOptionPane.showMessageDialog(frame, "User created successfully! Please log in.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "User created successfully! Please log in.",
+                        "Success", JOptionPane.INFORMATION_MESSAGE);
                 showPanel("Login");
             } catch (IOException | ClassNotFoundException ex) {
-                JOptionPane.showMessageDialog(frame, "Error creating user.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Error creating user.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -151,7 +156,8 @@ public class UserClient {
                 send.writeObject("3");
                 send.flush();
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
         createUserPanel.add(newUserField);
@@ -186,7 +192,8 @@ public class UserClient {
                 send.writeObject("5");
                 send.flush();
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -204,7 +211,8 @@ public class UserClient {
         ArrayList<String> info = receiveProfile();
         JPanel profilePanel = new JPanel(new GridLayout(6, 1));
 
-        JTextArea instructionsArea = new JTextArea("     Edit your bio, and password here (displayed in order)", 1, 30); 
+        JTextArea instructionsArea = new JTextArea("     Edit your bio, and password here (displayed in order)",
+                1, 30);
         instructionsArea.setEditable(false);
         usernameEditField = new JTextField(info.get(0));
         usernameEditField.setEditable(false);
@@ -223,7 +231,8 @@ public class UserClient {
                 send.writeObject("2");
                 send.flush();
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -265,7 +274,8 @@ public class UserClient {
                 send.writeObject("3");
                 send.flush();
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -297,7 +307,8 @@ public class UserClient {
                 send.writeObject("3");
                 send.flush();
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -323,7 +334,8 @@ public class UserClient {
                 send.writeObject("3");
                 send.flush();
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -334,7 +346,7 @@ public class UserClient {
         mainPanel.add(friendsOptionsPanel, "friendsOptionsPanel");
         showPanel("friendsOptionsPanel");
     }
-    
+
     private void initBlockedListPanel() {
         JPanel blockedListPanel = new JPanel(new BorderLayout());
 
@@ -350,7 +362,8 @@ public class UserClient {
                 send.writeObject("3");
                 send.flush();
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -374,7 +387,8 @@ public class UserClient {
                 send.writeObject("2");
                 send.flush();
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Error sending request to server.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -404,13 +418,15 @@ public class UserClient {
             String response = (String) receive.readObject();
             if (response.startsWith("Welcome")) {
                 this.username = username;
-                JOptionPane.showMessageDialog(frame, response + " " + username, "Login Successful", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(frame, response + " " + username, "Login Successful",
+                        JOptionPane.INFORMATION_MESSAGE);
                 showPanel("LoggedInMenu");
             } else {
                 JOptionPane.showMessageDialog(frame, response, "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (IOException | ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(frame, "Error logging in.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Error logging in.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -419,7 +435,8 @@ public class UserClient {
             send.writeObject(message);
             send.flush();
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(frame, "Failed to send message.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Failed to send message.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -431,9 +448,10 @@ public class UserClient {
             send.writeObject(bioEditField.getText());
             send.flush();
             send.writeObject(passwordEditField.getText());
-            send.flush();            
+            send.flush();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(frame, "Failed to edit profile.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Failed to edit profile.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
@@ -448,7 +466,8 @@ public class UserClient {
             profile.add((String) receive.readObject());
             return profile;
         } catch (IOException | ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(frame, "Failed to receive profile.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Failed to receive profile.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
         return null;
     }
@@ -459,7 +478,8 @@ public class UserClient {
                 sendMessageToServer("1");
                 showPanel("Chats");
 
-                String usernameToChat = JOptionPane.showInputDialog(frame, "Enter the username of the person you want to chat with:");
+                String usernameToChat = JOptionPane.showInputDialog(frame, "Enter the username" +
+                        " of the person you want to chat with:");
                 if (usernameToChat != null && !usernameToChat.isEmpty()) {
                     send.writeObject(usernameToChat);
                     send.flush();
@@ -490,28 +510,30 @@ public class UserClient {
                     Thread.sleep(100); // Avoid busy-waiting
                 }
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(frame, "Failed to chat with the server.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Failed to chat with the server.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
         }).start();
     }
 
-    private void handleDeleteMessages(){
+    private void handleDeleteMessages() {
         try {
             send.writeObject("4");
             send.flush();
             String response = (String) receive.readObject();
             if (response.equals("Messages Deleted")) {
-                JOptionPane.showMessageDialog(frame, "Messages Deleted", "Info", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Messages Deleted", "Info",
+                        JOptionPane.INFORMATION_MESSAGE);
             } else if (response.equals("No messages to delete")) {
-                JOptionPane.showMessageDialog(frame, "No messages to delete", "Info", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "No messages to delete", "Info",
+                        JOptionPane.INFORMATION_MESSAGE);
             }
             showPanel("LoggedInMenu");
         } catch (IOException | ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(frame, "Server did not respond properly", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Server did not respond properly", "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
-
-
 
 
     private void handleUserSearch() {
@@ -531,25 +553,32 @@ public class UserClient {
                 if (response.equals("found")) {//change so it checks if it says user panel
                     //recive  mroe for the details (3)
                     String usernameSearched = (String) receive.readObject();
-                    String bioSearched =  (String) receive.readObject();
-                    String q2 = JOptionPane.showInputDialog(frame, ("Profile:\n     Username: " + usernameSearched + "\n     Bio: " + bioSearched + "\nWhat you want to do? write \"friend\", \"search\", or, \"exit\""));
+                    String bioSearched = (String) receive.readObject();
+                    String q2 = JOptionPane.showInputDialog(frame, ("Profile:\n     Username: " +
+                            usernameSearched + "\n     Bio: " + bioSearched + "\nWhat you want to do? " +
+                            "write \"friend\"," +
+                            " \"search\", or, \"exit\""));
                     if (q2 != null && !q2.isEmpty() && q2.equals("friend")) {
                         send.writeObject("1");
                         send.flush();
                         String gha = (String) receive.readObject();
-                        JOptionPane.showMessageDialog(frame, gha, "Search Result", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(frame, gha, "Search Result",
+                                JOptionPane.INFORMATION_MESSAGE);
                     } else if (q2 != null && !q2.isEmpty() && q2.equals("block")) {
                         send.writeObject("2");
                         send.flush();
                         String gha = (String) receive.readObject();
-                        JOptionPane.showMessageDialog(frame, gha, "Search Result", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(frame, gha, "Search Result",
+                                JOptionPane.INFORMATION_MESSAGE);
                     }
                 } else if (response.equals("User Does Not exist.")) {
-                    JOptionPane.showMessageDialog(frame, response, "Search Result", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(frame, response, "Search Result",
+                            JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         } catch (IOException | ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(frame, "Error searching user.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Error searching user.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -565,7 +594,8 @@ public class UserClient {
             friendsArea.setText(friends.toString());
             showPanel("FriendsList");
         } catch (IOException | ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(frame, "Error retrieving friends list.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Error retrieving friends list.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -582,13 +612,16 @@ public class UserClient {
             send.flush();
             String response = (String) receive.readObject();
             if (response.equals("That user is not your friend")) {
-                JOptionPane.showMessageDialog(frame, "That user is not your friend", "Info", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "That user is not your friend", "Info",
+                        JOptionPane.INFORMATION_MESSAGE);
             } else if (response.equals("Friend Removed")) {
-                JOptionPane.showMessageDialog(frame, "Friend Removed", "Info", JOptionPane.INFORMATION_MESSAGE);
-            } 
+                JOptionPane.showMessageDialog(frame, "Friend Removed", "Info",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
             showPanel("LoggedInMenu");
         } catch (IOException | ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(frame, "Server did not respond properly", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Server did not respond properly", "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -605,13 +638,16 @@ public class UserClient {
             send.flush();
             String response = (String) receive.readObject();
             if (response.equals("Blocked User")) {
-                JOptionPane.showMessageDialog(frame, "Blocked User", "Info", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Blocked User", "Info",
+                        JOptionPane.INFORMATION_MESSAGE);
             } else if (response.equals("That user is already blocked")) {
-                JOptionPane.showMessageDialog(frame, "That user is already blocked", "Info", JOptionPane.INFORMATION_MESSAGE);
-            } 
+                JOptionPane.showMessageDialog(frame, "That user is already blocked", "Info",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
             showPanel("LoggedInMenu");
         } catch (IOException | ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(frame, "Server did not respond properly", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Server did not respond properly", "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -627,7 +663,8 @@ public class UserClient {
             blockedArea.setText(blockeds.toString());
             showPanel("BlockedList");
         } catch (IOException | ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(frame, "Error retrieving blocked list.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Error retrieving blocked list.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -644,13 +681,16 @@ public class UserClient {
             send.flush();
             String response = (String) receive.readObject();
             if (response.equals("User unblocked")) {
-                JOptionPane.showMessageDialog(frame, "User unblocked", "Info", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "User unblocked", "Info",
+                        JOptionPane.INFORMATION_MESSAGE);
             } else if (!response.equals("That user is not blocked")) {
-                JOptionPane.showMessageDialog(frame, "That user is not blocked", "Info", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "That user is not blocked",
+                        "Info", JOptionPane.INFORMATION_MESSAGE);
             }
             showPanel("LoggedInMenu");
         } catch (IOException | ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(frame, "Server did not respond properly", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Server did not respond properly",
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

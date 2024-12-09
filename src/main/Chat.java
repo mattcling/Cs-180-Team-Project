@@ -1,4 +1,5 @@
 package main;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class Chat implements Serializable, ChatInterface {
         participants.add(user1);
         participants.add(user2);
         chatID = generateChatID();
-        User user = (User) d.getData("user", user1);        
+        User user = (User) d.getData("user", user1);
         d.writeData(this, "chat");
         d.writeData(user, "user");
     }
@@ -46,7 +47,7 @@ public class Chat implements Serializable, ChatInterface {
         // this is a way to generate a random chat id
         // we are not going to be using it right now because everything is done in text,
         // so we're just going to use every participants username concatenated tg as the chat id
-        
+
 
         // String temp = "UID" + UUID.randomUUID();
         // if (d.getData(temp, "chat") != null) {
@@ -95,14 +96,16 @@ public class Chat implements Serializable, ChatInterface {
         return new ArrayList<>(participants);
     }
 
-    public List<Message> getMessages(){
+    public List<Message> getMessages() {
         return messages;
     }
+
     public List<Message> getMessagesAfter(long timestamp) {
         return messages.stream()
-            .filter(message -> message.getTimestamp() > timestamp)
-            .collect(Collectors.toList());
+                .filter(message -> message.getTimestamp() > timestamp)
+                .collect(Collectors.toList());
     }
+
     public boolean deleteLastMessage(String username) {
         if (messages.size() == 0) {
             return false;

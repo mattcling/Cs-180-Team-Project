@@ -1,4 +1,5 @@
 package main;
+
 import java.io.Serializable;
 
 /**
@@ -24,7 +25,7 @@ public class Profile implements Serializable, ProfileInterface {//will be used i
 
 
     public Profile(String userID, String bio, String userProfilePicture) {//creats new profile
-        
+
         this.userID = userID;
         this.bio = bio;
         //we need to generate a unique string for the profile picture file name

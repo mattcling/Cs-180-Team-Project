@@ -36,8 +36,8 @@ public class User implements UserInterface, Serializable {
     private static Database d = new Database();
 
     public User(String username,
-        String password) {//creates new user with a username passowrd, empty friends and blocked lists, and a random id
-        
+                String password) {//creates new user with a username passowrd, empty friends and blocked lists, and a random id
+
         d.loadOldData();
 
         this.userID = generateUserID(); // this method uses a io class to make a random sting of numbers and letters
@@ -53,9 +53,9 @@ public class User implements UserInterface, Serializable {
 
     }
 
-    
 
-    public boolean login(String username, String userpassword) {//login function with username and password - checking if logged in and returning
+    public boolean login(String username, String userpassword) {//login function with username and password -
+        // checking if logged in and returning
         d.loadOldData();
         User user = (User) d.getData("user", username);
         if (user != null && user.password.equals(userpassword)) {
